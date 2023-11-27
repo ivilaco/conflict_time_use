@@ -5,32 +5,33 @@ This paper examines the impact of violence-related governmental policies on time
 Code is organized into the `\code` folder as follows:
 
 ### Main code
-* `master_1.do`: Main do file that runs all STATA code until do file `13_data_for_matlab.do`
+* `0_master.do`: Main do file that runs all STATA code.
 
 ### Subcode
-* `1_alldata_analysis_updated2.do`: The code cleans the full survey data, short survey data and administrative data (20 hours to run)
-* `2_data_for_geocoding.do`: The code prepares the data to be geocoded (# minutes to run)
+* `1_cleaning.do`: The code cleans the full ENUT data and merges the years
+* `2_vars.do`: The code creates the relevant variables from the ENUT database
+* `3_covars.do`: The code creates additional variables for the analysis from external databases
+* `4_final_database.do`: The code merges the additional variables with the ENUT database to create the final database
+* `5_stats.do`: The code runs descriptive statistics and behaviour graphs
+* `6_regs_main.do`: The code runs the main regressions
+* `7_robustness.do`: The code runs robustness checks
   
 ## Data
-The data is organized into a `\data` folder in [Dropbox](https://www.dropbox.com/scl/fo/uqhhfvrcvxlx40dwl0otu/h?rlkey=7aoy43qs2ggrv5w2icd2foslj&dl=0). The raw data, that serves as main imput for the project, can be located in the `\raw` subfolder, as its name indicates. Manipulated data in the code will be saved in the `\coded` and `\mixed_logit` subfolders.
+The data is organized into a `\data` folder in [Dropbox](https://www.dropbox.com/scl/fo/jb7r6jz8zqgmdrgvb4ehm/h?rlkey=kbf16ami0e3jdzaq91gfnecnj&dl=0). The raw data, that serves as main imput for the project, can be located in the `\raw` subfolder, as its name indicates. Manipulated data in the code will be saved in the `\coded` subfolder.
 
 The main data sources are:
-1. A 3,800 student-level survey conducted at The University of Delhi (DU) in 2016;
-2. A mapping of potential travel routes to all colleges in the choice set, build up with Google Maps and an algorith developed by the author;
-3. Safety data from two crowdsourced mobile applications in Delhi, which allowed to assign a safety score to each travel route:
-   - SafetiPin, which provides perceived spatial safety data in the form of safety audits conducted at various locations across the Delhi National Capital Region (NCR);
-   - Safecity, which provides analytical data on harassment rates by travel mode recorded by users during their travel in the city;
+1. 
 
 ## Figures and Tables
-`\figures`, `\maps` and `\tables` subfolders inside the `\output` folder are shell folders that will populate with figures, maps and tables produced by the code.
+Figures, maps and tables will be found inside the `\output` folder when produced by the code.
 
 ## To replicate analysis
 It is possible to reproduce all the analysis using only the codes available in GitHub. 
 
-1. Download the `\safety-first` .zip folder from Github and unzip it.
-2. Inside the `\safety-first` folder, create a new folder called "output". Inside this new "output" folder, create two new folders with the names "figures" and "tables".
-3. Download the `\data` .zip folder from [Dropbox](https://www.dropbox.com/scl/fo/uqhhfvrcvxlx40dwl0otu/h?rlkey=7aoy43qs2ggrv5w2icd2foslj&dl=0), and save it inside the `\safety-first` folder. This way, the `\safety-first` folder must contain the folders `\code`, `\excel`, `\output` and `\data`, the 3 master code files and the `README.md`.
-6. In the master code files, update the directory paths to the path on your computer that leads to the `\safety-first` folder.
-7. Run the master code files in the following order: `master_1.do`, `master_2.m` and `master_3.do`.
+1. Download the `\conflict_time_use` .zip folder from Github and unzip it.
+2. Inside the `\conflict_time_use` folder, create a new folder called "output".
+3. Download the `\data` .zip folder from [Dropbox](https://www.dropbox.com/scl/fo/jb7r6jz8zqgmdrgvb4ehm/h?rlkey=kbf16ami0e3jdzaq91gfnecnj&dl=0), and save it inside the `\conflict_time_use` folder. This way, the `\conflict_time_use` folder must contain the folders `\code`, `\output` and `\data`, the master code file and the `README.md`.
+6. In the master code file, update the directory path to the one your computer or the DANE computer that leads to the project's folder.
+7. Run the master code file.
 
 Eveything should run smoohtly. If any inconvenience is encountered, please don't hesitate on reaching out to the authors.
