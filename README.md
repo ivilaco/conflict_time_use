@@ -8,9 +8,9 @@ Code is organized into the `\code` folder as follows:
 * `0_master.do`: Main do file that runs all STATA code.
 
 ### Subcode
-* `1_cleaning.do`: The code cleans the full ENUT data and merges the years
-* `2_vars.do`: The code creates the relevant variables from the ENUT database
-* `3_covars.do`: The code creates additional variables for the analysis from external databases
+* `1_covars.do`: The code creates additional variables for the analysis from external databases
+* `2_cleaning.do`: The code cleans the full ENUT data and merges all years
+* `3_vars.do`: The code creates the relevant variables from the ENUT database
 * `4_final_database.do`: The code merges the additional variables with the ENUT database to create the final database
 * `5_stats.do`: The code runs descriptive statistics and behaviour graphs
 * `6_regs_main.do`: The code runs the main regressions
