@@ -14,7 +14,7 @@ This do creates the final database for analysis
 	* Pego
 	use "${entra}/FARC_final.dta", clear 
 	merge 1:m MUNICIPIO TIME using "${enut}/ENUT_TOTAL_ALL.dta", gen(_merge7)
-	keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
+	keep if _merge7==3 // Se van las capitales JFV y los municipios que no estan en la muestra. Obs: 42,281
 	
 	merge m:1 MUNICIPIO using "${entra}/new_vars.dta", gen(_merge2)
 

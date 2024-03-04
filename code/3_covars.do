@@ -8,7 +8,7 @@ This do file creates the covariables and additional variables needed for
 the analysis
 =========================================================================*/
 
-*******************************************
+/*******************************************
 *** TREATMENT ***
 *******************************************
 
@@ -27,7 +27,7 @@ the analysis
 	lab define b 1 "Conflict" 0 "No Conflict"
 	lab values CONFLICT CONFLICT1 b
 	
-	save "${data}/coded/FARC.dta", replace
+	save "${data}/coded/FARC.dta", replace // Este archivo se debe mandar al DANE********
 	
 *******************************************
 *** COVARIABLES PSM ***
@@ -71,7 +71,7 @@ the analysis
 			save "${data}/coded/new_vars.dta", replace
 			}
 		restore
-	}
+	} *
 	
 	use "${data}/coded/new_vars.dta", clear // Este archivo se debe mandar al DANE********
 	
@@ -145,13 +145,13 @@ the analysis
 	merge m:1 MUNICIPIO using "${data}/coded/FARC.dta"
 	keep if _merge==3
 	drop _merge	
-	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********
+	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********/
 	
 *******************************************
 *** VARIABLES CEDE CONFLICT ***
 *******************************************
 
-	use "${data}/raw/PANEL_CONFLICTO_Y_VIOLENCIA(2020).dta", clear
+	use "${data}/raw/PANEL_CONFLICTO_Y_VIOLENCIA(2020).dta", clear // Este archivo se debe mandar al DANE********
 	
 	keep desplazados_expulsion desplazados_recepcion codmpio ano
 	rename codmpio MUNICIPIO
@@ -160,7 +160,7 @@ the analysis
 	keep if _merge==3
 	gen TIME = (ano>2014)
 	drop _merge
-	merge 1:1 MUNICIPIO ano using "${data}/raw/poblacion.dta"
+	merge 1:1 MUNICIPIO ano using "${data}/raw/poblacion.dta" // Este archivo se debe mandar al DANE********
 	keep if _merge==3
 
 	gen conflict_time = TIME*CONFLICT
@@ -227,7 +227,7 @@ the analysis
 	reg prop_desp_recep conflict_time i.MUNICIPIO i.ano // i.MUNICIPIO i.ano - después de agregar efectos fijos se vuelve significativo
 	reg prop_desp_expul conflict_time i.MUNICIPIO i.ano // i.MUNICIPIO i.ano
 	
-*******************************************
+/*******************************************
 *** CENSUS ***
 *******************************************
 
@@ -266,7 +266,7 @@ the analysis
 	replace vivia_1=100 if vivia_1==1
 	replace vivia_5=100 if vivia_5==1
 	drop pa_vivia_1ano pa_vivia_5anos
-	save "${data}/coded/censo_depto_total.dta", replace
+	save "${data}/coded/censo_depto_total.dta", replace */ // Este archivo se debe mandar al DANE********
 	
 	use "${data}/coded/censo_depto_total.dta", clear
 	
