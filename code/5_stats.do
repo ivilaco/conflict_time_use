@@ -14,52 +14,59 @@ This do file runs describptive stats and behaviour graphs
 	* Correlation between HH education and ingresos
 	corr INGRESO EDU
 
-	* A. Gráficas comportamentales
-		* 1. Comportamiento del uso del tiempo para todo el espectro
-		preserve
+*******************************************
+*** GRAPH USE OF TIME - ALL ***
+*******************************************
+	
+	preserve
 		collapse (mean) CH CU MW NW1 NW2 NW3 CHc CUc MWc NW1c NW2c NW3c, by(EDAD)
 
 			* 1.1 Con missings
-			twoway line MW EDAD, color(ebblue) ///		
-			|| line NW1 EDAD, color(olive_teal) ///
-			|| line NW2 EDAD ///
-			|| line NW3 EDAD ///
-			|| line CH EDAD, color(gold) ///
-			|| line CU EDAD, ///
-			graphregion(style(none) color(gs16)) xsize(7) xlabel(14(2)28) ///
+			twoway line MW EDAD, color(gold) ///		
+			|| line NW1 EDAD, color(mint) lpattern(shortdash_dot) ///
+			|| line NW2 EDAD, color(green) lpattern(longdash_dot) ///
+			|| line NW3 EDAD, color(ebblue) lpattern(dash) ///
+			|| line CH EDAD, color(purple) lpattern(shortdash) ///
+			|| line CU EDAD, color(black) lpattern(dot) ///
+			graphregion(color(gs16)) xsize(7) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") ///
 			cols(1) position(3) size(small) symxsize(3) region(lcolor(white))) ///
-			ytitle("Time spent (Hours/Day)") xtitle("Age (Years)") title("Panel A: With missing values")
+			ytitle("Time spent (Hours/Day)") xtitle("Age (Years)") subtitle("Panel A: With Missing Values")
 			graph export "${sale}/todcat_miss.pdf", replace
 				
 			* 1.2 Con ceros
-			twoway line MWc EDAD, color(ebblue) ///		
-			|| line NW1c EDAD, color(olive_teal) ///
-			|| line NW2c EDAD ///
-			|| line NW3c EDAD ///
-			|| line CHc EDAD, color(gold) ///
-			|| line CUc EDAD, ///
-			graphregion(style(none) color(gs16)) xsize(7) xlabel(14(2)28) ///
+			twoway line MWc EDAD, color(gold) ///		
+			|| line NW1c EDAD, color(mint) lpattern(shortdash_dot) ///
+			|| line NW2c EDAD, color(green) lpattern(longdash_dot) ///
+			|| line NW3c EDAD, color(ebblue) lpattern(dash) ///
+			|| line CHc EDAD, color(purple) lpattern(shortdash) ///
+			|| line CUc EDAD, color(black) lpattern(dot) ///
+			graphregion(color(gs16)) xsize(7) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") ///
 			cols(1) position(3) size(small) symxsize(3) region(lcolor(white))) ///
-			ytitle("Time spent (Hours/Day)") xtitle("Age (Years)") title("Panel B: Taking missing values as zeros")
+			ytitle("Time spent (Hours/Day)") xtitle("Age (Years)") subtitle("Panel B: Taking Missing Values as Zero")
 			graph export "${sale}/todcat_ceros.pdf", replace
 			
 			* 1.3 Con ceros (presentación)
-			twoway line MWc EDAD, color(ebblue) ///		
-			|| line NW1c EDAD, color(olive_teal) ///
-			|| line NW2c EDAD ///
-			|| line NW3c EDAD ///
-			|| line CHc EDAD, color(gold) ///
-			|| line CUc EDAD, ///
-			graphregion(style(none) color(gs16)) /*xsize(7)*/ xsize(4) xlabel(14(2)28) ///
+			twoway line MWc EDAD, color(gold) ///		
+			|| line NW1c EDAD, color(mint) lpattern(shortdash_dot) ///
+			|| line NW2c EDAD, color(green) lpattern(longdash_dot) ///
+			|| line NW3c EDAD, color(ebblue) lpattern(dash) ///
+			|| line CHc EDAD, color(purple) lpattern(shortdash) ///
+			|| line CUc EDAD, color(black) lpattern(dot) ///
+			graphregion(color(gs16)) /*xsize(7)*/ xsize(4) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") ///
 			rows(2) position(6) size(small) symxsize(3) region(lcolor(white))) ///
 			ytitle("Time spent (Hours/Day)") xtitle("Age (Years)")
 			graph export "${sale}/todcat_ceros_p.pdf", replace
-			restore
+			
+	restore
+	
+*******************************************
+*** GRAPH USE OF TIME - DIFF. GENDER ***
+*******************************************
 		
-		preserve
+	preserve
 		collapse (mean) CH CU MW NW1 NW2 NW3 CHc CUc MWc NW1c NW2c NW3c, by(EDAD SEXO)
 		reshape wide CH CU MW NW1 NW2 NW3 CHc CUc MWc NW1c NW2c NW3c, i(EDAD) j(SEXO)
 		foreach i in CH CU MW NW1 NW2 NW3 CHc CUc MWc NW1c NW2c NW3c{
@@ -67,45 +74,49 @@ This do file runs describptive stats and behaviour graphs
 		}
 			
 			* 1.1 Diferencia entre hombres y mujeres missings
-			twoway line MWm EDAD, color(ebblue) ///		
-			|| line NW1m EDAD, color(olive_teal) ///
-			|| line NW2m EDAD ///
-			|| line NW3m EDAD ///
-			|| line CHm EDAD, color(gold) ///
-			|| line CUm EDAD, ///
-			graphregion(style(none) color(gs16)) xsize(7) xlabel(14(2)28) ///
+			twoway line MWm EDAD, color(gold) ///		
+			|| line NW1m EDAD, color(mint) lpattern(shortdash_dot) ///
+			|| line NW2m EDAD, color(green) lpattern(longdash_dot) ///
+			|| line NW3m EDAD, color(ebblue) lpattern(dash) ///
+			|| line CHm EDAD, color(purple) lpattern(shortdash) ///
+			|| line CUm EDAD, color(black) lpattern(dot) ///
+			graphregion(color(gs16)) xsize(7) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") cols(1) position(3) size(small) symxsize(3) region(lcolor(white))) ///
-			ytitle("Female-Male Difference (Hours/Day)") xtitle("Age (Years)") title("Panel A: With missing values")
+			ytitle("Female-Male Difference (Hours/Day)") xtitle("Age (Years)") subtitle("Panel A: With Missing Values")
 			graph export "${sale}/todcat_missd.pdf", replace
 				
 			* 1.2 Diferencia entre hombres y mujeres ceros
-			twoway line MWcm EDAD, color(ebblue) ///	
-			|| line NW1cm EDAD, color(olive_teal) ///     
-			|| line NW2cm EDAD ///     
-			|| line NW3cm EDAD ///     
-			|| line CHcm EDAD, color(gold) ///      
-			|| line CUcm EDAD, ///      
-			graphregion(style(none) color(gs16)) xsize(7) xlabel(14(2)28) ///
+			twoway line MWcm EDAD, color(gold) ///	
+			|| line NW1cm EDAD, color(mint) lpattern(shortdash_dot) ///     
+			|| line NW2cm EDAD, color(green) lpattern(longdash_dot) ///     
+			|| line NW3cm EDAD, color(ebblue) lpattern(dash) ///     
+			|| line CHcm EDAD, color(purple) lpattern(shortdash) ///      
+			|| line CUcm EDAD, color(black) lpattern(dot) ///      
+			graphregion(color(gs16)) xsize(7) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") ///
 			cols(1) position(3) size(small) symxsize(3) region(lcolor(white))) ///
-			ytitle("Female-Male Difference (Hours/Day)") xtitle("Age (Years)") title("Panel B: Taking missing values as zeros")
+			ytitle("Female-Male Difference (Hours/Day)") xtitle("Age (Years)") subtitle("Panel B: Taking Missing Values as Zero")
 			graph export "${sale}/todcat_cerosd_p.pdf", replace
 			
 			* 1.3 Diferencia entre hombres y mujeres ceros (presentación)
-			twoway line MWcm EDAD, color(ebblue) ///	
-			|| line NW1cm EDAD, color(olive_teal) ///     
-			|| line NW2cm EDAD ///     
-			|| line NW3cm EDAD ///     
-			|| line CHcm EDAD, color(gold) ///      
-			|| line CUcm EDAD, ///      
-			graphregion(style(none) color(gs16)) xsize(4) xlabel(14(2)28) ///
+			twoway line MWcm EDAD, color(gold) ///	
+			|| line NW1cm EDAD, color(mint) lpattern(shortdash_dot) ///     
+			|| line NW2cm EDAD, color(green) lpattern(longdash_dot) ///     
+			|| line NW3cm EDAD, color(ebblue) lpattern(dash) ///     
+			|| line CHcm EDAD, color(purple) lpattern(shortdash) ///      
+			|| line CUcm EDAD, color(black) lpattern(dot) ///      
+			graphregion(color(gs16)) xsize(4) xlabel(14(2)28) ///
 			legen(order(1 "Labour market" 2 "Leisure and self-care" 3 "Sleep" 4 "Education" 5 "Household activities" 6 "Care") ///
 			rows(2) position(6)  size(small) symxsize(3) region(lcolor(white))) ///
 			ytitle("Female-Male Difference (Hours/Day)") xtitle("Age (Years)")
 			graph export "${sale}/todcat_cerosd_p.pdf", replace
-			restore
-			
-		* 2. Proporción de ceros en la muestra por variable dependiente
+	
+	restore
+
+*******************************************
+*** GRAPH PROPORTION OF ZEROS ***
+*******************************************
+
 		file open latex0 using "${sale}/zeros.txt", write replace text
 		file write latex0 "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 		file write latex0 "\large" _n
@@ -133,7 +144,11 @@ This do file runs describptive stats and behaviour graphs
 		file write latex0 "\end{tabular}" _n
 		file close latex0		
 		
-		* 3. Porcentage de hombres y discapacitados en el hogar
+*******************************************
+*** HOUSEHOLD DEMOGRAPHICS ***
+*******************************************
+
+		* Porcentage de hombres y discapacitados en el hogar
 		file open latex01 using "${sale}/phh.txt", write replace text
 		file write latex01 "\begin{tabular}{l c c c c c} \\ \hline \hline" _n
 		file write latex01 "&& \multicolumn{3}{c}{Males} & Disabled \\ \cline{3-6}" _n
@@ -159,7 +174,10 @@ This do file runs describptive stats and behaviour graphs
 		file write latex01 "\end{tabular}" _n
 		file close latex01	
 					
-	* B. Estadísticas descriptivas
+*******************************************
+*** DESCRIPTIVE STATS ***
+*******************************************
+
 	label var CONFLICT "Treatment (1: Conflict)"
 	label var TIME "Time (1: After 2014)"
 	label var EDAD "Age (in years)"
@@ -234,3 +252,32 @@ This do file runs describptive stats and behaviour graphs
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
+	
+*******************************************
+*** MAP COLOMBIA MUNICIPALITIES ***
+*******************************************
+
+	* Importing shapefiles
+	shp2dta using "${entra}/mpio.shp", database(col_mpios) coordinates(col_coord) genid(id) replace
+
+	use col_mpios, clear
+	destring MPIOS, gen(MUNICIPIO)
+	describe
+	list id MUNICIPIO in 1/5
+	save col_mpios, replace
+	
+	* Mergin with conflict database
+	use "${enut}/ENUT_FARC.dta", clear
+	keep MUNICIPIO CONFLICT 
+	duplicates drop MUNICIPIO, force
+	
+	merge 1:m MUNICIPIO using col_mpios
+	drop _merge
+	
+	* Creating the map and exporting
+	spmap CONFLICT using col_coord, id(id) fcolor(Accent) ///
+		legend(label(2 "No conflict") label(3 "Conflict"))	
+	graph export "${sale}/map.pdf", replace
+	
+	
+	
