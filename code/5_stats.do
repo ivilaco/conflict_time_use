@@ -4,7 +4,7 @@ Code author: Ivonne Lara
 --------------------------------------------------------------------------
 5_stats.do
 
-This do file runs describptive stats and behaviour graphs
+This do file runs descriptive stats, behaviour graphs and maps
 =========================================================================*/
 
 	use "${enut}/ENUT_FARC.dta", clear
