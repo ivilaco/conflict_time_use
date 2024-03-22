@@ -13,7 +13,8 @@ Code author: Ivonne Lara
 	set more off
 	
 	* Working directory - Cambiar este segun si se está trabajando desde el DANE o el computador personal
-	glo main "/Users/ivonnelara/Documents/Working Papers/conflict_time_use/Code"
+	glo main "/Users/ivonnelara/Documents/Working Papers/conflict_time_use"
+	glo desktop "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
 	cd "${main}"
 
 	* DANE (Verificar como estan construidas las carpetas en el DANE)
@@ -22,17 +23,23 @@ Code author: Ivonne Lara
 	glo sale "${main}/SALE"
 	
 	* Github
-	glo code "${main}\code"
-	glo data "${main}\data"
-	glo output "${main}\output"
+	glo code "${main}/code"
+	glo data "${desktop}/data"
+	glo output "${desktop}/output"
 	
 	* Setting the ado path with required packages
 	sysdir set PLUS "${main}/code/ado"
 	
-	* Install packages
+	/* Install packages
 	ssc install spmap
 	ssc install shp2dta
 	ssc install mif2dta
+	ssc install psmatch2
+	*ssc install st0026_2
+	ssc install spmap
+	ssc install shp2dta
+	ssc install mif2dta
+	*/
 		
 	* Start log
 	cap log close
@@ -61,15 +68,15 @@ Code author: Ivonne Lara
 *******************************************
 *** CODE ***
 *******************************************
-	
-	* Cleans de ENUT databases and merges them
-	do "${code}/1_cleaning.do" // DANE
-	
-	* Creates variables of interest from ENUT database
-	do "${code}/2_vars.do" // DANE
 
 	* Creates de covariables and additional variables for analysis from external databases
-	do "${code}/3_covars.do" // Github
+	do "${code}/1_covars.do" // Github
+	
+	* Cleans de ENUT databases and merges them
+	do "${code}/2_cleaning.do" // DANE
+	
+	* Creates variables of interest from ENUT database
+	do "${code}/3_vars.do" // DANE
 
 	* Merges the covariables with the ENUT to build the final databse
 	do "${code}/4_final_database.do" // DANE

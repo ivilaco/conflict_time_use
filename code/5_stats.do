@@ -268,16 +268,35 @@ This do file runs descriptive stats, behaviour graphs and maps
 	
 	* Mergin with conflict database
 	use "${enut}/ENUT_FARC.dta", clear
-	keep MUNICIPIO CONFLICT 
+	keep MUNICIPIO CONFLICT REGION
 	duplicates drop MUNICIPIO, force
 	
 	merge 1:m MUNICIPIO using col_mpios
 	drop _merge
 	
+	* Regions
+	drop REGION
+	gen REGION = .
+	replace REGION = 1 if DPTO == "08" | DPTO == "13" | DPTO == "20" | DPTO == "23" | DPTO == "44" | DPTO == "47" | DPTO == "70"
+	replace REGION = 2 if DPTO == "05" | DPTO == "17" | DPTO == "18" | DPTO == "41" | DPTO == "63" | DPTO == "66" | DPTO == "73"
+	replace REGION = 3 if DPTO == "15" | DPTO == "25" | DPTO == "50" | DPTO == "54" | DPTO == "68"
+	replace REGION = 4 if DPTO == "19" | DPTO == "27" | DPTO == "52" | DPTO == "76"
+	*replace REGION = 5 if DPTO == "11"
+	*replace REGION = 6 if DPTO == "88"
+		
 	* Creating the map and exporting
 	spmap CONFLICT using col_coord, id(id) fcolor(Accent) ///
-		legend(label(2 "No conflict") label(3 "Conflict"))	
+	egend(label(2 "No conflict") label(3 "Conflict"))
+
 	graph export "${sale}/map.pdf", replace
 	
+<<<<<<< Updated upstream
 	
 	
+=======
+	* Creating a Regions map
+	spmap REGION using col_coord, id(id) fcolor(Accent) clnum(5) ///
+	clmethod(unique) legend(label(1 "No data") label(2 "Atlantic") label(3 "Central") label(4 "Eastern") label(5 "Pacific")) 
+	graph export "${sale}/map_regions.pdf", replace
+	
+>>>>>>> Stashed changes

@@ -124,10 +124,37 @@ the analysis
 	}
 	save "${data}/coded/COVS.dta", replace
 	
-	* Probamos las variables con el tratamiento
+	* Pegamos las variables con el tratamiento // Mirar que pasa aca con MUNICIPIO
 	use "${data}/coded/COVS.dta", clear
+	rename codmpio MUNICIPIO
 	merge m:1 MUNICIPIO using "${data}/coded/FARC.dta"
 	keep if _merge==3
 	drop _merge	
-	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********/
+	save "${data}/coded/FARC_2.dta", replace 
 	
+*******************************************
+*** MPIOS PDET ***
+*******************************************
+
+	import excel "${data}/raw/MunicipiosPDET.xlsx", sheet("MunicipiosPDET") firstrow clear
+	
+	rename CódigoDANEDepartamento cod_DPTO
+	rename CódigoDANEMunicipio MUNICIPIO
+	rename Departamento DEPARTAMENTO
+	rename Municipio MPIO
+	rename SubregiónPDET SUB_PDET
+	
+	gen PDET = 1	
+	keep MUNICIPIO SUB_PDET PDET
+	
+	merge 1:m MUNICIPIO using "${data}/coded/FARC_2.dta"
+	replace PDET = 0 if PDET == .
+	
+	preserve
+	keep MUNICIPIO SUB_PDET PDET
+	duplicates drop MUNICIPIO, force
+	save "${data}/coded/MunicipiosPDET.dta", replace
+	restore
+	
+	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********/
+
