@@ -37,7 +37,27 @@ This do file runs robustness checks and mechanisms
 	gen prop_desp_recep = (desplazados_recepcion/pobl_tot)*100
 	gen prop_desp_expul = (desplazados_expulsion/pobl_tot)*100
 	
-	sum prop_desp_recep prop_desp_expul
+	*sum prop_desp_recep prop_desp_expul
+	
+	gen DPTO = substr(string(MUNICIPIO), 1, length(string(MUNICIPIO)) - 3)
+	
+	forvalue i = 5/8 {
+		replace DPTO = "0`i'" if DPTO == "`i'"
+	}
+	
+	* Regions
+	cap drop REGION
+	gen REGION = .
+	replace REGION = 1 if DPTO == "08" | DPTO == "13" | DPTO == "20" | DPTO == "23" | DPTO == "44" | DPTO == "47" | DPTO == "70"
+	replace REGION = 2 if DPTO == "05" | DPTO == "17" | DPTO == "18" | DPTO == "41" | DPTO == "63" | DPTO == "66" | DPTO == "73"
+	replace REGION = 3 if DPTO == "15" | DPTO == "25" | DPTO == "50" | DPTO == "54" | DPTO == "68"
+	replace REGION = 4 if DPTO == "19" | DPTO == "27" | DPTO == "52" | DPTO == "76"
+	*replace REGION = 5 if DPTO == "11"
+	*replace REGION = 6 if DPTO == "88"
+	
+	save "${enut}/mecanismo1.dta", replace
+	
+	use "${enut}/mecanismo1.dta", clear
 	
 	* Regresion
 	file open latexm2 using "${output}/mig.txt", write replace text
@@ -181,7 +201,7 @@ This do file runs robustness checks and mechanisms
 	file write latexm1 "& \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{\% of males} & \multicolumn{2}{c}{\% of young males} & \multicolumn{2}{c}{\% of disabled} \\ " _n
 	file write latexm1 "& (1) & (2) & (1) & (2) & (1) & (2) & (1) & (2) \\ \hline" _n
 
-	foreach i in p_hhth p_hhthj p_hdist hht {
+	foreach i in p_hhth p_hhthj  hht {
 		
 		* Conflict x time all
 		reg `i' conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO, vce(cluster MUNICIPIO)

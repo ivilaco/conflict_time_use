@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file cruns the main regressions + controls
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear
 
 * ----------------------------------------------------------------------
 * VI.1 Regresion principal (EF Municipio y EF Año)

@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs descriptive stats, behaviour graphs and maps
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear
 	
 	tab EDU, gen(edu)
 	
