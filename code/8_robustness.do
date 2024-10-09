@@ -190,8 +190,7 @@ This do file runs robustness checks and mechanisms
 		
 	collapse (mean) hht* hdist CONFLICT ANNO MUNICIPIO p_hhth p_hhthj p_hdist, by(idhogar TIME)
 	gen conflict_time = CONFLICT*TIME
-		foreach i in $mecs {
-		*replace `i'=. if CONFLICT==0
+		foreach i in p_hhth p_hhthj hht {
 		replace `i'=0 if `i'==.
 	}
 	
@@ -201,7 +200,7 @@ This do file runs robustness checks and mechanisms
 	file write latexm1 "& \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{\% of males} & \multicolumn{2}{c}{\% of young males} & \multicolumn{2}{c}{\% of disabled} \\ " _n
 	file write latexm1 "& (1) & (2) & (1) & (2) & (1) & (2) & (1) & (2) \\ \hline" _n
 
-	foreach i in p_hhth p_hhthj  hht {
+	foreach i in p_hhth p_hhthj hht {
 		
 		* Conflict x time all
 		reg `i' conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO, vce(cluster MUNICIPIO)
