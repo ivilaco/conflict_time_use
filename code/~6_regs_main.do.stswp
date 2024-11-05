@@ -11,10 +11,6 @@ This do file cruns the main regressions + controls
 	
 ******************* TESTS
 
-	* Westfall and Young (1993)
-	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
-	matlist r(table)
-
 
 ******************* TESTS
 
@@ -37,14 +33,14 @@ This do file cruns the main regressions + controls
 	file write latex1 " & \multicolumn{2}{c}{Dummy} & \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
 	file write latex1 "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
-	* v1 - Básica (OLS) Modelo 1
-	rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
+	* v1 - Básica (OLS) Modelo 1 Rwolf
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000)
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(100)
 		
 		global rw1_MW: di %4.3f `= e(RW)[1,3]'
 		global rw1_NW1: di %4.3f `= e(RW)[2,3]'
@@ -53,14 +49,14 @@ This do file cruns the main regressions + controls
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000)
+	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(100)
 
 		* 2016
 		global rw2_MW: di %4.3f `= e(RW)[1,3]'
@@ -78,8 +74,8 @@ This do file cruns the main regressions + controls
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (Tobit) Modelo 4		
-	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* v2 - Básica (Tobit) Modelo 4 Westfall and Young (1993)	
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
 		global rw4_MW: di %4.3f `= r(table)[1,4]'
@@ -97,8 +93,8 @@ This do file cruns the main regressions + controls
 		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v2 - Interacción por año (Tobit) Modelo 5 y 6
-	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* v2 - Interacción por año (Tobit) Modelo 5 y 6 Westfall and Young (1993)
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 	
 		* wyoung / NOTA: AJUSTAR
 
@@ -136,14 +132,14 @@ This do file cruns the main regressions + controls
 			global rw6_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw6_CU_s: di %4.3f `= r(table)[12,6]'
 			
-	* v3 - Básica (Dummy) Modelo 7
+	* v3 - Básica (Dummy) Modelo 7 Rwolf
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000)
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(100)
 	
 		global rw7_MW: di %4.3f `= e(RW)[1,3]'
 		global rw7_NW1: di %4.3f `= e(RW)[2,3]'
@@ -152,14 +148,14 @@ This do file cruns the main regressions + controls
 		global rw7_CH: di %4.3f `= e(RW)[5,3]'
 		global rw7_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v3 - Interacción por año (Dummy) Modelo 8 y 9
+	* v3 - Interacción por año (Dummy) Modelo 8 y 9 Rwolf
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
 	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000)
+	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(100)
 	
 		* 2016
 		global rw8_MW: di %4.3f `= e(RW)[1,3]'
@@ -359,15 +355,18 @@ This do file cruns the main regressions + controls
 	file write latex1 "\textbf{`lab'} \\" _n
 	file write latex1 " Conflict x Time & ${bc_`i'} && ${ba_`i'} && ${bb_`i'} &\\" _n
 	file write latex1 "  & (${sec_`i'}) && (${sea_`i'}) && (${seb_`i'}) & \\" _n
-	file write latex1 "  & [${rw7_`i'}] && [${rw1_`i'}] && [${rw4_`i'}] & \\" _n
+	file write latex1 "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
+	file write latex1 "  & && && <${rw4_`i'_s}> & \\" _n
 
 	file write latex1 " Conflict x 2016 && ${bj_`i'} && ${be_`i'} && ${bg_`i'} \\" _n
 	file write latex1 " && (${sej_`i'}) && (${see_`i'}) && (${seg_`i'})  \\" _n
-	file write latex1 " && [${rw8_`i'}] && [${rw2_`i'}] && [${rw5_`i'}] \\" _n
+	file write latex1 " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
+	file write latex1 " && && && <${rw5_`i'_s}> \\" _n
 
 	file write latex1 " Conflict x 2020 && ${bk_`i'} && ${bf_`i'} && ${bh_`i'}  \\" _n
 	file write latex1 " && (${sek_`i'}) && (${sef_`i'}) && (${seh_`i'})  \\" _n
-	file write latex1 " && [${rw9_`i'}] && [${rw3_`i'}] && [${rw6_`i'}] \\" _n
+	file write latex1 " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
+	file write latex1 " && && && <${rw6_`i'_s}> \\" _n
 
 	file write latex1 " R-squared & ${r25_`i'} & ${r26_`i'} & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'}   \\" _n
 	file write latex1 " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
