@@ -12,7 +12,7 @@ This do file cruns the main regressions + controls
 ******************* TESTS
 
 	* Westfall and Young (1993)
-	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 	matlist r(table)
 
 
@@ -81,21 +81,21 @@ This do file cruns the main regressions + controls
 	* v2 - Básica (Tobit) Modelo 4		
 	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung / NOTA: AJUSTAR
-		global rw4_MW: di %4.3f `= r(table)[1,3]'
-		global rw4_NW1: di %4.3f `= r(table)[2,3]'
-		global rw4_NW2: di %4.3f `= r(table)[3,3]'
-		global rw4_NW3: di %4.3f `= r(table)[4,3]'
-		global rw4_CH: di %4.3f `= r(table)[5,3]'
-		global rw4_CU: di %4.3f `= r(table)[6,3]'
+		* wyoung 
+		global rw4_MW: di %4.3f `= r(table)[1,4]'
+		global rw4_NW1: di %4.3f `= r(table)[2,4]'
+		global rw4_NW2: di %4.3f `= r(table)[3,4]'
+		global rw4_NW3: di %4.3f `= r(table)[4,4]'
+		global rw4_CH: di %4.3f `= r(table)[5,4]'
+		global rw4_CU: di %4.3f `= r(table)[6,4]'
 		
-		* Sidak / NOTA: AJUSTAR
-		global rw4_MW: di %4.3f `= r(table)[1,3]'
-		global rw4_NW1: di %4.3f `= r(table)[2,3]'
-		global rw4_NW2: di %4.3f `= r(table)[3,3]'
-		global rw4_NW3: di %4.3f `= r(table)[4,3]'
-		global rw4_CH: di %4.3f `= r(table)[5,3]'
-		global rw4_CU: di %4.3f `= r(table)[6,3]'
+		* Sidak
+		global rw4_MW_s: di %4.3f `= r(table)[1,6]'
+		global rw4_NW1_s: di %4.3f `= r(table)[2,6]'
+		global rw4_NW2_s: di %4.3f `= r(table)[3,6]'
+		global rw4_NW3_s: di %4.3f `= r(table)[4,6]'
+		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
+		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
 	* v2 - Interacción por año (Tobit) Modelo 5 y 6
 	wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
@@ -103,38 +103,38 @@ This do file cruns the main regressions + controls
 		* wyoung / NOTA: AJUSTAR
 
 			* 2016
-			global rw5_MW: di %4.3f `= r(table)[1,3]'
-			global rw5_NW1: di %4.3f `= r(table)[3,3]'
-			global rw5_NW2: di %4.3f `= r(table)[5,3]'
-			global rw5_NW3: di %4.3f `= r(table)[7,3]'
-			global rw5_CH: di %4.3f `= r(table)[9,3]'
-			global rw5_CU: di %4.3f `=  r(table)[11,3]'
+			global rw5_MW: di %4.3f `= r(table)[1,4]'
+			global rw5_NW1: di %4.3f `= r(table)[2,4]'
+			global rw5_NW2: di %4.3f `= r(table)[3,4]'
+			global rw5_NW3: di %4.3f `= r(table)[4,4]'
+			global rw5_CH: di %4.3f `= r(table)[5,4]'
+			global rw5_CU: di %4.3f `=  r(table)[6,4]'
 
 			* 2020
-			global rw6_MW: di %4.3f `= r(table)[2,3]'
-			global rw6_NW1: di %4.3f `= r(table)[4,3]'
-			global rw6_NW2: di %4.3f `= r(table)[6,3]'
-			global rw6_NW3: di %4.3f `= r(table)[8,3]'
-			global rw6_CH: di %4.3f `= r(table)[10,3]'
-			global rw6_CU: di %4.3f `= r(table)[12,3]'
+			global rw6_MW: di %4.3f `= r(table)[7,4]'
+			global rw6_NW1: di %4.3f `= r(table)[8,4]'
+			global rw6_NW2: di %4.3f `= r(table)[9,4]'
+			global rw6_NW3: di %4.3f `= r(table)[10,4]'
+			global rw6_CH: di %4.3f `= r(table)[11,4]'
+			global rw6_CU: di %4.3f `= r(table)[12,4]'
 			
 		* Sidak / NOTA: AJUSTAR
 
 			* 2016
-			global rw5_MW: di %4.3f `= r(table)[1,3]'
-			global rw5_NW1: di %4.3f `= r(table)[3,3]'
-			global rw5_NW2: di %4.3f `= r(table)[5,3]'
-			global rw5_NW3: di %4.3f `= r(table)[7,3]'
-			global rw5_CH: di %4.3f `= r(table)[9,3]'
-			global rw5_CU: di %4.3f `=  r(table)[11,3]'
+			global rw5_MW_s: di %4.3f `= r(table)[1,6]'
+			global rw5_NW1_s: di %4.3f `= r(table)[2,6]'
+			global rw5_NW2_s: di %4.3f `= r(table)[3,6]'
+			global rw5_NW3_s: di %4.3f `= r(table)[4,6]'
+			global rw5_CH_s: di %4.3f `= r(table)[5,6]'
+			global rw5_CU_s: di %4.3f `=  r(table)[6,6]'
 
 			* 2020
-			global rw6_MW: di %4.3f `= r(table)[2,3]'
-			global rw6_NW1: di %4.3f `= r(table)[4,3]'
-			global rw6_NW2: di %4.3f `= r(table)[6,3]'
-			global rw6_NW3: di %4.3f `= r(table)[8,3]'
-			global rw6_CH: di %4.3f `= r(table)[10,3]'
-			global rw6_CU: di %4.3f `= r(table)[12,3]'
+			global rw6_MW_s: di %4.3f `= r(table)[7,6]'
+			global rw6_NW1_s: di %4.3f `= r(table)[8,6]'
+			global rw6_NW2_s: di %4.3f `= r(table)[9,6]'
+			global rw6_NW3_s: di %4.3f `= r(table)[10,6]'
+			global rw6_CH_s: di %4.3f `= r(table)[11,6]'
+			global rw6_CU_s: di %4.3f `= r(table)[12,6]'
 			
 	* v3 - Básica (Dummy) Modelo 7
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
