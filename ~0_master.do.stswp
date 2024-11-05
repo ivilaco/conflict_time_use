@@ -42,6 +42,8 @@ Code author: Ivonne Lara
 	ssc install mif2dta, replace
 	ssc install rwolf, replace
 	ssc install rwolf2, replace
+	ssc install parmest
+	net install wyoung, from("https://raw.githubusercontent.com/reifjulian/wyoung/master") replace
 	*/
 		
 	* Start log
