@@ -378,6 +378,132 @@ file write latex4 "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 file write latex4 "& \multicolumn{2}{c}{14-19 years} & \multicolumn{2}{c}{20-23 years} & \multicolumn{2}{c}{24-28 years} \\" _n
 file write latex4 "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
+	* v1 - Básica (Tobit) Modelo 1 Rwolf, Edad 1
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+		
+		* wyoung 
+		global rw1_MW: di %4.3f `= r(table)[1,4]'
+		global rw1_NW1: di %4.3f `= r(table)[2,4]'
+		global rw1_NW2: di %4.3f `= r(table)[3,4]'
+		global rw1_NW3: di %4.3f `= r(table)[4,4]'
+		global rw1_CH: di %4.3f `= r(table)[5,4]'
+		global rw1_CU: di %4.3f `= r(table)[6,4]'
+		
+		* Sidak
+		global rw1_MW_s: di %4.3f `= r(table)[1,6]'
+		global rw1_NW1_s: di %4.3f `= r(table)[2,6]'
+		global rw1_NW2_s: di %4.3f `= r(table)[3,6]'
+		global rw1_NW3_s: di %4.3f `= r(table)[4,6]'
+		global rw1_CH_s: di %4.3f `= r(table)[5,6]'
+		global rw1_CU_s: di %4.3f `= r(table)[6,6]'
+
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
+
+		* 2016
+		global rw2_MW: di %4.3f `= e(RW)[1,3]'
+		global rw2_NW1: di %4.3f `= e(RW)[3,3]'
+		global rw2_NW2: di %4.3f `= e(RW)[5,3]'
+		global rw2_NW3: di %4.3f `= e(RW)[7,3]'
+		global rw2_CH: di %4.3f `= e(RW)[9,3]'
+		global rw2_CU: di %4.3f `=  e(RW)[11,3]'
+
+		* 2020
+		global rw3_MW: di %4.3f `= e(RW)[2,3]'
+		global rw3_NW1: di %4.3f `= e(RW)[4,3]'
+		global rw3_NW2: di %4.3f `= e(RW)[6,3]'
+		global rw3_NW3: di %4.3f `= e(RW)[8,3]'
+		global rw3_CH: di %4.3f `= e(RW)[10,3]'
+		global rw3_CU: di %4.3f `= e(RW)[12,3]'
+
+	* v2 - Básica (OLS) Modelo 1 Rwolf, Edad 2
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+		
+		global rw4_MW: di %4.3f `= e(RW)[1,3]'
+		global rw4_NW1: di %4.3f `= e(RW)[2,3]'
+		global rw4_NW2: di %4.3f `= e(RW)[3,3]'
+		global rw4_NW3: di %4.3f `= e(RW)[4,3]'
+		global rw4_CH: di %4.3f `= e(RW)[5,3]'
+		global rw4_CU: di %4.3f `= e(RW)[6,3]'
+		
+	* v2 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 2
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
+	
+		* 2016
+		global rw5_MW: di %4.3f `= e(RW)[1,3]'
+		global rw5_NW1: di %4.3f `= e(RW)[3,3]'
+		global rw5_NW2: di %4.3f `= e(RW)[5,3]'
+		global rw5_NW3: di %4.3f `= e(RW)[7,3]'
+		global rw5_CH: di %4.3f `= e(RW)[9,3]'
+		global rw5_CU: di %4.3f `=  e(RW)[11,3]'
+
+		* 2020
+		global rw6_MW: di %4.3f `= e(RW)[2,3]'
+		global rw6_NW1: di %4.3f `= e(RW)[4,3]'
+		global rw6_NW2: di %4.3f `= e(RW)[6,3]'
+		global rw6_NW3: di %4.3f `= e(RW)[8,3]'
+		global rw6_CH: di %4.3f `= e(RW)[10,3]'
+		global rw6_CU: di %4.3f `= e(RW)[12,3]'
+
+	* v3 - Básica (OLS) Modelo 1 Rwolf, Edad 3
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+			
+		global rw7_MW: di %4.3f `= e(RW)[1,3]'
+		global rw7_NW1: di %4.3f `= e(RW)[2,3]'
+		global rw7_NW2: di %4.3f `= e(RW)[3,3]'
+		global rw7_NW3: di %4.3f `= e(RW)[4,3]'
+		global rw7_CH: di %4.3f `= e(RW)[5,3]'
+		global rw7_CU: di %4.3f `= e(RW)[6,3]'
+		
+	* v3 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 3
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
+	
+		* 2016
+		global rw8_MW: di %4.3f `= e(RW)[1,3]'
+		global rw8_NW1: di %4.3f `= e(RW)[3,3]'
+		global rw8_NW2: di %4.3f `= e(RW)[5,3]'
+		global rw8_NW3: di %4.3f `= e(RW)[7,3]'
+		global rw8_CH: di %4.3f `= e(RW)[9,3]'
+		global rw8_CU: di %4.3f `=  e(RW)[11,3]'
+
+		* 2020
+		global rw9_MW: di %4.3f `= e(RW)[2,3]'
+		global rw9_NW1: di %4.3f `= e(RW)[4,3]'
+		global rw9_NW2: di %4.3f `= e(RW)[6,3]'
+		global rw9_NW3: di %4.3f `= e(RW)[8,3]'
+		global rw9_CH: di %4.3f `= e(RW)[10,3]'
+		global rw9_CU: di %4.3f `= e(RW)[12,3]'
+
 	foreach i in $ceros {
 		
 		*** EDAD 1
