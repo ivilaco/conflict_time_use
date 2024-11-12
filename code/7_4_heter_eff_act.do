@@ -30,11 +30,11 @@ This do file runs regression with heterogeneous effects
 * v1 - OLS
 * ----------------------------------------------------------------------
 	
-file open latex15 using "${sale}/reg6c_v1.txt", write replace text
-file write latex15 "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
-file write latex15 "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex15 "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
-file write latex15 "& (1) & (2) & (3) & (4)  \\ \hline" _n
+file open latex using "${sale}/reg6c_v1.txt", write replace text
+file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
+file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
+file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
 	foreach i in $ceros {
 		
@@ -161,39 +161,39 @@ file write latex15 "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			}
 		}
 	
-file write latex15 "\textbf{`lab'} \\" _n
-file write latex15 " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
-file write latex15 "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
+file write latex "\textbf{`lab'} \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 
-file write latex15 " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
-file write latex15 " && (${sey_`i'}) && (${sex_`i'}) \\" _n
+file write latex " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
+file write latex " && (${sey_`i'}) && (${sex_`i'}) \\" _n
 
-file write latex15 " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
-file write latex15 " && (${sez_`i'})&& (${sew_`i'})\\" _n
+file write latex " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
+file write latex " && (${sez_`i'})&& (${sew_`i'})\\" _n
 
-file write latex15 " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex15 " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex15 " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
+file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
+file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
+file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
-file write latex15 "\hline" _n
+file write latex "\hline" _n
 	}
-file write latex15 "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
-file write latex15 "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
-file write latex15 "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex15 "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex15 "\hline \hline" _n
-file write latex15 "\end{tabular}" _n
-file close latex15
+file write latex "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+file write latex "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
+file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "\hline \hline" _n
+file write latex "\end{tabular}" _n
+file close latex
 
 * ----------------------------------------------------------------------
 * v2 - Tobit
 * ----------------------------------------------------------------------
 
-file open latex16 using "${sale}/reg6c_v2.txt", write replace text
-file write latex16 "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
-file write latex16 "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex16 "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
-file write latex16 "& (1) & (2) & (3) & (4)  \\ \hline" _n
+file open latex using "${sale}/reg6c_v2.txt", write replace text
+file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
+file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
+file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
 	foreach i in $ceros {
 		
@@ -320,39 +320,39 @@ file write latex16 "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			}
 		}
 	
-file write latex16 "\textbf{`lab'} \\" _n
-file write latex16 " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
-file write latex16 "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
+file write latex "\textbf{`lab'} \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 
-file write latex16 " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
-file write latex16 " && (${sey_`i'}) && (${sex_`i'}) \\" _n
+file write latex " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
+file write latex " && (${sey_`i'}) && (${sex_`i'}) \\" _n
 
-file write latex16 " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
-file write latex16 " && (${sez_`i'})&& (${sew_`i'})\\" _n
+file write latex " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
+file write latex " && (${sez_`i'})&& (${sew_`i'})\\" _n
 
-file write latex16 " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex16 " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex16 " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
+file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
+file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
+file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
-file write latex16 "\hline" _n
+file write latex "\hline" _n
 	}
-file write latex16 "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
-file write latex16 "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
-file write latex16 "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex16 "Control & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex16 "\hline \hline" _n
-file write latex16 "\end{tabular}" _n
-file close latex16
+file write latex "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+file write latex "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
+file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "Control & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "\hline \hline" _n
+file write latex "\end{tabular}" _n
+file close latex
 
 * ----------------------------------------------------------------------
 * v3 - Dummys
 * ----------------------------------------------------------------------
 
-file open latex17 using "${sale}/reg6c_v3.txt", write replace text
-file write latex17 "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
-file write latex17 "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex17 "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
-file write latex17 "& (1) & (2) & (3) & (4) \\ \hline" _n
+file open latex using "${sale}/reg6c_v3.txt", write replace text
+file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
+file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
+file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
 	foreach i in $dummys {
 		
@@ -479,26 +479,26 @@ file write latex17 "& (1) & (2) & (3) & (4) \\ \hline" _n
 			}
 		}
 	
-file write latex17 "\textbf{`lab'} \\" _n
-file write latex17 " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
-file write latex17 "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
+file write latex "\textbf{`lab'} \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 
-file write latex17 " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
-file write latex17 " && (${sey_`i'}) && (${sex_`i'}) \\" _n
+file write latex " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
+file write latex " && (${sey_`i'}) && (${sex_`i'}) \\" _n
 
-file write latex17 " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
-file write latex17 " && (${sez_`i'})&& (${sew_`i'})\\" _n
+file write latex " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
+file write latex " && (${sez_`i'})&& (${sew_`i'})\\" _n
 
-file write latex17 " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex17 " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex17 " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
+file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
+file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
+file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
-file write latex17 "\hline" _n
+file write latex "\hline" _n
 	}
-file write latex17 "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
-file write latex17 "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
-file write latex17 "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex17 "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex17 "\hline \hline" _n
-file write latex17 "\end{tabular}" _n
-file close latex17
+file write latex "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+file write latex "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
+file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "\hline \hline" _n
+file write latex "\end{tabular}" _n
+file close latex
