@@ -539,7 +539,7 @@ file write latex " && (${sez_`i'})&& (${sew_`i'}) \\" _n
 file write latex " && \{${rw3_`i'}\} && \{${rw6_`i'}\} \\" _n
 file write latex " && <${rw3_`i'_s}> && <${rw6_`i'_s}> \\" _n
 
-file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
+*file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
 file write latex " Pre-t. treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
 file write latex " Pre-t. cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'}  \\" _n
 

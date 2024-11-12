@@ -27,7 +27,7 @@ This do file runs regression with heterogeneous effects
 	replace dummyedad=2 if EDAD>23
 
 * ---------------------------------------------------------------------
-* v1 - OLS (DONE)
+* v1 - OLS 
 * ---------------------------------------------------------------------
 	
 file open latex using "${sale}/reg2c_v1.txt", write replace text
@@ -750,7 +750,7 @@ file write latex " && (${sez_`i'})&& (${sew_`i'}) && (${sev_`i'})\\" _n
 file write latex " && \{${rw3_`i'}\} && \{${rw6_`i'}\} && \{${rw9_`i'}\} \\" _n
 file write latex " && <${rw3_`i'_s}> && <${rw6_`i'_s}> && <${rw9_`i'_s}> \\" _n
 
-file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} & ${r25_`i'} & ${r26_`i'}  \\" _n
+*file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} & ${r25_`i'} & ${r26_`i'}  \\" _n
 file write latex " Pre-t. treat. mean & ${m10_`i'} & ${m10_`i'} & ${m11_`i'} & ${m11_`i'} & ${m12_`i'} & ${m12_`i'}  \\" _n
 file write latex " Pre-t. cont. mean & ${m00_`i'} & ${m00_`i'} & ${m01_`i'} & ${m01_`i'} & ${m02_`i'} & ${m02_`i'}  \\" _n
 
@@ -765,7 +765,7 @@ file write latex "\end{tabular}" _n
 file close latex
 
 * ---------------------------------------------------------------------
-* v3 - Dummys (DONE)
+* v3 - Dummys 
 * ---------------------------------------------------------------------
 
 file open latex using "${sale}/reg2c_v3.txt", write replace text
