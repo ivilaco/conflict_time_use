@@ -21,11 +21,6 @@ This do file runs regression with heterogeneous effects
 		gen `i'_c=`i'*TIME
 	}
 
-	gen dummyedad=.
-	replace dummyedad=0 if EDAD<19
-	replace dummyedad=1 if EDAD>=19 & EDAD<=23
-	replace dummyedad=2 if EDAD>23
-
 * ----------------------------------------------------------------------
 * v1 - OLS
 * ---------------------------------------------------------------------*
@@ -477,7 +472,7 @@ file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{No education} & \multicolumn{2}{c}{Preschool/elementary} & \multicolumn{2}{c}{Middle/High school} & \multicolumn{2}{c}{Under/postgraduate} \\" _n
 file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 
-* v1 - Básica (Tobit) Modelo 1 Rwolf, Edu 1
+	* v1 - Básica (Tobit) Modelo 1 Rwolf, Edu 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -988,7 +983,7 @@ file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{No education} & \multicolumn{2}{c}{Preschool/elementary} & \multicolumn{2}{c}{Middle/High school} & \multicolumn{2}{c}{Under/postgraduate} \\" _n
 file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 
-* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+	* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==1, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if EDU==1, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if EDU==1, cluster(MUNICIPIO)) ///
