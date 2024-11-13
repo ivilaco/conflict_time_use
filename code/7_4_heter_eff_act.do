@@ -31,7 +31,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
 file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
-* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+* v1 - Básica (OLS) Modelo 1 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
@@ -47,7 +47,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
@@ -72,7 +72,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 1 Rwolf, Edad 2
+	* v2 - Básica (OLS) Modelo 4 Rwolf, ingdummy 2
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
@@ -88,7 +88,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 2
+	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, ingdummy 2
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
@@ -275,7 +275,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
 file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
-	* v1 - Básica (Tobit) Modelo 1 Rwolf, Edu 1
+	* v1 - Básica (Tobit) Modelo 1 wyoung & sidak, ingdummy 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -294,7 +294,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw1_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw1_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v1 - Interacción por año (Tobit) Modelo 2 y 3 Rwolf, Edu 1
+	* v1 - Interacción por año (Tobit) Modelo 2 y 3 wyoung & sidak, ingdummy 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung
@@ -333,7 +333,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			global rw3_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw3_CU_s: di %4.3f `= r(table)[12,6]'
 
-	* v2 - Básica (Tobit) Modelo 4 Rwolf, Edu 2
+	* v2 - Básica (Tobit) Modelo 4 wyoung & sidak, ingdummy 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -352,7 +352,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v2 - Interacción por año (Tobit) Modelo 5 y 6 Rwolf, Edu 2
+	* v2 - Interacción por año (Tobit) Modelo 5 y 6 wyoung & sidak, ingdummy 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung
@@ -556,7 +556,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
 file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-	* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+	* v1 - Básica (OLS) Modelo 1 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
@@ -572,7 +572,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
@@ -597,7 +597,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 1 Rwolf, Edad 2
+	* v2 - Básica (OLS) Modelo 4 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
@@ -613,7 +613,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 2
+	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, ingdummy 1
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///

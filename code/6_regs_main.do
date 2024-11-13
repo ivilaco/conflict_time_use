@@ -22,11 +22,11 @@ This do file cruns the main regressions + controls
 
 * ----------------------------------------------------------------------
 
-	file open latex1 using "${sale}/reg1c.txt", write replace text
-	file write latex1 "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
-	file write latex1 "& \multicolumn{2}{c}{Extensive margin} & \multicolumn{4}{c}{Intensive margin} \\ \cline{2-7}" _n
-	file write latex1 " & \multicolumn{2}{c}{Dummy} & \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
-	file write latex1 "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
+	file open latex using "${sale}/reg1c.txt", write replace text
+	file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
+	file write latex "& \multicolumn{2}{c}{Extensive margin} & \multicolumn{4}{c}{Intensive margin} \\ \cline{2-7}" _n
+	file write latex " & \multicolumn{2}{c}{Dummy} & \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
+	file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
 	* v1 - Básica (OLS) Modelo 1 Rwolf
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
@@ -347,33 +347,33 @@ This do file cruns the main regressions + controls
 			}
 		}
 		
-	file write latex1 "\textbf{`lab'} \\" _n
-	file write latex1 " Conflict x Time & ${bc_`i'} && ${ba_`i'} && ${bb_`i'} &\\" _n
-	file write latex1 "  & (${sec_`i'}) && (${sea_`i'}) && (${seb_`i'}) & \\" _n
-	file write latex1 "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
-	file write latex1 "  & && && <${rw4_`i'_s}> & \\" _n
+	file write latex "\textbf{`lab'} \\" _n
+	file write latex " Conflict x Time & ${bc_`i'} && ${ba_`i'} && ${bb_`i'} &\\" _n
+	file write latex "  & (${sec_`i'}) && (${sea_`i'}) && (${seb_`i'}) & \\" _n
+	file write latex "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
+	file write latex "  & && && <${rw4_`i'_s}> & \\" _n
 
-	file write latex1 " Conflict x 2016 && ${bj_`i'} && ${be_`i'} && ${bg_`i'} \\" _n
-	file write latex1 " && (${sej_`i'}) && (${see_`i'}) && (${seg_`i'})  \\" _n
-	file write latex1 " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
-	file write latex1 " && && && <${rw5_`i'_s}> \\" _n
+	file write latex " Conflict x 2016 && ${bj_`i'} && ${be_`i'} && ${bg_`i'} \\" _n
+	file write latex " && (${sej_`i'}) && (${see_`i'}) && (${seg_`i'})  \\" _n
+	file write latex " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
+	file write latex " && && && <${rw5_`i'_s}> \\" _n
 
-	file write latex1 " Conflict x 2020 && ${bk_`i'} && ${bf_`i'} && ${bh_`i'}  \\" _n
-	file write latex1 " && (${sek_`i'}) && (${sef_`i'}) && (${seh_`i'})  \\" _n
-	file write latex1 " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
-	file write latex1 " && && && <${rw6_`i'_s}> \\" _n
+	file write latex " Conflict x 2020 && ${bk_`i'} && ${bf_`i'} && ${bh_`i'}  \\" _n
+	file write latex " && (${sek_`i'}) && (${sef_`i'}) && (${seh_`i'})  \\" _n
+	file write latex " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
+	file write latex " && && && <${rw6_`i'_s}> \\" _n
 
-	file write latex1 " R-squared & ${r25_`i'} & ${r26_`i'} & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'}   \\" _n
-	file write latex1 " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
-	file write latex1 " Pre-t. cont. mean & ${md0_`i'} & ${md0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} \\" _n
+	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'}   \\" _n
+	file write latex " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
+	file write latex " Pre-t. cont. mean & ${md0_`i'} & ${md0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} \\" _n
 
-	file write latex1 "\hline" _n
+	file write latex "\hline" _n
 		}	
-	file write latex1 " Observations & ${N5_MW} & ${N6_MW} & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
-	file write latex1 "Year FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  & $\checkmark$ & $\checkmark$  \\" _n	
-	file write latex1 "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n
-	file write latex1 "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n			
-	file write latex1 "\hline \hline" _n
-	file write latex1 "\end{tabular}" _n
-	file close latex1
+	file write latex " Observations & ${N5_MW} & ${N6_MW} & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+	file write latex "Year FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  & $\checkmark$ & $\checkmark$  \\" _n	
+	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n
+	file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n			
+	file write latex "\hline \hline" _n
+	file write latex "\end{tabular}" _n
+	file close latex
 

@@ -20,11 +20,6 @@ This do file runs regression with heterogeneous effects
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
 	}
-
-	gen dummyedad=.
-	replace dummyedad=0 if EDAD<19
-	replace dummyedad=1 if EDAD>=19 & EDAD<=23
-	replace dummyedad=2 if EDAD>23
 	
 * ------------------------------------------------------
 * v1 - OLS
@@ -36,7 +31,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
 file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+* v1 - Básica (OLS) Modelo 1 Rwolf, Genero 1
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
@@ -52,7 +47,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Genero 1
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
@@ -77,7 +72,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 1 Rwolf, Edad 2
+	* v2 - Básica (OLS) Modelo 4 Rwolf, Genero 2
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
@@ -93,7 +88,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 2
+	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, Genero 2
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
@@ -178,7 +173,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		}
 		
 		*** Males
-		* v1 - Básica
+		* v2 - Básica
 		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
@@ -203,7 +198,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v1 - Interacción por año
+		* v2 - Interacción por año
 		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -282,7 +277,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
 file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-* v1 - Básica (Tobit) Modelo 1 Rwolf, Edad 1
+* v1 - Básica (Tobit) Modelo 1 wyoung & sidak, Genero 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -301,7 +296,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw1_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw1_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v1 - Interacción por año (Tobit) Modelo 2 y 3 Rwolf, Edad 1
+	* v1 - Interacción por año (Tobit) Modelo 2 y 3 wyoung & sidak, Genero 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung
@@ -340,7 +335,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global rw3_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw3_CU_s: di %4.3f `= r(table)[12,6]'
 
-	* v2 - Básica (Tobit) Modelo 4 Rwolf, Edad 2
+	* v2 - Básica (Tobit) Modelo 4 wyoung & sidak, Genero 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -359,7 +354,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v2 - Interacción por año (Tobit) Modelo 5 y 6 Rwolf, Edad 2
+	* v2 - Interacción por año (Tobit) Modelo 5 y 6 wyoung & sidak, Genero 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung
@@ -401,7 +396,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 	foreach i in $out {
 		
 		*** Females
-		* v2 - Básica
+		* v1 - Básica
 		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
@@ -426,7 +421,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v2 - Interacción por año
+		* v1 - Interacción por año
 		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -563,7 +558,7 @@ file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
 file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+* v1 - Básica (OLS) Modelo 1 Rwolf, Genero 1
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
@@ -579,7 +574,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Genero 1
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
@@ -604,7 +599,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 1 Rwolf, Edad 2
+	* v2 - Básica (OLS) Modelo 4 Rwolf, Genero 2
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
@@ -620,7 +615,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 2
+	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, Genero 2
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
@@ -648,7 +643,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 	foreach i in $out {
 		
 		*** Females
-		* v3 - Básica
+		* v1 - Básica
 		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
@@ -673,7 +668,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v3 - Interacción por año
+		* v1 - Interacción por año
 		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -705,7 +700,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		}
 		
 		*** Males
-		* v3 - Básica
+		* v2 - Básica
 		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
@@ -730,7 +725,7 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v3 - Interacción por año
+		* v2 - Interacción por año
 		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
