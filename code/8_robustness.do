@@ -11,7 +11,7 @@ This do file runs robustness checks and mechanisms
 *** MECANISMO 1 ***
 *******************************************
 
-	use "${entra}/PANEL_CONFLICTO_Y_VIOLENCIA(2020).dta", clear // Este archivo se debe mandar al DANE********
+	use "${entra}/PANEL_CONFLICTO_Y_VIOLENCIA(2020).dta", clear // Este archivo se debe mandar al DANE******** (5)
 	
 	keep desplazados_expulsion desplazados_recepcion codmpio ano
 	rename codmpio MUNICIPIO
@@ -25,7 +25,7 @@ This do file runs robustness checks and mechanisms
 	gen TIME2018 = (ano == 2018)
 	gen TIME2019 = (ano == 2019)
 	drop _merge
-	merge 1:1 MUNICIPIO ano using "${entra}/poblacion.dta" // Este archivo se debe mandar al DANE********
+	merge 1:1 MUNICIPIO ano using "${entra}/poblacion.dta" // Este archivo se debe mandar al DANE******** (6)
 	keep if _merge==3
 
 	gen conflict_time = TIME*CONFLICT

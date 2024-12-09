@@ -12,21 +12,26 @@ Code author: Ivonne Lara
 	clear all
 	set more off
 	
-	* Working directory - Cambiar este segun si se está trabajando desde el DANE o el computador personal
-	*glo main "/Users/ivonnelara/Documents/Working Papers/conflict_time_use"
-	glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
-	glo desktop "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
-	cd "${main}"
-
-	* DANE (Verificar como estan construidas las carpetas en el DANE)
+******** Working directory
+	
+	/* DANE (Verificar como estan construidas las carpetas en el DANE)
+	glo main "/Users/ivonnelara/Documents/Working Papers/conflict_time_use"
+	
 	glo entra "${main}/ENTRA"
 	glo enut "${main}/ENUT"
 	glo sale "${main}/SALE"
+	*/
+		
+	* Personal
+	glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
+	glo desktop "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
 	
-	* Github
 	glo code "${main}/code"
 	glo data "${desktop}/data"
 	glo output "${desktop}/output"
+	*
+	
+	cd "${main}"
 	
 	* Setting the ado path with required packages
 	sysdir set PLUS "${main}/code/ado"

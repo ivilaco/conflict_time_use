@@ -8,16 +8,14 @@ This do file runs descriptive stats, behaviour graphs and maps
 =========================================================================*/
 
 	use "${enut}/ENUT_FARC_J.dta", clear
-	
-	tab EDU, gen(edu)
-	
+		
 	* Correlation between HH education and ingresos
 	corr INGRESO EDU
 
 *******************************************
 *** GRAPH USE OF TIME - ALL ***
 *******************************************
-	
+
 	preserve
 		collapse (mean) CH CU MW NW1 NW2 NW3 CHc CUc MWc NW1c NW2c NW3c, by(EDAD)
 
@@ -258,7 +256,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 *******************************************
 
 	* Importing shapefiles
-	shp2dta using "${entra}/mpio.shp", database(col_mpios) coordinates(col_coord) genid(id) replace
+	shp2dta using "${entra}/mpio.shp", database(col_mpios) coordinates(col_coord) genid(id) replace // Este archivo se debe mandar al DANE******** (4)
 
 	use col_mpios, clear
 	destring MPIOS, gen(MUNICIPIO)
@@ -267,7 +265,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	save col_mpios, replace
 	
 	* Mergin with conflict database
-	use "${enut}/ENUT_FARC.dta", clear
+	use "${enut}/ENUT_FARC_ALL.dta", clear
 	keep MUNICIPIO CONFLICT REGION
 	duplicates drop MUNICIPIO, force
 	
@@ -290,13 +288,9 @@ This do file runs descriptive stats, behaviour graphs and maps
 
 	graph export "${sale}/map.pdf", replace
 	
-<<<<<<< Updated upstream
-	
-	
-=======
+/*
 	* Creating a Regions map
 	spmap REGION using col_coord, id(id) fcolor(Accent) clnum(5) ///
 	clmethod(unique) legend(label(1 "No data") label(2 "Atlantic") label(3 "Central") label(4 "Eastern") label(5 "Pacific")) 
 	graph export "${sale}/map_regions.pdf", replace
 	
->>>>>>> Stashed changes

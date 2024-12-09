@@ -11,7 +11,7 @@ This do creates the final database for analysis
 
 		* Pego con el tratamiento
 		use "$entra/FARC_final.dta", clear
-		merge 1:m MUNICIPIO TIME using "$enut/ENUT_TOTAL_M_`j'.dta", gen(_merge7)
+		merge 1:m MUNICIPIO TIME using "$enut/ENUT_TOTAL_`j'.dta", gen(_merge7)
 		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
 		
 		* Pego covariables
@@ -39,7 +39,7 @@ This do creates the final database for analysis
 		gen conflict_time12020 = CONFLICT1*TIME2020
 		
 		* Variables de interes
-		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros $dummys ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud
+		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros $dummys ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud P1174 P1172 jefe P425
 		
 		* Modifico var municipio
 		tostring MUNICIPIO, replace
@@ -48,6 +48,7 @@ This do creates the final database for analysis
 		destring MUNICIPIO DEPTO, replace
 		
 		* Variables por hogar
+		rename (P1174 P1172) (compa_jef conyuge_hogar)
 		bys idhogar TIME : egen htot1=count(unos) if CONFLICT==1
 		bys idhogar TIME : egen htot0=count(unos) if CONFLICT==0
 		forvalues i=0/1 {
@@ -74,3 +75,26 @@ This do creates the final database for analysis
 		* Guardo base final
 		save "$enut/ENUT_FARC_`j'.dta", replace
 	}
+
+* ----------------------------------------------------------------------*
+* IV. Additional variables for analysis (REVISAR SI SE NECESITA)
+* ----------------------------------------------------------------------*/
+
+	use "$enut/ENUT_FARC_ALL.dta", clear
+		
+		* Porcentaje de hogares donde la mujer es jefe del hogar
+		bys ANNO MUNICIPIO : egen hhs_j = sum(jefe) // Tomamos en cuenta los hogares que tienen jefe del hogar
+		bys ANNO MUNICIPIO : egen hhs_jm = sum(jefe) if SEXO == 1
+		
+		* Porcentaje de hogares donde el conyuge esta presente
+		bys ANNO MUNICIPIO : egen hhs_c = sum(jefe) if conyuge_hogar == 1
+		
+		* Mecanismo 2 - Household Re-Composition
+		gen p_hhth = (hhth/hht)*100
+		gen p_hhthj = (hhthj/hht)*100
+		gen p_hdist = (hdist/hht)*100
+		gen p_hhs_jm = (hhs_jm/hhs_j)*100	
+		gen p_hhs_c = (hhs_c/hhs_j)*100	
+		
+	save "$enut/ENUT_FARC_ALL.dta", replace
+	

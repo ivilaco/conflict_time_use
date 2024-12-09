@@ -27,15 +27,15 @@ the analysis
 	lab define b 1 "Conflict" 0 "No Conflict"
 	lab values CONFLICT CONFLICT1 b
 	
-	save "${data}/coded/FARC.dta", replace // Este archivo se debe mandar al DANE********
+	save "${data}/coded/FARC.dta", replace // Este archivo se debe mandar al DANE******** (1)
 	
 *******************************************
 *** COVARIABLES PSM ***
 *******************************************
 
-	use "${data}/raw/PANEL_CARACTERISTICAS_GENERALES(2020).dta", clear
+	use "${data}/Panel Municipal CEDE/PANEL_CARACTERISTICAS_GENERALES(2020).dta", clear
 	rename codmpio MUNICIPIO
-	merge m:1 MUNICIPIO using "${data}/coded/FARC.dta"
+	merge m:1 MUNICIPIO using "${data}/coded/FARC.dta" // (1)
 	keep if _merge==3
 	drop if ano<2005
 	gen TIME=1 if ano>2014
@@ -43,11 +43,12 @@ the analysis
 	drop if ano>2013
 	
 	glob covs_psm "gcaribe retro_pobl_rur pobl_rur dismdo disbogota mercado_cercano distancia_mercado pib_agricola pib_industria pib_servicios pib_total nbicabecera IPM_rur ipm_ledu_p ipm_templeof_p"
-	keep $covs_psm
+	keep $covs_psm MUNICIPIO ano CONFLICT
 	
 	local j = 0
-	foreach i in $hola {
+	foreach i in $covs_psm {
 		local j = `j'+1
+		
 		preserve
 		keep `i' MUNICIPIO ano CONFLICT
 		sort MUNICIPIO ano
@@ -65,21 +66,21 @@ the analysis
 			merge 1:1 MUNICIPIO using `w1', gen(_merge)
 			drop _merge
 			save `w1', replace
-			save "${data}/coded/new_vars.dta", replace // Este archivo se debe mandar al DANE********
+			save "${data}/coded/new_vars.dta", replace // Este archivo se debe mandar al DANE******** (2)
 			}
 		restore
-	} *	
+	} 
 	
-	* A. Covs
+*******************************************
+*** CONTROLS ***
+*******************************************
+	
+	* Preparing vars from raw excel file
 	foreach i of numlist 1 8/12 18/20 22/27 29 {
 	import excel "${data}/raw/PSM_covariables.xlsx", sheet("`i'") firstrow clear
 	rename cod_ent cod_mpio	
 	destring cod_mpio v`i' year, replace
 	drop if v`i'==.
-	*drop if year>2014
-	*drop if year<2000 
-	*reshape wide v`i', i(cod_mpio) j(year)
-	*egen v`i'_ = rowmean(v`i'20*)
 	keep cod_mpio v`i' year
 	drop if year<2005
 	rename cod_mpio MUNICIPIO
@@ -96,7 +97,8 @@ the analysis
 	save "${data}/coded/v`i'.dta", replace
 	}
 	
-	use "${data}/raw/COVS.dta", replace
+	* Adding v4 del panel CEDE
+	use "${data}/Panel Municipal CEDE/PANEL_CARACTERISTICAS_GENERALES(2020).dta", clear
 	keep IPM ano codmpio
 	rename ano year
 	rename codmpio cod_mpio
@@ -124,9 +126,8 @@ the analysis
 	}
 	save "${data}/coded/COVS.dta", replace
 	
-	* Pegamos las variables con el tratamiento // Mirar que pasa aca con MUNICIPIO
+	* Pegamos las variables con el tratamiento
 	use "${data}/coded/COVS.dta", clear
-	rename codmpio MUNICIPIO
 	merge m:1 MUNICIPIO using "${data}/coded/FARC.dta"
 	keep if _merge==3
 	drop _merge	
@@ -156,5 +157,5 @@ the analysis
 	save "${data}/coded/MunicipiosPDET.dta", replace
 	restore
 	
-	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********/
+	save "${data}/coded/FARC_final.dta", replace // Este archivo se debe mandar al DANE********/ (3)
 
