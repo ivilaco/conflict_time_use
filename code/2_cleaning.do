@@ -115,13 +115,21 @@ unified database
 *** ENUT 2020-2021 ***
 *******************************************
 
-	* A. Vuelvo las bases homogeneas
-	foreach i in B C I D E G H1 {
+	/* A. Vuelvo las bases homogeneas
+	import spss using "${enut}/2020-2021/CAP_I_2021.sav", clear
+	rename *, upper
+	save "${enut}/2020-2021/CAP_I_2021.dta", replace
+
+	foreach i in B C D E G H1 {
 		use "${enut}/2020-2021/CAP_`i'_2021.dta", clear
 		rename *, upper
 		save "${enut}/2020-2021/CAP_`i'_2021.dta", replace
 	}
 
+	import excel "${enut}/2020-2021/Dpto y Mpio_Geog_2020_2021.xlsx", sheet("Hoja1") firstrow clear
+	save "${enut}/2020-2021/mun_2021.dta", replace
+
+	* B. Pego las bases
 	use "${enut}/2020-2021/cap_I_2021.dta", clear
 	local data "D E G H1"
 	foreach file of local data {
@@ -129,7 +137,9 @@ unified database
 	}
 	merge m:1 DIRECTORIO SECUENCIA_P using "${enut}/2020-2021/cap_C_2021.dta", gen(_merge7)
 	merge m:1 DIRECTORIO using "${enut}/2020-2021/cap_B_2021.dta", gen(_merge6)
-	
+	merge m:1 DIRECTORIO using "${enut}/2020-2021/mun_2021.dta", gen(_merge7)
+	*/
+
 	import delimited "${enut}/2020-2021/BFENUTFINALANON.csv", clear
 	rename *, upper
 
