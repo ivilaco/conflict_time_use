@@ -25,7 +25,7 @@ unified database
 *** ENUT 2012-2013 ***
 *******************************************
 
-	* A. Vuelvo las bases homogeneas
+	* A. Vuelvo las bases dta
 	foreach file in B C I D E G H1 {
 		import delimited "${enut}/2012-2013/CAP_`file'_1213.txt", clear
 		rename *, upper
@@ -73,24 +73,26 @@ unified database
 *** ENUT 2016-2017 ***
 *******************************************
 
-	* A. Vuelvo las bases homogeneas
-	import spss using "${enut}/2016-2017/CAPITULO I_1617.sav", clear
-	save "${enut}/2016-2017/cap_I_1617.dta", replace
-	
-	use "${enut}/2016-2017/cap_B_1617.dta", clear
-	rename *, upper
-	save "${enut}/2016-2017/cap_B_1617.dta", replace
+	* A. Vuelvo las bases dta
+	foreach file in B C I D E G H1 {
+		import delimited "${enut}/2016-2017/CAP_`file'_1617.csv", clear
+		rename *, upper
+		save "${enut}/2012-2013/cap_`file'_1213.dta", replace
+	}
+
+	import excel "${enut}/2016-2017/Dpto y Mpio_Geog_2016_2017.xlsx", sheet("Hoja1") firstrow clear
+	save "${enut}/2016-2017/mun_1617.dta", replace
 
 	* B. Pego las bases
 	use "${enut}/2016-2017/cap_I_1617.dta", clear
 
-local data "D E G H1"
-foreach file of local data {
-    merge 1:1 DIRECTORIO SECUENCIA_P ORDEN using "${enut}/2016-2017/cap_`file'_1617.dta", gen("`file'")
-}
-	merge m:1 DIRECTORIO SECUENCIA_P using "${enut}/2016-2017/cap_C_1617.dta", gen(_merge7)
+	local data "D E G H1"
+	foreach file of local data {
+   	 	merge 1:1 DIRECTORIO SECUENCIA_P ORDEN using "${enut}/2016-2017/cap_`file'_1617.dta", gen("`file'")
+	}
+	merge m:1 DIRECTORIO SECUENCIA_P using "${enut}/2016-2017/cap_C_1617.dta", gen(_merge8)
 	merge m:1 DIRECTORIO using "${enut}/2016-2017/cap_B_1617.dta", gen(_merge6)
-	rename *, upper
+	merge m:1 DIRECTORIO using "${enut}/2016-2017/mun_1617.dta", gen(_merge7)
 
 	* C. Cambio de nombre las variables para homogeneizar - parece que todas tienen el mismo nombre 
 	* D. Me quedo con las variables de interés
