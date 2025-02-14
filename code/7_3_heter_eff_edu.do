@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear
+	use "${clave}/ENUT_FARC_J.dta", clear
 	
 * =====================================================================
 * VII. Efectos Heterogeneos Educación Jefe del Hogar
@@ -466,7 +466,7 @@ file close latex
 * v2 - Tobit
 * ---------------------------------------------------------------------*
 
-file open latex using "${sale}/reg5c_v2.txt", write replace text
+file open latex using "${graf}/reg5c_v2.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{No education} & \multicolumn{2}{c}{Preschool/elementary} & \multicolumn{2}{c}{Middle/High school} & \multicolumn{2}{c}{Under/postgraduate} \\" _n
@@ -475,14 +475,14 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v1 - Básica (Tobit) Modelo 1 wyoung & sidak, Edu 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung 
+		/* wyoung 
 		global rw1_MW: di %4.3f `= r(table)[1,4]'
 		global rw1_NW1: di %4.3f `= r(table)[2,4]'
 		global rw1_NW2: di %4.3f `= r(table)[3,4]'
 		global rw1_NW3: di %4.3f `= r(table)[4,4]'
 		global rw1_CH: di %4.3f `= r(table)[5,4]'
 		global rw1_CU: di %4.3f `= r(table)[6,4]'
-		
+		*/
 		* Sidak
 		global rw1_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw1_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -494,7 +494,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v1 - Interacción por año (Tobit) Modelo 2 y 3 wyoung & sidak, Edu 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if EDU==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung
+		/* wyoung
 
 			* 2016
 			global rw2_MW: di %4.3f `= r(table)[1,4]'
@@ -511,7 +511,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 			global rw3_NW3: di %4.3f `= r(table)[10,4]'
 			global rw3_CH: di %4.3f `= r(table)[11,4]'
 			global rw3_CU: di %4.3f `= r(table)[12,4]'
-			
+			*/
 		* Sidak
 
 			* 2016
@@ -533,14 +533,14 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v2 - Básica (Tobit) Modelo 4 wyoung & sidak, Edu 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung 
+		/* wyoung 
 		global rw4_MW: di %4.3f `= r(table)[1,4]'
 		global rw4_NW1: di %4.3f `= r(table)[2,4]'
 		global rw4_NW2: di %4.3f `= r(table)[3,4]'
 		global rw4_NW3: di %4.3f `= r(table)[4,4]'
 		global rw4_CH: di %4.3f `= r(table)[5,4]'
 		global rw4_CU: di %4.3f `= r(table)[6,4]'
-		
+		*/
 		* Sidak
 		global rw4_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw4_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -552,7 +552,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v2 - Interacción por año (Tobit) Modelo 5 y 6 wyoung & sidak, Edu 2
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if EDU==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung
+		/* wyoung
 
 			* 2016
 			global rw5_MW: di %4.3f `= r(table)[1,4]'
@@ -569,7 +569,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 			global rw6_NW3: di %4.3f `= r(table)[10,4]'
 			global rw6_CH: di %4.3f `= r(table)[11,4]'
 			global rw6_CU: di %4.3f `= r(table)[12,4]'
-			
+			*/
 		* Sidak
 
 			* 2016
@@ -591,14 +591,14 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v3 - Básica (Tobit) Modelo 7 wyoung & sidak, Edu 3
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==3, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung 
+		/* wyoung 
 		global rw7_MW: di %4.3f `= r(table)[1,4]'
 		global rw7_NW1: di %4.3f `= r(table)[2,4]'
 		global rw7_NW2: di %4.3f `= r(table)[3,4]'
 		global rw7_NW3: di %4.3f `= r(table)[4,4]'
 		global rw7_CH: di %4.3f `= r(table)[5,4]'
 		global rw7_CU: di %4.3f `= r(table)[6,4]'
-		
+		*/
 		* Sidak
 		global rw7_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw7_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -610,7 +610,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v3 - Interacción por año (OLS) Modelo 8 y 9 wyoung & sidak, Edu 1
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if EDU==3, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung
+		/* wyoung
 
 			* 2016
 			global rw8_MW: di %4.3f `= r(table)[1,4]'
@@ -627,7 +627,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 			global rw9_NW3: di %4.3f `= r(table)[10,4]'
 			global rw9_CH: di %4.3f `= r(table)[11,4]'
 			global rw9_CU: di %4.3f `= r(table)[12,4]'
-			
+			*/
 		* Sidak
 
 			* 2016
@@ -649,14 +649,14 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v4 - Básica (Tobit) Modelo 10 wyoung & sidak, Edu 4
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if EDU==4, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung 
+		/* wyoung 
 		global rw10_MW: di %4.3f `= r(table)[1,4]'
 		global rw10_NW1: di %4.3f `= r(table)[2,4]'
 		global rw10_NW2: di %4.3f `= r(table)[3,4]'
 		global rw10_NW3: di %4.3f `= r(table)[4,4]'
 		global rw10_CH: di %4.3f `= r(table)[5,4]'
 		global rw10_CU: di %4.3f `= r(table)[6,4]'
-		
+		*/
 		* Sidak
 		global rw10_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw10_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -668,7 +668,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 	* v4 - Interacción por año (OLS) Modelo 11 y 12 wyoung & sidak, Edu 4
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if EDU==4, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung
+		/* wyoung
 
 			* 2016
 			global rw11_MW: di %4.3f `= r(table)[1,4]'
@@ -685,7 +685,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 			global rw12_NW3: di %4.3f `= r(table)[10,4]'
 			global rw12_CH: di %4.3f `= r(table)[11,4]'
 			global rw12_CU: di %4.3f `= r(table)[12,4]'
-			
+			*/
 		* Sidak
 
 			* 2016
@@ -946,18 +946,18 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) & (7) & (8)  \\ \hline" _n
 file write latex "\textbf{`lab'} \\" _n
 file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} && ${be_`i'} && ${bo_`i'} &  \\" _n
 file write latex "  & (${sea_`i'})&& (${sec_`i'}) && (${see_`i'})&& (${seo_`i'})& \\" _n
-file write latex "  & \{${rw1_`i'}\} && \{${rw4_`i'}\} && \{${rw7_`i'}\} && \{${rw10_`i'}\} & \\" _n
-file write latex "  & <${rw1_`i'_s}> && <${rw4_`i'_s}> && <${rw7_`i'_s}> && <${rw10_`i'_s}> & \\" _n
+file write latex "  & \{${rw1_`i'_s}\} && \{${rw4_`i'_s}\} && \{${rw7_`i'_s}\} && \{${rw10_`i'_s}\} & \\" _n
+*file write latex "  & <${rw1_`i'_s}> && <${rw4_`i'_s}> && <${rw7_`i'_s}> && <${rw10_`i'_s}> & \\" _n
 
 file write latex " Conflict x 2016 && ${by_`i'} && ${bx_`i'} && ${bu_`i'} && ${bm_`i'} \\" _n
 file write latex " && (${sey_`i'})&& (${sex_`i'}) && (${seu_`i'}) && (${sem_`i'})\\" _n
-file write latex " && \{${rw2_`i'}\} && \{${rw5_`i'}\} && \{${rw8_`i'}\} && \{${rw11_`i'}\} \\" _n
-file write latex " && <${rw2_`i'_s}> && <${rw5_`i'_s}> && <${rw8_`i'_s}> && <${rw11_`i'_s}>  \\" _n
+file write latex " && \{${rw2_`i'_s}\} && \{${rw5_`i'_s}\} && \{${rw8_`i'_s}\} && \{${rw11_`i'_s}\} \\" _n
+*file write latex " && <${rw2_`i'_s}> && <${rw5_`i'_s}> && <${rw8_`i'_s}> && <${rw11_`i'_s}>  \\" _n
 
 file write latex " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} && ${bv_`i'} && ${bn_`i'} \\" _n
 file write latex " && (${sez_`i'})&& (${sew_`i'}) && (${sev_`i'}) && (${sen_`i'})\\" _n
-file write latex " && \{${rw3_`i'}\} && \{${rw6_`i'}\} && \{${rw9_`i'}\} && \{${rw12_`i'}\} \\" _n
-file write latex " && <${rw3_`i'_s}> && <${rw6_`i'_s}> && <${rw9_`i'_s}> && <${rw12_`i'_s}> \\" _n
+file write latex " && \{${rw3_`i'_s}\} && \{${rw6_`i'_s}\} && \{${rw9_`i'_s}\} && \{${rw12_`i'_s}\} \\" _n
+*file write latex " && <${rw3_`i'_s}> && <${rw6_`i'_s}> && <${rw9_`i'_s}> && <${rw12_`i'_s}> \\" _n
 
 *file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} & ${r25_`i'} & ${r26_`i'} & ${r27_`i'} & ${r28_`i'}  \\" _n
 file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m12_`i'} & ${m12_`i'} & ${m13_`i'} & ${m13_`i'} & ${m14_`i'} & ${m14_`i'}  \\" _n

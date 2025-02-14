@@ -176,14 +176,14 @@ This do file runs descriptive stats, behaviour graphs and maps
 *** DESCRIPTIVE STATS ***
 *******************************************
 
-	label var CONFLICT "Treatment (1: Conflict)"
-	label var TIME "Time (1: After 2014)"
-	label var EDAD "Age (in years)"
-	label var SEXO "Gender (1: Female)"
-	label var ingdummy "HH possesion of goods (1: High)"
-	label var edu1 "No education"
+	label var CONFLICT "Conflict (1 = FARC-Affected Municipality) "
+	label var TIME "Time (1 = Years After 2014)"
+	label var EDAD "Age (Years)"
+	label var SEXO "Gender (1 = Female)"
+	label var ingdummy "Household Asset Ownership (1 = High)"
+	label var edu1 "No Education"
 	label var edu2 "Preschool/Elementary"
-	label var edu3 "Middle/High school"
+	label var edu3 "Middle/High School"
 	label var edu4 "Under/Postgraduate"
 
 	file open latex using "${sale}/estad.txt", write replace text
@@ -203,7 +203,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 					
 	file write latex "`lab' & ${m1_`i'} & ${p1_`i'}  & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}	
-	file write latex "Education of the Head of HH (1: Highest) &&&&& \\" _n
+	file write latex "Household Head Education (1 = Highest Level Achieved) &&&&& \\" _n
 	foreach i in edu1 edu2 edu3 edu4 {	
 					
 		sum `i', d 
@@ -218,7 +218,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "\hspace{3mm} `lab' & ${m1_`i'} & ${p1_`i'}  & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}	
 	file write latex " \\ " _n
-	file write latex "\textbf{Extensive margin (Dummy)} &&&&& \\ " _n
+	file write latex "\textbf{Extensive Margin} &&&&& \\ " _n
 	foreach i in $dummys {	
 					
 		sum `i', d 
@@ -233,7 +233,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "`lab' & ${m1_`i'} & ${p1_`i'} & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}
 	file write latex " \\ " _n
-	file write latex "\textbf{Intensive margin (Hours)} &&&&& \\ " _n
+	file write latex "\textbf{Intensive Margin} &&&&& \\ " _n
 	foreach i in $ceros {	
 						
 		sum `i', d 

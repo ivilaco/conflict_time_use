@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file cruns the main regressions + controls
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear
+	use "${clave}/ENUT_FARC_J.dta", clear
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -22,7 +22,7 @@ This do file cruns the main regressions + controls
 
 * ----------------------------------------------------------------------
 
-	file open latex using "${sale}/reg1c.txt", write replace text
+	file open latex using "${graf}/reg1c.txt", write replace text
 	file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{Extensive margin} & \multicolumn{4}{c}{Intensive margin} \\ \cline{2-7}" _n
 	file write latex " & \multicolumn{2}{c}{Dummy} & \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
@@ -72,13 +72,14 @@ This do file cruns the main regressions + controls
 	* v2 - Básica (Tobit) Modelo 4 Westfall and Young (1993)	
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
-		* wyoung 
+		/* wyoung 
 		global rw4_MW: di %4.3f `= r(table)[1,4]'
 		global rw4_NW1: di %4.3f `= r(table)[2,4]'
 		global rw4_NW2: di %4.3f `= r(table)[3,4]'
 		global rw4_NW3: di %4.3f `= r(table)[4,4]'
 		global rw4_CH: di %4.3f `= r(table)[5,4]'
 		global rw4_CU: di %4.3f `= r(table)[6,4]'
+		*/
 		
 		* Sidak
 		global rw4_MW_s: di %4.3f `= r(table)[1,6]'
@@ -91,7 +92,7 @@ This do file cruns the main regressions + controls
 	* v2 - Interacción por año (Tobit) Modelo 5 y 6 Westfall and Young (1993)
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 	
-		* wyoung / NOTA: AJUSTAR
+		/* wyoung
 
 			* 2016
 			global rw5_MW: di %4.3f `= r(table)[1,4]'
@@ -108,8 +109,9 @@ This do file cruns the main regressions + controls
 			global rw6_NW3: di %4.3f `= r(table)[10,4]'
 			global rw6_CH: di %4.3f `= r(table)[11,4]'
 			global rw6_CU: di %4.3f `= r(table)[12,4]'
+			*/
 			
-		* Sidak / NOTA: AJUSTAR
+		* Sidak
 
 			* 2016
 			global rw5_MW_s: di %4.3f `= r(table)[1,6]'
@@ -350,18 +352,21 @@ This do file cruns the main regressions + controls
 	file write latex "\textbf{`lab'} \\" _n
 	file write latex " Conflict x Time & ${bc_`i'} && ${ba_`i'} && ${bb_`i'} &\\" _n
 	file write latex "  & (${sec_`i'}) && (${sea_`i'}) && (${seb_`i'}) & \\" _n
-	file write latex "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
-	file write latex "  & && && <${rw4_`i'_s}> & \\" _n
+	file write latex "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'_s}\} & \\" _n
+	*file write latex "  & [${rw7_`i'}] && [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
+	*file write latex "  & && && <${rw4_`i'_s}> & \\" _n
 
 	file write latex " Conflict x 2016 && ${bj_`i'} && ${be_`i'} && ${bg_`i'} \\" _n
 	file write latex " && (${sej_`i'}) && (${see_`i'}) && (${seg_`i'})  \\" _n
-	file write latex " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
-	file write latex " && && && <${rw5_`i'_s}> \\" _n
+	file write latex " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'_s}\} \\" _n
+	*file write latex " && [${rw8_`i'}] && [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
+	*file write latex " && && && <${rw5_`i'_s}> \\" _n
 
 	file write latex " Conflict x 2020 && ${bk_`i'} && ${bf_`i'} && ${bh_`i'}  \\" _n
 	file write latex " && (${sek_`i'}) && (${sef_`i'}) && (${seh_`i'})  \\" _n
-	file write latex " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
-	file write latex " && && && <${rw6_`i'_s}> \\" _n
+	file write latex " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'_s}\} \\" _n
+	*file write latex " && [${rw9_`i'}] && [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
+	*file write latex " && && && <${rw6_`i'_s}> \\" _n
 
 	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'}   \\" _n
 	file write latex " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
