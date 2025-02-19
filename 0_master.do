@@ -29,7 +29,10 @@ Code author: Ivonne Lara
 	glo code "${main}/code"
 	glo data "${desktop}/data"
 	glo output "${desktop}/output"
+	
+	* Clave
 	glo clave "${main}/ENUT"
+	glo graf "${main}/ENUT/graf"
 	
 	cd "${main}"
 	
