@@ -344,13 +344,16 @@ This do file runs robustness checks and mechanisms
 	gen conflict_time2018 = CONFLICT*TIME2018
 	gen conflict_time2019 = CONFLICT*TIME2019
 	
-	reg ntl_ CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO
-	
 	save "${data}/coded/mecanismo3.dta", replace
-	
+		
+	* Regresion
 	use "${data}/coded/mecanismo3.dta", clear
 	
-	* Regresion
+		/* 
+	sum ntl_, detail
+	drop if ntl_ < r(p5) | ntl_ > r(p95)	
+	*/
+	
 	file open latex using "${graf}/ntl.txt", write replace text
 	file write latex "\begin{tabular}{l c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{Night Light Intensity} \\ " _n
@@ -465,6 +468,53 @@ This do file runs robustness checks and mechanisms
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
+	
+	* Event analysis
+	use "${data}/coded/mecanismo3.dta", clear
+	
+	/*
+	sum ntl_, detail
+	drop if ntl_ < r(p5) | ntl_ > r(p95)	
+	*/
+	
+	forvalues i = 2010/2019 {
+		gen y`i' = (ano == `i')
+	}
+	gen zero=. // 2014
+	replace zero=0 if zero==.
+
+	foreach v in ntl_ {
+		
+	reghdfe `v' CONFLICT#y2010 CONFLICT#y2011 CONFLICT#y2012 CONFLICT#y2013 zero CONFLICT#y2015 CONFLICT#y2016 CONFLICT#y2017 CONFLICT#y2018 CONFLICT#y2019, absorb(MUNICIPIO ano) vce(cluster MUNICIPIO) noomitted 
+
+		preserve
+		estimate store coef 
+		parmest, norestore	
+		replace estimate=. if parm=="o.zero"
+		drop if estimate==0
+		gen cont=_n
+		drop if cont>=11
+		replace estimate=0 if estimate==.
+	foreach c in estimate min95 max95 {
+		gen `c'_ = -`c'
+		drop `c'
+	}
+		gen tiempo = 0 + _n
+		label define tag1 1 "-4" 2 "-3" 3 "-2" 4 "-1" 5 "0" 6 "1" 7 "2" 8 "3" 9 "4" 10 "5"
+		label values tiempo tag1
+		
+		twoway (scatter estimate_ tiempo) ///
+		(rcap min95_ max95_ tiempo, lc(gs12)), ///
+		xtitle("Year") ytitle("Coefficient") ///
+		yline(0, lc(red)) xline(5) ///
+		xlabel(1 2 3 4 5 6 7 8 9 10, valuelabel) ///
+		ylabel(, grid) ///
+		graphregion(color(white)) /// 
+		legend(off)
+		restore
+		
+		graph export "${graf}/ea_`v'_2.png", replace 
+	}
 	
 /*******************************************
 *** CENSUS ***
