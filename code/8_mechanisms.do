@@ -552,16 +552,16 @@ This do file runs robustness checks and mechanisms
 	gen tiempo = 0 + _n
 	label define tag1 1 "-5" 2 "-4" 3 "-3" 4 "-2" 5 "-1" 6 "0" 7 "1" 8 "2" 9 "3" 10 "4" 11 "5" 12 "6"
 	label values tiempo tag1
-	
+		
 	twoway (scatter estimate_ tiempo, msize(small) mcolor(blue)) ///
-		(rcap min95_ max95_ tiempo, lc(gs10) lwidth(thin)), ///
-		xtitle("Year") ytitle("Coefficient") ///
-		yline(0, lc(red) lwidth(med)) xline(6, lpattern(dash) lc(gs8)) ///
-		xlabel(1(1)12, valuelabel) ///
-		ylabel(-500(500)1500, grid) ///
-		yscale(range(-500 1500)) ///
-		graphregion(color(gs16)) ///
-		legend(off)
+			(rcap min95_ max95_ tiempo, lc(gs10) lwidth(thin)), ///
+			xtitle("Year", size(small)) ytitle("Coefficient", size(small)) ///
+			yline(0, lc(red) lwidth(med)) xline(6, lpattern(dash) lc(gs8)) ///
+			xlabel(1(1)12, valuelabel labsize(small)) ///
+			ylabel(-250(250)1500, grid labsize(small)) ///
+			yscale(range(-250 1500)) ///
+			graphregion(color(gs16)) ///
+			legend(off)
 
 	graph export "${graf}/nightlights_ea.pdf", as(pdf) replace 
 
