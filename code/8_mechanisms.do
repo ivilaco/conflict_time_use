@@ -37,8 +37,6 @@ This do file runs robustness checks and mechanisms
 	gen prop_desp_recep = (desplazados_recepcion/pobl_tot)*100
 	gen prop_desp_expul = (desplazados_expulsion/pobl_tot)*100
 	
-	*sum prop_desp_recep prop_desp_expul
-	
 	gen DPTO = substr(string(MUNICIPIO), 1, length(string(MUNICIPIO)) - 3)
 	
 	forvalue i = 5/8 {
@@ -52,8 +50,6 @@ This do file runs robustness checks and mechanisms
 	replace REGION = 2 if DPTO == "05" | DPTO == "17" | DPTO == "18" | DPTO == "41" | DPTO == "63" | DPTO == "66" | DPTO == "73"
 	replace REGION = 3 if DPTO == "15" | DPTO == "25" | DPTO == "50" | DPTO == "54" | DPTO == "68"
 	replace REGION = 4 if DPTO == "19" | DPTO == "27" | DPTO == "52" | DPTO == "76"
-	*replace REGION = 5 if DPTO == "11"
-	*replace REGION = 6 if DPTO == "88"
 	
 	save "${enut}/mecanismo1.dta", replace
 	
@@ -306,6 +302,35 @@ This do file runs robustness checks and mechanisms
 *** MECANISMO 3 : Night Lights ***
 *******************************************
 
+******** COVARS (CEDE PANEL) Not really necessary but ill keep it here until further notice. We are not using this covars in the event analysis.
+
+	foreach i in panel_agricultura_y_tierra_2020 panel_buen_gobierno_2020 panel_carac_generales_2020 panel_conflicto_y_violencia_2020 panel_de_educacion_2020 panel_salud_y_servicios_2020 {
+		
+		use "${data}/Panel Municipal CEDE/`i'.dta", clear
+		drop if ano < 2005
+		save "${data}/coded/cede_clean_`i'.dta", replace
+	}
+	
+	use "${data}/coded/cede_clean_panel_agricultura_y_tierra_2020.dta", clear
+	
+	foreach i in panel_buen_gobierno_2020 panel_carac_generales_2020 panel_conflicto_y_violencia_2020 panel_de_educacion_2020 panel_salud_y_servicios_2020 {
+		
+		merge 1:1 codmpio ano using "${data}/coded/cede_clean_`i'.dta"
+		drop _merge
+	
+	}
+	
+	rename codmpio MUNICIPIO
+	
+	* The ones we are interested in for the doubly DiD
+	glo ef_ddid "pobl_tot indrural  pib_total pib_percapita gini pobreza nbi IPM"
+	glo cov_ddid "areaoficialkm2 distancia_mercado altura discapital dismdo"
+	keep MUNICIPIO ano $cov_ddid $ef_ddid
+	
+	save "${data}/coded/all_covars.dta", replace
+	
+******** NIGHT LIGHTS
+	
 	import delimited "${data}/raw/merged_sum_lights.csv", clear 
 	
 	* Renaming for simplicity and merging
@@ -327,10 +352,11 @@ This do file runs robustness checks and mechanisms
 	drop _merge
 	
 	reshape long ntl_, i(MUNICIPIO) j(ano)
-	
+
 	* Creating time vars
-	drop if ano<2010
+	drop if ano<2005
 	gen TIME = (ano>2014)
+
 	gen TIME2015 = (ano == 2015)
 	gen TIME2016 = (ano == 2016)
 	gen TIME2017 = (ano == 2017)
@@ -343,25 +369,58 @@ This do file runs robustness checks and mechanisms
 	gen conflict_time2017 = CONFLICT*TIME2017
 	gen conflict_time2018 = CONFLICT*TIME2018
 	gen conflict_time2019 = CONFLICT*TIME2019
+
+	* Merging covars
+	merge 1:1 MUNICIPIO ano using "${data}/coded/all_covars.dta"
+	keep if _merge == 3
+	drop _merge
 	
-	save "${data}/coded/mecanismo3.dta", replace
-		
-	* Regresion
-	use "${data}/coded/mecanismo3.dta", clear
+	* Keep MUNICIPIOs that appear in all TIME periods  
+	bysort MUNICIPIO (TIME): gen count = _N  
+	egen max_count = max(count), by(MUNICIPIO)  
+	drop if count < max_count  
+	drop if max_count < 2
 	
-		/* 
+	drop max_count count
+	
+	* Dropping outliers
 	sum ntl_, detail
-	drop if ntl_ < r(p5) | ntl_ > r(p95)	
-	*/
+	drop if ntl_ < r(p5) | ntl_ > r(p95)
 	
-	file open latex using "${graf}/ntl.txt", write replace text
+	* Trends and fixed effects
+	xtset MUNICIPIO ano
+	bys CONFLICT: egen trend_pre = mean(cond(inrange(ano, 2010, 2014), ntl_, .)) // promedio de nightlights para los períodos -4 a -1 
+		forvalues i = 2005/2019 {
+		gen y`i' = (ano == `i')
+		
+		foreach e in trend_pre $cov_ddid $ef_ddid {
+			gen `e'_y`i' = `e' * y`i'
+		}
+	}
+	
+	foreach e in $ef_ddid {
+		tab ano if `e' != .
+	}
+	
+		glo ef_ddid "pobl_tot indrural pib_total pib_percapita gini pobreza nbi IPM"
+
+		
+	* Saving database for processing
+	save "${data}/coded/mecanismo3.dta", replace
+	export delimited using "${data}/coded/mecanismo3.csv", replace
+	
+/******** REGRESION
+		
+	use "${data}/coded/mecanismo3.dta", clear	
+	
+	file open latex using "${graf}/ntl_3.txt", write replace text
 	file write latex "\begin{tabular}{l c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{Night Light Intensity} \\ " _n
 	file write latex "& (1) & (2) \\ \hline" _n
 	
 	foreach i in ntl_ {
 		
-		reg `i' conflict_time i.MUNICIPIO i.ano
+		reg `i' conflict_time i.MUNICIPIO i.ano, cluster(MUNICIPIO)
 		local b: di %4.3f `= _b[conflict_time]'
 		global seb_`i': di %4.3f `= _se[conflict_time]'
 		local tb=_b[conflict_time]/_se[conflict_time]
@@ -387,7 +446,7 @@ This do file runs robustness checks and mechanisms
 			}
 			}
 			
-		reg `i' conflict_time2015 conflict_time2016 conflict_time2017 conflict_time2018 conflict_time2019 i.MUNICIPIO i.ano
+		reg `i' conflict_time2015 conflict_time2016 conflict_time2017 conflict_time2018 conflict_time2019 i.MUNICIPIO i.ano, cluster(MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time2015]'
 		local c: di %4.3f `= _b[conflict_time2016]'
 		local d: di %4.3f `= _b[conflict_time2017]'
@@ -468,95 +527,49 @@ This do file runs robustness checks and mechanisms
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
+*/
 	
-	* Event analysis
+******** EVENT ANALYSIS
+
 	use "${data}/coded/mecanismo3.dta", clear
-	
-	/*
-	sum ntl_, detail
-	drop if ntl_ < r(p5) | ntl_ > r(p95)	
-	*/
-	
-	forvalues i = 2010/2019 {
-		gen y`i' = (ano == `i')
-	}
-	gen zero=. // 2014
-	replace zero=0 if zero==.
 
-	foreach v in ntl_ {
-		
-	reghdfe `v' CONFLICT#y2010 CONFLICT#y2011 CONFLICT#y2012 CONFLICT#y2013 zero CONFLICT#y2015 CONFLICT#y2016 CONFLICT#y2017 CONFLICT#y2018 CONFLICT#y2019, absorb(MUNICIPIO ano) vce(cluster MUNICIPIO) noomitted 
+	gen zero = (ano == 2013) // Create zero for baseline year. Its 2013 as it corresponds to the year inmediatly before the treament.
+	reghdfe ntl_ CONFLICT#y2008 CONFLICT#y2009 CONFLICT#y2010 CONFLICT#y2011 CONFLICT#y2012 zero CONFLICT#y2014 CONFLICT#y2015 CONFLICT#y2016 CONFLICT#y2017 CONFLICT#y2018 CONFLICT#y2019, absorb(MUNICIPIO ano) vce(cluster MUNICIPIO) noomitted
 
-		preserve
-		estimate store coef 
-		parmest, norestore	
-		replace estimate=. if parm=="o.zero"
-		drop if estimate==0
-		gen cont=_n
-		drop if cont>=11
-		replace estimate=0 if estimate==.
+	estimate store coef 
+	parmest, norestore	
+	replace estimate=. if parm=="o.zero"
+	drop if estimate==0
+	gen cont=_n
+	drop if cont>=13
+	replace estimate=0 if estimate==.
+	
 	foreach c in estimate min95 max95 {
 		gen `c'_ = -`c'
 		drop `c'
 	}
-		gen tiempo = 0 + _n
-		label define tag1 1 "-4" 2 "-3" 3 "-2" 4 "-1" 5 "0" 6 "1" 7 "2" 8 "3" 9 "4" 10 "5"
-		label values tiempo tag1
 		
-		twoway (scatter estimate_ tiempo) ///
-		(rcap min95_ max95_ tiempo, lc(gs12)), ///
-		xtitle("Year") ytitle("Coefficient") ///
-		yline(0, lc(red)) xline(5) ///
-		xlabel(1 2 3 4 5 6 7 8 9 10, valuelabel) ///
-		ylabel(, grid) ///
-		graphregion(color(white)) /// 
-		legend(off)
-		restore
-		
-		graph export "${graf}/ea_`v'_2.png", replace 
-	}
+	gen tiempo = 0 + _n
+	label define tag1 1 "-5" 2 "-4" 3 "-3" 4 "-2" 5 "-1" 6 "0" 7 "1" 8 "2" 9 "3" 10 "4" 11 "5" 12 "6"
+	label values tiempo tag1
 	
-/*******************************************
+	twoway (scatter estimate_ tiempo, msize(small) mcolor(blue)) ///
+		(rcap min95_ max95_ tiempo, lc(gs10) lwidth(thin)), ///
+		xtitle("Year") ytitle("Coefficient") ///
+		yline(0, lc(red) lwidth(med)) xline(6, lpattern(dash) lc(gs8)) ///
+		xlabel(1(1)12, valuelabel) ///
+		ylabel(-500(500)1500, grid) ///
+		yscale(range(-500 1500)) ///
+		graphregion(color(gs16)) ///
+		legend(off)
+
+	graph export "${graf}/nightlights_ea.pdf", as(pdf) replace 
+
+
+*******************************************
 *** CENSUS ***
 *******************************************
 
-	foreach i in 05 08 11 13 15 17 18 19 20 23 25 27 41 44 47 50 52 54 63 66 68 70 73 76 81 85 86 88 91 94 95 97 99 {
-	
-	use "${data}/raw/CNPV2018_5PER_A2_`i'.DTA", clear
-	
-	keep u_mpio p_nrohog p_nro_per pa_vivia_5anos pa_vivia_1ano p_edadr u_dpto
-	gen unos=1
-	gen MUNICIPIO = u_dpto + u_mpio
-	destring MUNICIPIO, replace
-	
-	merge m:1 MUNICIPIO using "$v/FARC.dta"
-	
-	keep if _merge==3
-
-	drop u_mpio p_nrohog p_nro_per u_dpto
-	save "${data}/coded/censo_depto_`i'.dta", replace
-	}
-	
-	use "${data}/coded/censo_depto_05.dta", clear
-	foreach i in 08 11 13 15 17 18 19 20 23 25 27 41 44 47 50 52 54 63 66 68 70 73 76 81 85 86 88 91 94 95 97 99 {
-		append using "${data}/coded/censo_depto_`i'.dta"
-	}
-	
-	gen vivia_1 = (pa_vivia_1ano==3)
-	gen vivia_5 = (pa_vivia_5anos==3)
-
-	gen young=.
-	replace young=1 if p_edadr==4 | p_edadr==5 | p_edadr==6
-	gen vivia_1y = (pa_vivia_1ano==3)
-	gen vivia_5y = (pa_vivia_5anos==3)
-	replace vivia_1y=. if young==.
-	replace vivia_5y=. if young==.
-	
-	replace vivia_1=100 if vivia_1==1
-	replace vivia_5=100 if vivia_5==1
-	drop pa_vivia_1ano pa_vivia_5anos
-	save "${data}/coded/censo_depto_total.dta", replace */ // Este archivo se debe mandar al DANE********
-	
 	use "${data}/coded/censo_depto_total.dta", clear
 	
 	* Regresion

@@ -52,6 +52,7 @@ Code author: Ivonne Lara
 	ssc install rwolf2, replace
 	ssc install parmest
 	net install wyoung, from("https://raw.githubusercontent.com/reifjulian/wyoung/master")// ssc install wyoung, replace
+	ssc install ietoolkit
 	*/
 		
 	* Start log
