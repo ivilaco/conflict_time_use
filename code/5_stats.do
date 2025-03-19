@@ -112,14 +112,15 @@ This do file runs descriptive stats, behaviour graphs and maps
 	restore
 
 *******************************************
-*** GRAPH PROPORTION OF ZEROS ***
+*** TABLE PROPORTION OF ZEROS ***
 *******************************************
 
 		file open latex0 using "${sale}/zeros.txt", write replace text
-		file write latex0 "\begin{tabular}{l c c c c} \\ \hline \hline" _n
+		file write latex0 "\begin{tabular}{l c c c c c} \\ \hline \hline" _n
 		file write latex0 "\large" _n
-		file write latex0 "& \multicolumn{2}{c}{Frequency} & \multicolumn{2}{c}{Percentage} \\ \cline{2-5}" _n
-		file write latex0 " & $>$0 & =0  & $>$0 & =0 \\ \hline" _n
+		file write latex0 "& \multicolumn{2}{c}{Frequency} && \multicolumn{2}{c}{Percentage} \\ \cline{2-3} \cline{5-6}" _n
+		file write latex0 "& $>$ 0 & = 0 && $>$ 0 & = 0 \\" _n
+		file write latex0 " & (1) & (2) && (3) & (4) \\ \hline" _n
 		foreach i in $out {
 			tab `i'd
 			estpost tabulate `i'd
@@ -136,7 +137,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 			
 			local lab: variable label `i'
 		
-		file write latex0 "`lab' & ${f1_`i'} & ${f0_`i'} & ${p1_`i'} & ${p0_`i'} \\" _n
+		file write latex0 "`lab' & ${f1_`i'} & ${f0_`i'} && ${p1_`i'} & ${p0_`i'} \\" _n
 		}
 		file write latex0 "\hline \hline" _n
 		file write latex0 "\end{tabular}" _n
