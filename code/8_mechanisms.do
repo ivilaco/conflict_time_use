@@ -574,10 +574,10 @@ This do file runs robustness checks and mechanisms
 	
 	* Regresion
 	file open latex using "${output}/censo.txt", write replace text
-	file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{2}{c}{Total population} & \multicolumn{2}{c}{Young population} \\ \cline{2-5}" _n
-	file write latex "& Five years back & One year back & Five years back & One year back \\ " _n
-	file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
+	file write latex "\begin{tabular}{l c c c c c} \\ \hline \hline" _n
+	file write latex "& \multicolumn{2}{c}{Total population} && \multicolumn{2}{c}{Young population} \\ \cline{2-3} \cline{5-6}" _n
+	file write latex "& Five years back & One year back && Five years back & One year back \\  " _n
+	file write latex "& (1) & (2) && (3) & (4) \\ \hline" _n
 
 	foreach i in vivia_5 vivia_5y vivia_1 vivia_1y {
 		
@@ -613,16 +613,16 @@ This do file runs robustness checks and mechanisms
 			
 	}
 	
-	file write latex " Conflict & ${bb_vivia_5} & ${bb_vivia_1} & ${bb_vivia_5y} & ${bb_vivia_1y} \\" _n
-	file write latex "  & (${seb_vivia_5}) & (${seb_vivia_1}) & (${seb_vivia_5y}) & (${seb_vivia_1y}) \\" _n
+	file write latex " Conflict & ${bb_vivia_5} & ${bb_vivia_1} && ${bb_vivia_5y} & ${bb_vivia_1y} \\" _n
+	file write latex "  & (${seb_vivia_5}) & (${seb_vivia_1}) && (${seb_vivia_5y}) & (${seb_vivia_1y}) \\" _n
 
-	file write latex " Observations & ${N_vivia_5} & ${N_vivia_1} & ${N_vivia_5y} & ${N_vivia_1y} \\" _n
-	file write latex " R-squared & ${r2_vivia_5} & ${r2_vivia_1} & ${r2_vivia_5y} & ${r2_vivia_1y} \\" _n
+	file write latex " Observations & ${N_vivia_5} & ${N_vivia_1} && ${N_vivia_5y} & ${N_vivia_1y} \\" _n
+	file write latex " R-squared & ${r2_vivia_5} & ${r2_vivia_1} && ${r2_vivia_5y} & ${r2_vivia_1y} \\" _n
 	file write latex "\hline" _n
 
-	file write latex "Mean & ${m1_vivia_5} & ${m1_vivia_1} & ${m1_vivia_5y} & ${m1_vivia_1y} \\" _n
-	file write latex "Standard Deviation & ${p1_vivia_5} & ${p1_vivia_1} & ${p1_vivia_5y} & ${p1_vivia_1y} \\" _n		
-	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
+	file write latex "Mean & ${m1_vivia_5} & ${m1_vivia_1} && ${m1_vivia_5y} & ${m1_vivia_1y} \\" _n
+	file write latex "Standard Deviation & ${p1_vivia_5} & ${p1_vivia_1} && ${p1_vivia_5y} & ${p1_vivia_1y} \\" _n		
+	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n	
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
