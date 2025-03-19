@@ -219,7 +219,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 					
 	file write latex "\hspace{3mm} `lab'  & ${o1_`i'} & ${m1_`i'} & ${p1_`i'}  & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}	
-	file write latex " \\ \hline " _n
+	file write latex " \\ " _n
 	file write latex "Panel A. Extensive Margin &&&&&& \\ " _n
 	foreach i in $dummys {	
 					
