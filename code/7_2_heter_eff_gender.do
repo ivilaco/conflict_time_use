@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects
 =========================================================================*/
 
-	use "${clave}/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 	
 * =====================================================================
 * VII. Efectos Heterogeneos Genero
@@ -271,7 +271,7 @@ file close latex
 * v2 - Tobit
 * ------------------------------------------------------
 
-file open latex using "${graf}/reg3c_v2.txt", write replace text
+file open latex using "${sale}/reg3c_v2.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n

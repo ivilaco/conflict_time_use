@@ -443,7 +443,7 @@ This do file runs robustness checks and mechanisms
 			graphregion(color(gs16)) ///
 			legend(off)
 
-	graph export "${graf}/nightlights_ea.pdf", as(pdf) replace 
+	graph export "${output}/nightlights_ea.pdf", as(pdf) replace 
 
 
 *******************************************

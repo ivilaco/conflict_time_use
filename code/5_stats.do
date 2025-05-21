@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs descriptive stats, behaviour graphs and maps
 =========================================================================*/
 
-	use "${clave}/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 		
 	* Correlation between HH education and ingresos
 	corr INGRESO EDU

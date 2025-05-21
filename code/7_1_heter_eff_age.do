@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects
 =========================================================================*/
 
-	use "${clave}/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 	
 * =====================================================================
 * VII. Efectos Heterogeneos Grupos de Edad
@@ -372,7 +372,7 @@ file close latex
 * v2 - Tobit
 * ---------------------------------------------------------------------
 
-file open latex using "${graf}/reg2c_v2.txt", write replace text
+file open latex using "${sale}/reg2c_v2.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{14-19 years} & \multicolumn{2}{c}{20-23 years} & \multicolumn{2}{c}{24-28 years} \\" _n

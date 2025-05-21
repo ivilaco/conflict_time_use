@@ -14,15 +14,15 @@ Code author: Ivonne Lara
 	
 ******** Working directory
 	
-	/* DANE (Verificar como estan construidas las carpetas en el DANE)
+	* DANE (Verificar como estan construidas las carpetas en el DANE)
 	glo main "Z:/IVONNE LARA"
 	
 	glo entra "${main}/ENTRA"
 	glo enut "${entra}/ENUT"
 	glo sale "${main}/SALE"
-	*/
+
 		
-	* Personal
+	/* Personal
 	glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
 	glo desktop "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
 	
@@ -33,6 +33,7 @@ Code author: Ivonne Lara
 	* Clave
 	glo clave "${main}/ENUT"
 	glo graf "${main}/ENUT/graf"
+	*/ 
 	
 	cd "${main}"
 	

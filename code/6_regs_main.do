@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file cruns the main regressions + controls
 =========================================================================*/
 
-	use "${clave}/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -22,7 +22,7 @@ This do file cruns the main regressions + controls
 
 * ----------------------------------------------------------------------
 
-	file open latex using "${graf}/reg1c.txt", write replace text
+	file open latex using "${sale}/reg1c.txt", write replace text // graf
 	file write latex "\begin{tabular}{l c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{Extensive margin} && \multicolumn{4}{c}{Intensive margin} \\ \cline{2-3} \cline{5-8}" _n
 	file write latex " & \multicolumn{2}{c}{Dummy} && \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
