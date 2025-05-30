@@ -14,7 +14,7 @@ This do file cruns the main regressions + controls
 	}
 	
 * ----------------------------------------------------------------------
-* VI.1 Regresion principal (EF Municipio y EF Año) (DONE)
+* VI.1 Regresion principal (EF Municipio y EF Año)
 
 	* v1 - Básica
 	* v2 - Tobit

@@ -99,26 +99,26 @@ ENUT database
 		}
 
 	* E. Labeling 	
-	lab variable MW "Labour Market"
-	lab variable NW1 "Leisure and Self-Care"
+	lab variable MW "Labour market"
+	lab variable NW1 "Leisure and self-care"
 	lab variable NW2 "Sleep"
 	lab variable NW3 "Education"
-	lab variable CH "Household Activities"
-	lab variable CU "Care of Individuals"
+	lab variable CH "Household activities"
+	lab variable CU "Care of individuals"
 	
-	lab variable MWc "Labour Market"
-	lab variable NW1c "Leisure and Self-Care"
+	lab variable MWc "Labour market"
+	lab variable NW1c "Leisure and self-care"
 	lab variable NW2c "Sleep"
 	lab variable NW3c "Education"
-	lab variable CHc "Household Activities"
-	lab variable CUc "Care of Individuals"
+	lab variable CHc "Household activities"
+	lab variable CUc "Care of individuals"
 	
-	lab variable MWd "Labour Market"
-	lab variable NW1d "Leisure and Self-Care"
+	lab variable MWd "Labour market"
+	lab variable NW1d "Leisure and self-care"
 	lab variable NW2d "Sleep"
 	lab variable NW3d "Education"
-	lab variable CHd "Household Activities"
-	lab variable CUd "Care of Individuals"
+	lab variable CHd "Household activities"
+	lab variable CUd "Care of individuals"
 	
 	* F. Variables de analisis mecanismos
 		* Acceso a salud

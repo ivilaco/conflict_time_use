@@ -164,7 +164,7 @@ This do file runs robustness checks and mechanisms
 	file write latex "\hline" _n
 
 	file write latex "Mean & ${m1_prop_desp_recep} & ${m1_prop_desp_recep} & ${m1_prop_desp_expul} & ${m1_prop_desp_expul} \\" _n
-	file write latex "Standard Deviation & ${p1_prop_desp_recep} & ${p1_prop_desp_recep} & ${p1_prop_desp_expul} & ${p1_prop_desp_expul}  \\" _n		
+	file write latex "Std. Dev. & ${p1_prop_desp_recep} & ${p1_prop_desp_recep} & ${p1_prop_desp_expul} & ${p1_prop_desp_expul}  \\" _n		
 	file write latex "Year FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
 	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
 	file write latex "\hline \hline" _n
@@ -193,7 +193,7 @@ This do file runs robustness checks and mechanisms
 	* Regresion
 	file open latex using "${output}/mecanismos1.txt", write replace text
 	file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{\% of males} & \multicolumn{2}{c}{\% of young males} & \multicolumn{2}{c}{\% of disabled} \\ " _n
+	file write latex "& \multicolumn{2}{c}{HH size} & \multicolumn{2}{c}{\% males} & \multicolumn{2}{c}{\% young males} & \multicolumn{2}{c}{\% disabled} \\ " _n
 	file write latex "& (1) & (2) & (1) & (2) & (1) & (2) & (1) & (2) \\ \hline" _n
 
 	foreach i in p_hhth p_hhthj hht {
@@ -291,7 +291,7 @@ This do file runs robustness checks and mechanisms
 	file write latex "\hline" _n
 
 	file write latex "Mean & ${m1_hht} & ${m1_hht} & ${m1_p_hhth}  & ${m1_p_hhth} & ${m1_p_hhthj} & ${m1_p_hhthj} & ${m1_p_hdist} & ${m1_p_hdist} \\" _n
-	file write latex "Standard Deviation & ${p1_hht} & ${p1_hht} & ${p1_p_hhth} & ${p1_p_hhth} & ${p1_p_hhthj} & ${p1_p_hhthj} & ${p1_p_hdist} & ${p1_p_hdist} \\" _n
+	file write latex "Std. Dev. & ${p1_hht} & ${p1_hht} & ${p1_p_hhth} & ${p1_p_hhth} & ${p1_p_hhthj} & ${p1_p_hhthj} & ${p1_p_hdist} & ${p1_p_hdist} \\" _n
 	file write latex "Year FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n	
 	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n			
 	file write latex "\hline \hline" _n
@@ -501,7 +501,7 @@ This do file runs robustness checks and mechanisms
 	file write latex "\hline" _n
 
 	file write latex "Mean & ${m1_vivia_5} & ${m1_vivia_1} && ${m1_vivia_5y} & ${m1_vivia_1y} \\" _n
-	file write latex "Standard Deviation & ${p1_vivia_5} & ${p1_vivia_1} && ${p1_vivia_5y} & ${p1_vivia_1y} \\" _n		
+	file write latex "Std. Dev. & ${p1_vivia_5} & ${p1_vivia_1} && ${p1_vivia_5y} & ${p1_vivia_1y} \\" _n		
 	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n	
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n

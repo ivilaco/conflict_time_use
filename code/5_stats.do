@@ -177,19 +177,19 @@ This do file runs descriptive stats, behaviour graphs and maps
 *** DESCRIPTIVE STATS ***
 *******************************************
 
-	label var CONFLICT "Conflict (1 = FARC-Affected Municipality) "
-	label var TIME "Time (1 = Years After 2014)"
+	label var CONFLICT "Conflict (1 = FARC-affected municipality) "
+	label var TIME "Time (1 = Years after 2014)"
 	label var EDAD "Age (Years)"
 	label var SEXO "Gender (1 = Female)"
-	label var ingdummy "Household Asset Ownership (1 = High)"
-	label var edu1 "No Education"
+	label var ingdummy "Household asset ownership (1 = High)"
+	label var edu1 "No education"
 	label var edu2 "Preschool/Elementary"
-	label var edu3 "Middle/High School"
+	label var edu3 "Middle/High school"
 	label var edu4 "Under/Postgraduate"
 
 	file open latex using "${graf}/estad.txt", write replace text
 	file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
-	file write latex "Variable & N & Mean & Median & SD & Min & Max \\" _n
+	file write latex "Variable & N & Mean & Median & Std. Dev. & Min & Max \\" _n
 	file write latex " & (1) & (2) & (3) & (4) & (5) & (6) \\ \hline " _n
 	foreach i in CONFLICT TIME EDAD SEXO ingdummy {	
 					
@@ -205,7 +205,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 					
 	file write latex "`lab' & ${o1_`i'} & ${m1_`i'} & ${p1_`i'}  & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}	
-	file write latex "Household Head Education (1 = Highest Level Achieved) &&&&&& \\" _n
+	file write latex "Household head's education (1 = Highest level achieved) &&&&&& \\" _n
 	foreach i in edu1 edu2 edu3 edu4 {	
 					
 		sum `i', d 
@@ -221,7 +221,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "\hspace{3mm} `lab'  & ${o1_`i'} & ${m1_`i'} & ${p1_`i'}  & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}	
 	file write latex " \\ " _n
-	file write latex "Panel A. Extensive Margin &&&&&& \\ " _n
+	file write latex "Panel A. Extensive margin &&&&&& \\ " _n
 	foreach i in $dummys {	
 					
 		sum `i', d 
@@ -237,7 +237,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "\hspace{3mm} `lab'  & ${o1_`i'} & ${m1_`i'} & ${p1_`i'} & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}
 	file write latex " \\ " _n
-	file write latex "Panel B. Intensive Margin &&&&&& \\ " _n
+	file write latex "Panel B. Intensive margin &&&&&& \\ " _n
 	foreach i in $ceros {	
 						
 		sum `i', d 
@@ -253,7 +253,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "\hspace{3mm} `lab'  & ${o1_`i'} & ${m1_`i'} & ${p1_`i'} & ${sd1_`i'} & ${min1_`i'} & ${max1_`i'} \\" _n
 	}
 	file write latex " \\ " _n
-	file write latex "Panel C. Intensive Margin (If Time Spent) &&&&&& \\ " _n
+	file write latex "Panel C. Intensive margin (If time spent) &&&&&& \\ " _n
 	foreach i in $ceros {	
 						
 		sum `i' if `i' >0, d
