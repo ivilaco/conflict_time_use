@@ -13,17 +13,6 @@ Setting the code environment
 
 	clear all
 	set more off
-
-	* Local (Clave) BORRAR CUANDO SE REVISE EL CODIGO PARA REPRODUCIBILIDAD
-	*glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
-	
-	*glo code "${main}/code"
-	*glo data "${desktop}/data"
-	*glo output "${desktop}/output"
-	
-	*glo clave "${main}/ENUT"
-	*glo graf "${main}/ENUT/graf"
-	*/ 
 	
 	* DANE
 	glo main "Z:/IVONNE LARA"
@@ -87,8 +76,12 @@ Setting the code environment
 	global controls "v4_c v20_c"
 	
 *******************************************
-*** CODE ***
+*** Code ***
 *******************************************
+
+**************************
+*** Cleaning and stats ***
+**************************
 
 	* Creates de covariables and additional variables for analysis from external databases
 	do "${code}/1_covars.do" // Github
@@ -101,30 +94,56 @@ Setting the code environment
 
 	* Merges the covariables with the ENUT to build the final databse
 	do "${code}/4_final_database.do" // DANE
+	
+**************************
+*** Stats and main reg ***
+**************************
 
-	* Creates stats on relevant variables
+	* Runns stats and descriptive outputs on relevant variables
 	do "${code}/5_stats.do" // DANE
 
 	* Runs the main regressions
 	do "${code}/6_regs_main.do" // DANE
-
-	* Runs mechanisms
-		* 
-		do "${code}/8_1_mechanisms.do" // Github
 	
-		*
-		do "${code}/8_2_mechanisms.do" // DANE
+**************************
+*** Heterogeneous Eff. ***
+**************************
 
-		* 
-		do "${code}/8_3_mechanisms.do" // Github
-
-	* Runs Robustness
-		* 
-		do "${code}/8_1_mechanisms.do" // DANE
+	* Age range
+	do "${code}/7_1_heter_eff_age.do" // DANE
 	
-		*
-		do "${code}/8_2_mechanisms.do" // DANE
+	* Gender
+	do "${code}/7_2_heter_eff_gender.do" // DANE
 
-		* 
-		do "${code}/8_3_mechanisms.do" // Github
+	* HH head education
+	do "${code}/7_3_heter_eff_edu.do" // DANE
+
+	* Income level (HH assets ownership)
+	do "${code}/7_4_heter_eff_act.do" // DANE
+
+**************************
+*** Mechanisms ***
+**************************
+	
+	* Migration patterns
+	do "${code}/8_1_mechanisms.do" // Github
+	
+	* Household Composition
+	do "${code}/8_2_mechanisms.do" // DANE
+
+	* Night Lights
+	do "${code}/8_3_mechanisms.do" // Github
+
+**************************
+*** Robustness ***
+**************************
+		
+	* PSM and Parallel trends
+	do "${code}/9_1_robustness.do" // DANE
+	
+	* Alternative conflict measure
+	do "${code}/9_2_robustness.do" // DANE
+
+	* Selective migration paterns
+	do "${code}/9_3_robustness.do" // Github
 

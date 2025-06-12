@@ -73,7 +73,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 			gen `i'm = `i'1-`i'0
 		}
 			
-		* 1.1 Diferencia entre hombres y mujeres missings
+		* 1.1 With missings
 		twoway line MWm EDAD, color(gold) ///		
 		|| line NW1m EDAD, color(mint) lpattern(shortdash_dot) ///
 		|| line NW2m EDAD, color(green) lpattern(longdash_dot) ///
@@ -87,7 +87,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 	
 		graph export "${sale}/todcat_missd.pdf", replace
 				
-		* 1.2 Diferencia entre hombres y mujeres ceros
+		* 1.2 With zeros
 		twoway line MWcm EDAD, color(gold) ///	
 		|| line NW1cm EDAD, color(mint) lpattern(shortdash_dot) ///     
 		|| line NW2cm EDAD, color(green) lpattern(longdash_dot) ///     
@@ -101,7 +101,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 		
 		graph export "${sale}/todcat_cerosd_p.pdf", replace
 			
-		* 1.3 Diferencia entre hombres y mujeres ceros (presentación)
+		* 1.3 With zeros (presentation)
 		twoway line MWcm EDAD, color(gold) ///	
 		|| line NW1cm EDAD, color(mint) lpattern(shortdash_dot) ///     
 		|| line NW2cm EDAD, color(green) lpattern(longdash_dot) ///     
@@ -120,7 +120,6 @@ This do file runs descriptive stats, behaviour graphs and maps
 *******************************************
 *** Table proportion of zeros ***
 *******************************************
-
 
 	file open latex0 using "${sale}/zeros.txt", write replace text
 	file write latex0 "\begin{tabular}{l c c c c c} \\ \hline \hline" _n
