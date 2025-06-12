@@ -277,7 +277,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 *******************************************
 
 	* Importing shapefiles
-	shp2dta using "${entra}/mpio.shp", database(col_mpios) coordinates(col_coord) genid(id) replace // Este archivo se debe mandar al DANE******** (4)
+	shp2dta using "${entra}/mpio.shp", database(col_mpios) coordinates(col_coord) genid(id) replace // This database must be sent to DANE******** (4)
 
 	use col_mpios, clear
 	destring MPIOS, gen(MUNICIPIO)

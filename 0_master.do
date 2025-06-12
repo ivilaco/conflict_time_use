@@ -13,32 +13,37 @@ Code author: Ivonne Lara
 	set more off
 	
 ******** Working directory
+
+	* Local (Clave) BORRAR CUANDO SE REVISE EL CODIGO PARA REPRODUCIBILIDAD
+	*glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
 	
-	* DANE (Verificar como estan construidas las carpetas en el DANE)
+	*glo code "${main}/code"
+	*glo data "${desktop}/data"
+	*glo output "${desktop}/output"
+	
+	*glo clave "${main}/ENUT"
+	*glo graf "${main}/ENUT/graf"
+	*/ 
+	
+	* DANE
 	glo main "Z:/IVONNE LARA"
 	
 	glo entra "${main}/ENTRA"
-	glo enut "${entra}/ENUT"
+	glo enut "${main}/ENUT"
 	glo sale "${main}/SALE"
+	
+	* Desktop
+	glo github "/Users/ivonnelara/Downloads/conflict_time_use"
+	glo main "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
 
-		
-	/* Personal
-	glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
-	glo desktop "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
-	
-	glo code "${main}/code"
-	glo data "${desktop}/data"
-	glo output "${desktop}/output"
-	
-	* Clave
-	glo clave "${main}/ENUT"
-	glo graf "${main}/ENUT/graf"
-	*/ 
-	
+	glo code "${github}/code"
+	glo data "${main}/data"
+	glo output "${main}/output"
+
 	cd "${main}"
 	
 	* Setting the ado path with required packages
-	sysdir set PLUS "${main}/code/ado"
+	sysdir set PLUS "${github}/code/ado"
 	
 	/* Install packages
 	ssc install spmap, replace
@@ -52,8 +57,10 @@ Code author: Ivonne Lara
 	ssc install rwolf, replace
 	ssc install rwolf2, replace
 	ssc install parmest
-	net install wyoung, from("https://raw.githubusercontent.com/reifjulian/wyoung/master")// ssc install wyoung, replace
+	net install wyoung, from("https://raw.githubusercontent.com/reifjulian/wyoung/master") // ssc install wyoung, replace
 	ssc install ietoolkit
+	ssc install reghdfe
+	ssc install ftools
 	*/
 		
 	* Start log
@@ -103,4 +110,4 @@ Code author: Ivonne Lara
 	do "${code}/6_regs_main.do" // DANE
 
 	* Runs robustness
-	do "${code}/7_robustness.do" // DANE
+	do "${code}/8_robustness.do" // Github and DANE

@@ -15,7 +15,7 @@ This do creates the final database for analysis
 		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
 		
 		* Pego covariables
-		merge m:1 MUNICIPIO using "$cov/new_vars.dta", gen(_merge2)
+		merge m:1 MUNICIPIO using "$entra/new_vars.dta", gen(_merge2)
 
 		*unique MUNICIPIO // 202 mpios 
 		*tab CONFLICT // No conflict: 33,549 (79.3%) Conflict: 8,732 (20.6%)

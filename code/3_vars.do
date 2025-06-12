@@ -141,7 +141,7 @@ ENUT database
 		bys idhogar TIME: egen hhtk=count(unos) if EDAD<13 
 		bys idhogar TIME: egen hdist=count(unos) if DIS==1 
 	
-	* F. Quito el percentil 99
+	* G. Quito el percentil 99
 	preserve
 	
 	foreach i in MWc NW1c NW2c NW3c {
@@ -153,8 +153,7 @@ ENUT database
 	save "${enut}/ENUT_TOTAL_ALL.dta", replace
 	restore
 
-	* F. Quito el percentil 99 y me quedo solo con los jovenes
-	
+	* H. Quito el percentil 99 y me quedo solo con los jovenes
 	keep if EDAD>13 & EDAD<29 
 	foreach i in MWc NW1c NW2c NW3c {
 		sum `i', d
