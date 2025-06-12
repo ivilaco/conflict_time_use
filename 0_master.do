@@ -3,16 +3,16 @@ Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
 0_master.do
+
+Setting the code environment
 =========================================================================*/
 
 *******************************************
-*** SET MAIN ENVIRONMENT ***
+*** Set main environment ***
 *******************************************
 
 	clear all
 	set more off
-	
-******** Working directory
 
 	* Local (Clave) BORRAR CUANDO SE REVISE EL CODIGO PARA REPRODUCIBILIDAD
 	*glo main "/Users/ivonnelara/Documents/Tesis/IVONNE LARA/ENTRA"
@@ -50,7 +50,6 @@ Code author: Ivonne Lara
 	ssc install shp2dta, replace
 	ssc install mif2dta, replace
 	ssc install psmatch2, replace
-	*ssc install st0026_2, replace
 	ssc install spmap, replace
 	ssc install shp2dta, replace
 	ssc install mif2dta, replace
@@ -67,7 +66,7 @@ Code author: Ivonne Lara
 	cap log close
 	
 *******************************************
-*** ADDITIONAL GLOBALS ***
+*** Globals ***
 *******************************************
 	
 	* Independent variables
@@ -109,5 +108,23 @@ Code author: Ivonne Lara
 	* Runs the main regressions
 	do "${code}/6_regs_main.do" // DANE
 
-	* Runs robustness
-	do "${code}/8_robustness.do" // Github and DANE
+	* Runs mechanisms
+		* 
+		do "${code}/8_1_mechanisms.do" // Github
+	
+		*
+		do "${code}/8_2_mechanisms.do" // DANE
+
+		* 
+		do "${code}/8_3_mechanisms.do" // Github
+
+	* Runs Robustness
+		* 
+		do "${code}/8_1_mechanisms.do" // DANE
+	
+		*
+		do "${code}/8_2_mechanisms.do" // DANE
+
+		* 
+		do "${code}/8_3_mechanisms.do" // Github
+

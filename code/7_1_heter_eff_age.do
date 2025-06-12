@@ -4,17 +4,17 @@ Code author: Ivonne Lara
 --------------------------------------------------------------------------
 7_1_heter_eff_age.do
 
-This do file runs regression with heterogeneous effects
+This do file runs regression with heterogeneous effects - Age groups
 =========================================================================*/
 
 	use "${enut}/ENUT_FARC_J.dta", clear // clave
 	
 * =====================================================================
-* VII. Efectos Heterogeneos Grupos de Edad
+* Heterogeneous effects - Age groups
 
-	* v1 - Básica
-	* v2 - Tobit
-	* v3 - Dummys
+	* v1 - Intensive OLS
+	* v2 - Intensive Tobit
+	* v3 - Extensive Dummys
 * =====================================================================
 
 	foreach i in v4 v20 {
@@ -25,18 +25,24 @@ This do file runs regression with heterogeneous effects
 	replace dummyedad=0 if EDAD<19
 	replace dummyedad=1 if EDAD>=19 & EDAD<=23
 	replace dummyedad=2 if EDAD>23
-
-* ---------------------------------------------------------------------
-* v1 - OLS 
-* ---------------------------------------------------------------------
 	
+*******************************************
+*** v1 - Intensive OLS  *** 
+*******************************************
+
+**************************************
+*** Multiple hypothesis correction *** 
+**************************************
+
 file open latex using "${sale}/reg2c_v1.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{14-19 years} & \multicolumn{2}{c}{20-23 years} & \multicolumn{2}{c}{24-28 years} \\" _n
 file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
-	* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+***** Age group 1
+	
+	* All years
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
@@ -52,7 +58,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* Year interaction
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
@@ -77,7 +83,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 4 Rwolf, Edad 2
+***** Age group 2
+	
+	* All years
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
@@ -93,7 +101,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, Edad 2
+	* Year interaction
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
@@ -118,7 +126,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw6_CH: di %4.3f `= e(RW)[10,3]'
 		global rw6_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v3 - Básica (OLS) Modelo 7 Rwolf, Edad 3
+***** Age group 3
+	
+	* All years
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
@@ -134,7 +144,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw7_CH: di %4.3f `= e(RW)[5,3]'
 		global rw7_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v3 - Interacción por año (OLS) Modelo 8 y 9 Rwolf, Edad 3
+	* Year interaction
 	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
@@ -159,10 +169,15 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw9_CH: di %4.3f `= e(RW)[10,3]'
 		global rw9_CU: di %4.3f `= e(RW)[12,3]'
 
+**************************************
+*** Regressions *** 
+**************************************
+
 	foreach i in $out {
 		
-		*** EDAD 1
-		* v1 - Básica
+***** Age group 1
+	
+		* All years
 		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
@@ -187,7 +202,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v1 - Interacción por año
+		* Year interaction
 		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -218,8 +233,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 2
-		* v2 - Básica
+***** Age group 2
+	
+		* All years
 		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
@@ -244,7 +260,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v2 - Interacción por año
+		* Year interaction
 		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -275,8 +291,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 3
-		* v3 - Básica
+***** Age group 3
+	
+		* All years
 		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
 		local e: di %4.3f `= _b[conflict_time]'
 		global see_`i': di %4.3f `= _se[conflict_time]'
@@ -301,7 +318,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global be_`i' "`e'"
 		}
 		
-		* v3 - Interacción por año
+		* Year interaction
 		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
 		local u: di %4.3f `= _b[conflict_time2016]'
 		global seu_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -368,9 +385,13 @@ file write latex "\hline \hline" _n
 file write latex "\end{tabular}" _n
 file close latex
 
-* ---------------------------------------------------------------------
-* v2 - Tobit
-* ---------------------------------------------------------------------
+*******************************************
+*** v2 - Intensive Tobit  *** 
+*******************************************
+
+**************************************
+*** Multiple hypothesis correction *** 
+**************************************
 
 file open latex using "${sale}/reg2c_v2.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
@@ -378,7 +399,9 @@ file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{14-19 years} & \multicolumn{2}{c}{20-23 years} & \multicolumn{2}{c}{24-28 years} \\" _n
 file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
-	* v1 - Básica (Tobit) Modelo 1 wyoung & sidak, Edad 1
+***** Age group 1
+	
+	* All years
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung 
@@ -397,7 +420,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw1_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw1_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v1 - Interacción por año (Tobit) Modelo 2 y 3 wyoung & sidak, Edad 1
+	* Year interaction
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung
@@ -436,7 +459,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global rw3_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw3_CU_s: di %4.3f `= r(table)[12,6]'
 
-	* v2 - Básica (Tobit) Modelo 4 wyoung & sidak, Edad 2
+***** Age group 2
+	
+	* All years
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* wyoung 
@@ -455,7 +480,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v2 - Interacción por año (Tobit) Modelo 5 y 6 wyoung & sidak, Edad 2
+	* Year interaction
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung
@@ -495,7 +520,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global rw6_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw6_CU_s: di %4.3f `= r(table)[12,6]'
 
-	* v3 - Básica (Tobit) Modelo 7 wyoung & sidak, Edad 3
+***** Age group 3
+	
+	* All years
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung 
@@ -514,7 +541,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw7_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw7_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v3 - Interacción por año (OLS) Modelo 2 y 3 wyoung & sidak, Edad 3
+	* Year interaction
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung
@@ -553,10 +580,15 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global rw9_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw9_CU_s: di %4.3f `= r(table)[12,6]'
 
+**************************************
+*** Regressions *** 
+**************************************
+
 	foreach i in $out {
 		
-		*** EDAD 1
-		* v1 - Básica
+***** Age group 1
+	
+		* All years
 		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
@@ -581,7 +613,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v1 - Interacción por año
+		* Year interaction
 		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -612,8 +644,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 2
-		* v2 - Básica 
+***** Age group 2
+	
+		* All years	
 		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
@@ -638,7 +671,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v2 - Interacción por año
+		* Year interaction
 		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -669,8 +702,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 3
-		* v3 - Básica
+***** Age group 3
+	
+		* All years
 		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local e: di %4.3f `= _b[conflict_time]'
 		global see_`i': di %4.3f `= _se[conflict_time]'
@@ -695,7 +729,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global be_`i' "`e'"
 		}
 		
-		* v3 - Interacción por año (OLS)
+		* Year interaction
 		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local u: di %4.3f `= _b[conflict_time2016]'
 		global seu_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -765,9 +799,13 @@ file write latex "\hline \hline" _n
 file write latex "\end{tabular}" _n
 file close latex
 
-* ---------------------------------------------------------------------
-* v3 - Dummys 
-* ---------------------------------------------------------------------
+*******************************************
+*** v3 - Extensive Dummys  *** 
+*******************************************
+
+**************************************
+*** Multiple hypothesis correction *** 
+**************************************
 
 file open latex using "${sale}/reg2c_v3.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
@@ -775,7 +813,9 @@ file write latex "\begin{tabular}{l c c c c c c} \\ \hline \hline" _n
 file write latex "& \multicolumn{2}{c}{14-19 years} & \multicolumn{2}{c}{20-23 years} & \multicolumn{2}{c}{24-28 years} \\" _n
 file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 
-	* v1 - Básica (OLS) Modelo 1 Rwolf, Edad 1
+***** Age group 1
+	
+	* All years
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
@@ -791,7 +831,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Interacción por año (OLS) Modelo 2 y 3 Rwolf, Edad 1
+	* Year interaction
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
@@ -816,7 +856,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Básica (OLS) Modelo 4 Rwolf, Edad 2
+***** Age group 2
+	
+	* All years
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
@@ -832,7 +874,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw4_CH: di %4.3f `= e(RW)[5,3]'
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v2 - Interacción por año (OLS) Modelo 5 y 6 Rwolf, Edad 2
+	* Year interaction
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
@@ -857,7 +899,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw6_CH: di %4.3f `= e(RW)[10,3]'
 		global rw6_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v3 - Básica (OLS) Modelo 7 Rwolf, Edad 3
+***** Age group 3
+	
+	* All years
 	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
@@ -873,7 +917,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw7_CH: di %4.3f `= e(RW)[5,3]'
 		global rw7_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v3 - Interacción por año (OLS) Modelo 8 y 9 Rwolf, Edad 3
+	* Year interaction
 	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
 	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
@@ -898,10 +942,15 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		global rw9_CH: di %4.3f `= e(RW)[10,3]'
 		global rw9_CU: di %4.3f `= e(RW)[12,3]'
 
+**************************************
+*** Regressions *** 
+**************************************
+
 	foreach i in $out {
 		
-		*** EDAD 1
-		* v1 - Básica
+***** Age group 1
+	
+		* All years
 		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
@@ -926,7 +975,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v1 - Interacción por año
+		* Year interaction
 		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -957,8 +1006,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 2
-		* v2 - Básica
+***** Age group 2
+	
+		* All years
 		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
@@ -983,7 +1033,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v2 - Interacción por año
+		* Year interaction
 		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
@@ -1014,8 +1064,9 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 		}
 		}
 		
-		*** EDAD 3
-		* v3 - Básica
+***** Age group 3
+	
+		* All years
 		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
 		local e: di %4.3f `= _b[conflict_time]'
 		global see_`i': di %4.3f `= _se[conflict_time]'
@@ -1040,7 +1091,7 @@ file write latex "& (1) & (2) & (3) & (4) & (5) & (6) \\ \hline" _n
 			global be_`i' "`e'"
 		}
 		
-		* v3 - Interacción por año
+		* Year interaction
 		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
 		local u: di %4.3f `= _b[conflict_time2016]'
 		global seu_`i': di %4.3f `= _se[conflict_time2016]'	

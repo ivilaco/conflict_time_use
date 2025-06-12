@@ -7,6 +7,10 @@ Code author: Ivonne Lara
 This do creates the final database for analysis
 =========================================================================*/
 
+*******************************************
+*** Final details ***
+*******************************************
+
 	foreach j in J ALL {
 
 		* Pego con el tratamiento
@@ -75,26 +79,26 @@ This do creates the final database for analysis
 		* Guardo base final
 		save "$enut/ENUT_FARC_`j'.dta", replace
 	}
-
-* ----------------------------------------------------------------------*
-* IV. Additional variables for analysis (REVISAR SI SE NECESITA)
-* ----------------------------------------------------------------------*/
+	
+*******************************************
+*** Additional variables for analysis ***
+*******************************************
 
 	use "$enut/ENUT_FARC_ALL.dta", clear
 		
-		* Porcentaje de hogares donde la mujer es jefe del hogar
-		bys ANNO MUNICIPIO : egen hhs_j = sum(jefe) // Tomamos en cuenta los hogares que tienen jefe del hogar
-		bys ANNO MUNICIPIO : egen hhs_jm = sum(jefe) if SEXO == 1
+	* Percentage of hhs with a women as head 
+	bys ANNO MUNICIPIO : egen hhs_j = sum(jefe)
+	bys ANNO MUNICIPIO : egen hhs_jm = sum(jefe) if SEXO == 1
 		
-		* Porcentaje de hogares donde el conyuge esta presente
-		bys ANNO MUNICIPIO : egen hhs_c = sum(jefe) if conyuge_hogar == 1
+	* Porcentage of hhs where spouse is present
+	bys ANNO MUNICIPIO : egen hhs_c = sum(jefe) if conyuge_hogar == 1
 		
-		* Mecanismo 2 - Household Re-Composition
-		gen p_hhth = (hhth/hht)*100
-		gen p_hhthj = (hhthj/hht)*100
-		gen p_hdist = (hdist/hht)*100
-		gen p_hhs_jm = (hhs_jm/hhs_j)*100	
-		gen p_hhs_c = (hhs_c/hhs_j)*100	
+	* Mechanism 2 - Household Re-Composition
+	gen p_hhth = (hhth/hht)*100
+	gen p_hhthj = (hhthj/hht)*100
+	gen p_hdist = (hdist/hht)*100
+	gen p_hhs_jm = (hhs_jm/hhs_j)*100	
+	gen p_hhs_c = (hhs_c/hhs_j)*100	
 		
 	save "$enut/ENUT_FARC_ALL.dta", replace
 	

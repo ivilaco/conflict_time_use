@@ -160,9 +160,3 @@ the analysis
 		drop _merge	
 	
 	save "${data}/coded/FARC_final.dta", replace // This database must be sent to DANE******** (4)
-
-*******************************************
-*** Census 2018 ***
-*******************************************
-
-

@@ -2,43 +2,35 @@
 Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
-6_regs_main.do
+9_2_robustness.do
 
-This do file runs the main regressions + controls
+This do file runs robustness 2 - Alternative conflict measure
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear // clave
+*******************************************
+*** Robustness 2: Alt. conflict measure *** 
+*******************************************
 
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
+	
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
 	}
 	
-* =====================================================================
-* Main regression (EF Municipio y EF Año)
-
-	* v1 - Intensive OLS
-	* v2 - Intensive Tobit
-	* v3 - Extensive Dummys
-* =====================================================================
-
-*******************************************
-*** Multiple hypothesis correction  *** 
-*******************************************
-
-	file open latex using "${sale}/reg1c.txt", write replace text // graf
+	file open latex using "${sale}/reg1r.txt", write replace text
 	file write latex "\begin{tabular}{l c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{Extensive margin} && \multicolumn{4}{c}{Intensive margin} \\ \cline{2-3} \cline{5-8}" _n
 	file write latex " & \multicolumn{2}{c}{Dummy} && \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
 	file write latex "& (1) & (2) && (3) & (4) & (5) & (6) \\ \hline" _n
 
 	* v1 - Intensive OLS (Rwolf)
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+	qui rwolf2 (reg MWc conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time1, conflict_time1, conflict_time1, conflict_time1, conflict_time1, conflict_time1) reps(1000) seed(12345)
 		
 		global rw1_MW: di %4.3f `= e(RW)[1,3]'
 		global rw1_NW1: di %4.3f `= e(RW)[2,3]'
@@ -47,14 +39,14 @@ This do file runs the main regressions + controls
 		global rw1_CH: di %4.3f `= e(RW)[5,3]'
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
-	* v1 - Intensive OLS (Rwolf) - year interaction
-	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
-	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
+	* v1 - Intensive OLS (Rwolf) - Year interaction
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020) reps(1000) seed(12345)
 
 		* 2016
 		global rw2_MW: di %4.3f `= e(RW)[1,3]'
@@ -72,8 +64,8 @@ This do file runs the main regressions + controls
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-	* v2 - Intensive Tobit (Sidak)
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* v2 - Intensive Tobit (Sidak)	
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time1) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung 
 		global rw4_MW: di %4.3f `= r(table)[1,4]'
@@ -92,8 +84,8 @@ This do file runs the main regressions + controls
 		global rw4_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* v2 - Intensive Tobit (Sidak) - year interaction
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* v2 - Intensive Tobit (Sidak) - Year interaction
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time12016 conflict_time12020 CONFLICT1 TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time12016 conflict_time12020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 	
 		/* wyoung
 
@@ -113,7 +105,7 @@ This do file runs the main regressions + controls
 			global rw6_CH: di %4.3f `= r(table)[11,4]'
 			global rw6_CU: di %4.3f `= r(table)[12,4]'
 			*/
-			
+		
 		* Sidak
 
 			* 2016
@@ -133,13 +125,13 @@ This do file runs the main regressions + controls
 			global rw6_CU_s: di %4.3f `= r(table)[12,6]'
 			
 	* v3 - Extensive Dummys (Rwolf)
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+	qui rwolf2 (reg MWd conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
+	(reg NW1d conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW2d conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time1 CONFLICT1 TIME i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time1, conflict_time1, conflict_time1, conflict_time1, conflict_time1, conflict_time1) reps(1000) seed(12345)
 	
 		global rw7_MW: di %4.3f `= e(RW)[1,3]'
 		global rw7_NW1: di %4.3f `= e(RW)[2,3]'
@@ -148,14 +140,14 @@ This do file runs the main regressions + controls
 		global rw7_CH: di %4.3f `= e(RW)[5,3]'
 		global rw7_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* v3 - Extensive Dummys (Rwolf) - year interaction
-	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
-	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
-	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
+	* v3 - Extensive Dummys (Rwolf) - Year interaction
+	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
+	(reg NW1d TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW2d TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg NW3d TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CHd TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)) ///
+	(reg CUd TIME2016 TIME2020 conflict_time12016 conflict_time12020 CONFLICT1 i.ANNO i.MUNICIPIO  $controls, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020, conflict_time12016 conflict_time12020) reps(1000) seed(12345)
 	
 		* 2016
 		global rw8_MW: di %4.3f `= e(RW)[1,3]'
@@ -173,17 +165,13 @@ This do file runs the main regressions + controls
 		global rw9_CH: di %4.3f `= e(RW)[10,3]'
 		global rw9_CU: di %4.3f `= e(RW)[12,3]'
 
-*******************************************
-*** Regressions  *** 
-*******************************************
-
 		foreach i in $out {
 					
 			* v1 - Intensive OLS
-			reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
-			local a: di %4.3f `= _b[conflict_time]'
-			global sea_`i': di %4.3f `= _se[conflict_time]'
-			local ta=_b[conflict_time]/_se[conflict_time]
+			reg `i'c CONFLICT1 TIME conflict_time1 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
+			local a: di %4.3f `= _b[conflict_time1]'
+			global sea_`i': di %4.3f `= _se[conflict_time1]'
+			local ta=_b[conflict_time1]/_se[conflict_time1]
 			local pa= 2*ttail(`e(df_r)',abs(`ta'))
 			global r2_`i': di %4.3f `= e(r2)'
 			global N_`i': di %9.0f `= e(N)'
@@ -205,13 +193,13 @@ This do file runs the main regressions + controls
 			}
 			
 			* v1 - Intensive OLS - year interaction
-			reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
-			local e: di %4.3f `= _b[conflict_time2016]'
-			global see_`i': di %4.3f `= _se[conflict_time2016]'	
-			local f: di %4.3f `= _b[conflict_time2020]'
-			global sef_`i': di %4.3f `= _se[conflict_time2020]'
-			local te=_b[conflict_time2016]/_se[conflict_time2016]
-			local tf=_b[conflict_time2020]/_se[conflict_time2020]
+			reg `i'c CONFLICT1 TIME2016 TIME2020 conflict_time12016 conflict_time12020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
+			local e: di %4.3f `= _b[conflict_time12016]'
+			global see_`i': di %4.3f `= _se[conflict_time12016]'	
+			local f: di %4.3f `= _b[conflict_time12020]'
+			global sef_`i': di %4.3f `= _se[conflict_time12020]'
+			local te=_b[conflict_time12016]/_se[conflict_time12016]
+			local tf=_b[conflict_time12020]/_se[conflict_time12020]
 			local pe= 2*ttail(`e(df_r)',abs(`te'))
 			local pf= 2*ttail(`e(df_r)',abs(`tf'))
 			global r22_`i': di %4.3f `= e(r2)'
@@ -236,10 +224,10 @@ This do file runs the main regressions + controls
 			}
 			
 			* v2 - Intensive Tobit
-			tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)
-			local b: di %4.3f `= _b[conflict_time]'
-			global seb_`i': di %4.3f `= _se[conflict_time]'
-			local tb=_b[conflict_time]/_se[conflict_time]
+			tobit `i'c CONFLICT1 TIME conflict_time1 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)
+			local b: di %4.3f `= _b[conflict_time1]'
+			global seb_`i': di %4.3f `= _se[conflict_time1]'
+			local tb=_b[conflict_time1]/_se[conflict_time1]
 			local pb= 2*ttail(`e(df_r)',abs(`tb'))
 			global r23_`i': di %4.3f `= e(r2)'
 			global N3_`i': di %9.0f `= e(N)'
@@ -261,13 +249,13 @@ This do file runs the main regressions + controls
 			}
 			
 			* v2 - Intensive Tobit - year interaction
-			tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)
-			local g: di %4.3f `= _b[conflict_time2016]'
-			global seg_`i': di %4.3f `= _se[conflict_time2016]'	
-			local h: di %4.3f `= _b[conflict_time2020]'
-			global seh_`i': di %4.3f `= _se[conflict_time2020]'
-			local tg=_b[conflict_time2016]/_se[conflict_time2016]
-			local th=_b[conflict_time2020]/_se[conflict_time2020]
+			tobit `i'c CONFLICT1 TIME2016 TIME2020 conflict_time12016 conflict_time12020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)
+			local g: di %4.3f `= _b[conflict_time12016]'
+			global seg_`i': di %4.3f `= _se[conflict_time12016]'	
+			local h: di %4.3f `= _b[conflict_time12020]'
+			global seh_`i': di %4.3f `= _se[conflict_time12020]'
+			local tg=_b[conflict_time12016]/_se[conflict_time12016]
+			local th=_b[conflict_time12020]/_se[conflict_time12020]
 			local pg= 2*ttail(`e(df_r)',abs(`tg'))
 			local ph= 2*ttail(`e(df_r)',abs(`th'))
 			global r24_`i': di %4.3f `= e(r2)'
@@ -292,10 +280,10 @@ This do file runs the main regressions + controls
 			}
 			
 			* v3 - Extensive Dummy
-			reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
-			local c: di %4.3f `= _b[conflict_time]'
-			global sec_`i': di %4.3f `= _se[conflict_time]'
-			local tc=_b[conflict_time]/_se[conflict_time]
+			reg `i'd CONFLICT1 TIME conflict_time1 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
+			local c: di %4.3f `= _b[conflict_time1]'
+			global sec_`i': di %4.3f `= _se[conflict_time1]'
+			local tc=_b[conflict_time1]/_se[conflict_time1]
 			local pc= 2*ttail(`e(df_r)',abs(`tc'))
 			global r25_`i': di %4.3f `= e(r2)'
 			global N5_`i': di %9.0f `= e(N)'
@@ -317,13 +305,13 @@ This do file runs the main regressions + controls
 			}
 			
 			* v3 - Extensive Dummy - year interaction
-			reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
-			local j: di %4.3f `= _b[conflict_time2016]'
-			global sej_`i': di %4.3f `= _se[conflict_time2016]'	
-			local k: di %4.3f `= _b[conflict_time2020]'
-			global sek_`i': di %4.3f `= _se[conflict_time2020]'
-			local tj=_b[conflict_time2016]/_se[conflict_time2016]
-			local tk=_b[conflict_time2020]/_se[conflict_time2020]
+			reg `i'd CONFLICT1 TIME2016 TIME2020 conflict_time12016 conflict_time12020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO)
+			local j: di %4.3f `= _b[conflict_time12016]'
+			global sej_`i': di %4.3f `= _se[conflict_time12016]'	
+			local k: di %4.3f `= _b[conflict_time12020]'
+			global sek_`i': di %4.3f `= _se[conflict_time12020]'
+			local tj=_b[conflict_time12016]/_se[conflict_time12016]
+			local tk=_b[conflict_time12020]/_se[conflict_time12020]
 			local pj= 2*ttail(`e(df_r)',abs(`tj'))
 			local pk= 2*ttail(`e(df_r)',abs(`tk'))
 			global r26_`i': di %4.3f `= e(r2)'
@@ -357,30 +345,30 @@ This do file runs the main regressions + controls
 		}
 		
 	file write latex "\textbf{`lab'} \\" _n
-	file write latex " Conflict x Time & ${bc_`i'} &&& ${ba_`i'} && ${bb_`i'} &\\" _n
+	file write latex " Conflict x Time & ${bc_`i'} &&& ${ba_`i'} && ${bb_`i'} & \\" _n
 	file write latex "  & (${sec_`i'}) &&& (${sea_`i'}) && (${seb_`i'}) & \\" _n
 	file write latex "  & [${rw7_`i'}] &&& [${rw1_`i'}] && \{${rw4_`i'_s}\} & \\" _n
 	*file write latex "  & [${rw7_`i'}] &&& [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
-	*file write latex "  & &&& && <${rw4_`i'_s}> & \\" _n
+	*file write latex "  & && && <${rw4_`i'_s}> & \\" _n
 
-	file write latex " Conflict x 2016 && ${bj_`i'} &&& ${be_`i'} && ${bg_`i'} \\" _n
-	file write latex " && (${sej_`i'}) &&& (${see_`i'}) && (${seg_`i'})  \\" _n
+	file write latex " Conflict x 2016 && ${bj_`i'} &&& ${be_`i'} && ${bg_`i'}  \\" _n
+	file write latex " && (${sej_`i'}) &&& (${see_`i'}) && (${seg_`i'})\\" _n
 	file write latex " && [${rw8_`i'}] &&& [${rw2_`i'}] && \{${rw5_`i'_s}\} \\" _n
 	*file write latex " && [${rw8_`i'}] &&& [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
 	*file write latex " && && && <${rw5_`i'_s}> \\" _n
 
-	file write latex " Conflict x 2020 && ${bk_`i'} &&& ${bf_`i'} && ${bh_`i'}  \\" _n
-	file write latex " && (${sek_`i'}) &&& (${sef_`i'}) && (${seh_`i'})  \\" _n
+	file write latex " Conflict x 2020 && ${bk_`i'} &&& ${bf_`i'} && ${bh_`i'} \\" _n
+	file write latex " && (${sek_`i'}) &&& (${sef_`i'}) && (${seh_`i'}) \\" _n
 	file write latex " && [${rw9_`i'}] &&& [${rw3_`i'}] && \{${rw6_`i'_s}\} \\" _n
 	*file write latex " && [${rw9_`i'}] &&& [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
 	*file write latex " && && && <${rw6_`i'_s}> \\" _n
 
-	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} && ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'}   \\" _n
+	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} && ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
 	file write latex " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} && ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
 	file write latex " Pre-t. cont. mean & ${md0_`i'} & ${md0_`i'} && ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} \\" _n
 
 	file write latex "\hline" _n
-		}	
+		}
 	file write latex " Observations & ${N5_MW} & ${N6_MW} && ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
 	file write latex "Year FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  & $\checkmark$ & $\checkmark$  \\" _n	
 	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n
@@ -388,4 +376,3 @@ This do file runs the main regressions + controls
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
-
