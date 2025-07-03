@@ -2,7 +2,7 @@
 Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
-7_3_heter_eff_edu.do
+7_3_heter_eff_age.do
 
 This do file runs regression with heterogeneous effects - HH Education
 =========================================================================*/

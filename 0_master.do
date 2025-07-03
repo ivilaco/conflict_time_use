@@ -68,9 +68,10 @@ Setting the code environment
 	glo otro "P1122S1A2 P1122S1A3 P1122S2A2 P1122S2A3 P1122S3A2 P1122S3A3"
 	
 	* Other variables
-	glo out "MW NW1 NW2 NW3 CH CU"
-	glo ceros "MWc NW1c NW2c NW3c CHc CUc"
-	glo dummys "MWd NW1d NW2d NW3d CHd CUd"
+	glo out "NW3 MW CH CU NW1 NW2"
+	glo ceros "NW3c MWc CHc CUc NW1c NW2c"
+	glo dummys "NW3d MWc CHd CUd NW1d NW2d"
+	
 	glo mecs "hht hhtm hhth hhthj hhta hhtk hdist"
 	glo covs "gcaribe retro_pobl_rur pobl_rur dismdo disbogota mercado_cercano distancia_mercado pib_agricola pib_industria pib_servicios pib_total nbicabecera IPM_rur ipm_ledu_p ipm_templeof_p v9 v11 v18 v22 v23 v25 v26 v4 v20"
 	global controls "v4_c v20_c"
