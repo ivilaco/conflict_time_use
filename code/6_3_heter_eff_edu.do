@@ -2,13 +2,13 @@
 Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
-7_3_heter_eff_age.do
+7_3_heter_eff_edu.do
 
 This do file runs regression with heterogeneous effects - HH Education
 =========================================================================*/
 
 	*use "${enut}/ENUT_FARC_J.dta", clear // clave
-	use "/Users/ivonnelara/Documents/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta"
+	use "/Users/ivonnelara/Documents/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta", clear
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -310,7 +310,9 @@ This do file runs regression with heterogeneous effects - HH Education
 		foreach n of numlist 1/4 {
 			foreach a of numlist 0/1 {
 				sum `i'd if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				global e_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global e_sd`a'`n'_`i': di %10.2f `= r(sd)'
+
 			}
 		}
 
@@ -432,7 +434,8 @@ This do file runs regression with heterogeneous effects - HH Education
 		foreach n of numlist 1/4 {
 			foreach a of numlist 0/1 {
 				sum `i'c if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
 			}
 		}
 	}
@@ -551,7 +554,8 @@ This do file runs regression with heterogeneous effects - HH Education
 		foreach n of numlist 1/4 {
 			foreach a of numlist 0/1 {
 				sum `i'c if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
 			}
 		}
 	}
@@ -578,10 +582,15 @@ This do file runs regression with heterogeneous effects - HH Education
 			file write latex " \textbf{`lab'} & & & & && ${bd_`i'} & ${be_`i'} & ${bf_`i'} & ${bl_`i'} && &&&  \\" _n
 			file write latex " & & && && (${sed_`i'}) & (${see_`i'}) & (${sef_`i'}) & (${sel_`i'}) && & &&  \\" _n
 			file write latex " & & && && [${d_`i'}] & [${e_`i'}] & [${f_`i'}] & [${l_`i'}] && & & &  \\" _n
+			file write latex "\\" _n
 
 			file write latex " R^2 & & & & && ${r24_`i'} & ${r25_`i'} & ${r26_`i'} & ${r211_`i'} && & && \\" _n
-			file write latex " Treat. mean & & & & && ${m11_`i'} & ${m12_`i'} & ${m13_`i'} & ${m14_`i'} && &&& \\" _n
-			file write latex " Cont. mean & & & & && ${m01_`i'} & ${m02_`i'} & ${m03_`i'} & ${m04_`i'} &&& && \\" _n
+			file write latex " Treatment group \\" _n			
+			file write latex " \hspace{3mm} Mean & & & & && ${i_m11_`i'} & ${i_m12_`i'} & ${i_m13_`i'} & ${i_m14_`i'} && &&& \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & & & & && ${i_sd11_`i'} & ${i_sd12_`i'} & ${i_sd13_`i'} & ${i_sd14_`i'} && &&& \\" _n
+			file write latex " Control group \\" _n
+			file write latex " \hspace{3mm} Mean & & & & && ${i_m01_`i'} & ${i_m02_`i'} & ${i_m03_`i'} & ${i_m04_`i'} &&& && \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & & & & && ${i_sd01_`i'} & ${i_sd02_`i'} & ${i_sd03_`i'} & ${i_sd04_`i'} &&& && \\" _n
 		}
 
 		* Others
@@ -590,10 +599,15 @@ This do file runs regression with heterogeneous effects - HH Education
 			file write latex " \textbf{`lab'} & ${ba_`i'} & ${bb_`i'} & ${bc_`i'} & ${bk_`i'} && & & & && ${bg_`i'} & ${bh_`i'} & ${bj_`i'} & ${bm_`i'} \\" _n
 			file write latex " & (${sea_`i'}) & (${seb_`i'}) & (${sec_`i'}) & (${sek_`i'}) && & & & && (${seg_`i'}) & (${seh_`i'}) & (${sej_`i'}) & (${sem_`i'}) \\" _n
 			file write latex " & [${a_`i'}]& [${b_`i'}] & [${c_`i'}] & [${k_`i'}] && & & & && \{${g_`i'}\} & \{${h_`i'}\} & \{${j_`i'}\} & \{${m_`i'}\} \\" _n
+			file write latex "\\" _n
 
 			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r210_`i'} && & & & && ${r27_`i'} & ${r28_`i'} & ${r29_`i'} & ${r212_`i'} \\" _n
-			file write latex " Treat. mean & ${m11_`i'} & ${m12_`i'} & ${m13_`i'} & ${m14_`i'} && & &  &  && ${m11_`i'} & ${m12_`i'} & ${m13_`i'} & ${m14_`i'} \\" _n
-			file write latex " Cont. mean & ${m01_`i'} & ${m02_`i'} & ${m03_`i'} & ${m04_`i'} && && & && ${m01_`i'} & ${m02_`i'} & ${m03_`i'} & ${m04_`i'} \\" _n
+			file write latex " Treatment group \\" _n			
+			file write latex " \hspace{3mm} Mean & ${e_m11_`i'} & ${e_m12_`i'} & ${e_m13_`i'} & ${e_m14_`i'} && & &  &  && ${i_m11_`i'} & ${i_m12_`i'} & ${i_m13_`i'} & ${i_m14_`i'} \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & ${e_sd11_`i'} & ${e_sd12_`i'} & ${e_sd13_`i'} & ${e_sd14_`i'} && & &  &  && ${i_sd11_`i'} & ${i_sd12_`i'} & ${i_sd13_`i'} & ${i_sd14_`i'} \\" _n
+			file write latex " Control group \\" _n
+			file write latex " \hspace{3mm} Mean & ${e_m01_`i'} & ${e_m02_`i'} & ${e_m03_`i'} & ${e_m04_`i'} && && & && ${i_m01_`i'} & ${i_m02_`i'} & ${i_m03_`i'} & ${i_m04_`i'} \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & ${e_sd01_`i'} & ${e_sd02_`i'} & ${e_sd03_`i'} & ${e_sd04_`i'} && && & && ${i_sd01_`i'} & ${i_sd02_`i'} & ${i_sd03_`i'} & ${i_sd04_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n

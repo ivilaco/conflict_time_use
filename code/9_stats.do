@@ -7,7 +7,7 @@ Code author: Ivonne Lara
 This do file runs descriptive stats, behaviour graphs and maps
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear // clave
+	use "${enut}/ENUT_FARC_J.dta", clear // clave	
 	
 *******************************************
 *** Graphs on the use of time - All ***
@@ -333,4 +333,175 @@ This do file runs descriptive stats, behaviour graphs and maps
 	spmap REGION using col_coord, id(id) fcolor(Accent) clnum(5) ///
 	clmethod(unique) legend(label(1 "No data") label(2 "Atlantic") label(3 "Central") label(4 "Eastern") label(5 "Pacific")) 
 	graph export "${sale}/map_regions.pdf", replace
+	*/
 	
+*******************************************
+*** Mean and SD for main samples ***
+*******************************************
+
+	file open latex using "${output}/m_sd_main.txt", write replace text
+	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
+	
+	file write latex "& \multicolumn{5}{c}{\textbf{Extensive margin}} && \multicolumn{5}{c}{\textbf{Intensive margin}} \\" _n
+	file write latex "& \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} && \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} \\ \cline{2-3} \cline{5-6} \cline{8-9} \cline{11-12} " _n
+	file write latex "& Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. \\ " _n
+	file write latex "& (1) & (2) && (3) & (4) && (5) & (6) && (7) & (8) \\ \hline" _n
+
+	* Main results sample
+	file write latex "\multicolumn{9}{l}{Panel A. Main results sample} \\ " _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	file write latex "\\" _n	
+	
+	* Alternative conflict measure sample	
+	file write latex " \multicolumn{9}{l}{Panel B. Alternative conflict measure sample} \\" _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT1==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT1==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	file write latex "\\" _n		
+	
+	use "${enut}/ENUT_FARC_PSM.dta", clear
+
+	* PSM sample
+	file write latex " \multicolumn{9}{l}{Panel C. Propensity score matching sample} \\" _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	
+	file write latex "\hline \hline" _n
+	file write latex "\end{tabular}" _n
+	file close latex
+	
+	 
+*******************************************
+*** Mean and SD for heterogeneous eff ***
+*******************************************
+
+	file open latex using "${output}/m_sd_main.txt", write replace text
+	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
+	
+	file write latex "& \multicolumn{5}{c}{\textbf{Extensive margin}} && \multicolumn{5}{c}{\textbf{Intensive margin}} \\" _n
+	file write latex "& \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} && \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} \\ \cline{2-3} \cline{5-6} \cline{8-9} \cline{11-12} " _n
+	file write latex "& Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. \\ " _n
+	file write latex "& (1) & (2) && (3) & (4) && (5) & (6) && (7) & (8) \\ \hline" _n
+
+	* Age
+	file write latex "\multicolumn{9}{l}{Panel A. Age group} \\ " _n // ACA VOY
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	file write latex "\\" _n	
+	
+	* Gender	
+	file write latex " \multicolumn{9}{l}{Panel B. Gender} \\" _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT1==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT1==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	file write latex "\\" _n		
+	
+	* Education
+	file write latex " \multicolumn{9}{l}{Panel C. Education level of the head of household } \\" _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	
+	file write latex "\hline \hline" _n
+	file write latex "\end{tabular}" _n
+	file close latex
+	
+	* Assets
+	file write latex " \multicolumn{9}{l}{Panel D. Household asset ownership} \\" _n
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			sum `i'd if TIME==0 & CONFLICT==`a', d 
+			global m_d`a'_`i': di %10.2f `= r(mean)'
+			global sd_d`a'_`i': di %10.2f `= r(sd)'
+			
+			sum `i'c if TIME==0 & CONFLICT==`a', d 
+			global m_c`a'_`i': di %10.2f `= r(mean)'
+			global sd_c`a'_`i': di %10.2f `= r(sd)'
+		}
+		
+		local lab: variable label `i'
+		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+	}
+	
+	file write latex "\hline \hline" _n
+	file write latex "\end{tabular}" _n
+	file close latex

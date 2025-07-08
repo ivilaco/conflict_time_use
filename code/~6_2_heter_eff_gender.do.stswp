@@ -2,13 +2,13 @@
 Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
-7_4_heter_eff_act.do
+7_2_heter_eff_gender.do
 
-This do file runs regression with heterogeneous effects - Income level
+This do file runs regression with heterogeneous effects - Gender
 =========================================================================*/
 
 	*use "${enut}/ENUT_FARC_J.dta", clear // clave
-	use "/Users/ivonnelara/DocuIncome lowts/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta", clear
+	use "/Users/ivonnelara/Documents/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta", clear
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -20,13 +20,13 @@ This do file runs regression with heterogeneous effects - Income level
 
 ***** Extensive
 
-	* Income high
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	* Women
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global a_MW: di %4.3f `= e(RW)[1,3]'
@@ -36,13 +36,13 @@ This do file runs regression with heterogeneous effects - Income level
 		global a_CH: di %4.3f `= e(RW)[5,3]'
 		global a_CU: di %4.3f `= e(RW)[6,3]'
 		
-	* Income low
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	* Men
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global b_MW: di %4.3f `= e(RW)[1,3]'
@@ -54,13 +54,13 @@ This do file runs regression with heterogeneous effects - Income level
 
 ***** Intensive - OLS	
 	
-	* Income high
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	* Women
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global d_MW: di %4.3f `= e(RW)[1,3]'
@@ -70,13 +70,13 @@ This do file runs regression with heterogeneous effects - Income level
 		global d_CH: di %4.3f `= e(RW)[5,3]'
 		global d_CU: di %4.3f `= e(RW)[6,3]'
 			
-	* Income low
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	* Men
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global e_MW: di %4.3f `= e(RW)[1,3]'
@@ -88,8 +88,8 @@ This do file runs regression with heterogeneous effects - Income level
 		
 ***** Intesive - Tobit
 	
-	* Income high
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* Women
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* Sidak
 		global g_MW: di %4.3f `= r(table)[1,6]'
@@ -99,8 +99,8 @@ This do file runs regression with heterogeneous effects - Income level
 		global g_CH: di %4.3f `= r(table)[5,6]'
 		global g_CU: di %4.3f `= r(table)[6,6]'
 		
-	* Income low
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* Men
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* Sidak
 		global h_MW: di %4.3f `= r(table)[1,6]'
@@ -116,9 +116,9 @@ This do file runs regression with heterogeneous effects - Income level
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 	
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
 		local ta=_b[conflict_time]/_se[conflict_time]
@@ -142,9 +142,9 @@ This do file runs regression with heterogeneous effects - Income level
 			global ba_`i' "`a'"
 		}
 		
-***** Income low
+***** Men
 	
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local b: di %4.3f `= _b[conflict_time]'
 		global seb_`i': di %4.3f `= _se[conflict_time]'
 		local tb=_b[conflict_time]/_se[conflict_time]
@@ -171,8 +171,9 @@ This do file runs regression with heterogeneous effects - Income level
 		* Mean
 		foreach n of numlist 0/1 {
 			foreach a of numlist 0/1 {
-				sum `i'd if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				sum `i'd if TIME==0 & CONFLICT==`a' & SEXO==`n', d 
+				global e_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global e_sd`a'`n'_`i': di %10.2f `= r(sd)'
 			}
 		}
 
@@ -186,9 +187,9 @@ This do file runs regression with heterogeneous effects - Income level
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO)
 		local d: di %4.3f `= _b[conflict_time]'
 		global sed_`i': di %4.3f `= _se[conflict_time]'
 		local td=_b[conflict_time]/_se[conflict_time]
@@ -212,9 +213,9 @@ This do file runs regression with heterogeneous effects - Income level
 			global bd_`i' "`d'"
 		}
 		
-***** Income low
+***** Men
 	
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO)
 		local e: di %4.3f `= _b[conflict_time]'
 		global see_`i': di %4.3f `= _se[conflict_time]'
 		local te=_b[conflict_time]/_se[conflict_time]
@@ -241,8 +242,9 @@ This do file runs regression with heterogeneous effects - Income level
 		* Mean
 		foreach n of numlist 0/1 {
 			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				sum `i'c if TIME==0 & CONFLICT==`a' & SEXO==`n', d 
+				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
 			}
 		}
 	}
@@ -253,9 +255,9 @@ This do file runs regression with heterogeneous effects - Income level
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 	
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local g: di %4.3f `= _b[conflict_time]'
 		global seg_`i': di %4.3f `= _se[conflict_time]'
 		local tg=_b[conflict_time]/_se[conflict_time]
@@ -279,9 +281,9 @@ This do file runs regression with heterogeneous effects - Income level
 			global bg_`i' "`g'"
 		}
 		
-***** Income low
+***** Men
 	
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local h: di %4.3f `= _b[conflict_time]'
 		global seh_`i': di %4.3f `= _se[conflict_time]'
 		local th=_b[conflict_time]/_se[conflict_time]
@@ -308,8 +310,9 @@ This do file runs regression with heterogeneous effects - Income level
 		* Mean
 		foreach n of numlist 0/1 {
 			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
+				sum `i'c if TIME==0 & CONFLICT==`a' & SEXO==`n', d 
+				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
+				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
 			}
 		}
 	}
@@ -318,12 +321,12 @@ This do file runs regression with heterogeneous effects - Income level
 *** Latex table *** 
 **************************************
 
-	file open latex using "${output}/reg_he_act.txt", write replace text
+	file open latex using "${output}/reg_he_gender.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{ \textbf{Extensive}} && \multicolumn{5}{c}{ \textbf{Intensive}} \\" _n
 	file write latex "& \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{Tobit}} \\ \cline{2-3} \cline{5-6} \cline{8-9}" _n
-	file write latex " & Lower possession & Higher possession && Lower possession & Higher possession && Lower possession & Higher possession \\" _n
+	file write latex " & Females & Males && Females & Males && Females & Males \\" _n
 	file write latex "& (1) & (2) && (3) & (4) && (5) & (6)  \\ \hline" _n
 		
 	foreach i in $out {
@@ -336,10 +339,15 @@ This do file runs regression with heterogeneous effects - Income level
 			file write latex " \textbf{`lab'} & & && ${bd_`i'} & ${be_`i'} && &  \\" _n
 			file write latex " & & && (${sed_`i'}) & (${see_`i'}) && &   \\" _n
 			file write latex " & & && [${d_`i'}] & [${e_`i'} && & \\" _n
+			file write latex "\\" _n
 
 			file write latex " R^2 & & && ${r24_`i'} & ${r25_`i'} && & \\" _n
-			file write latex " Treat. mean & &  && ${m10_`i'} & ${m11_`i'} && & \\" _n
-			file write latex " Cont. mean & & && ${m00_`i'} & ${m01_`i'} &&&  \\" _n
+			file write latex " Treatment group \\" _n			
+			file write latex " \hspace{3mm} Mean & &  && ${i_m10_`i'} & ${i_m11_`i'} && & \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & &  && ${i_sd10_`i'} & ${i_sd11_`i'} && & \\" _n
+			file write latex " Control group \\" _n
+			file write latex " \hspace{3mm} Mean & & && ${i_m00_`i'} & ${i_m01_`i'} &&&  \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & & && ${i_sd00_`i'} & ${i_sd01_`i'} &&&  \\" _n
 		}
 
 		* Others
@@ -348,10 +356,15 @@ This do file runs regression with heterogeneous effects - Income level
 			file write latex " \textbf{`lab'} & ${ba_`i'} & ${bb_`i'} && &  && ${bg_`i'} & ${bh_`i'} \\" _n
 			file write latex " & (${sea_`i'}) & (${seb_`i'}) && & && (${seg_`i'}) & (${seh_`i'}) \\" _n
 			file write latex " & [${a_`i'}]& [${b_`i'}] && &  && \{${g_`i'}\} & \{${h_`i'}\} \\" _n
+			file write latex "\\" _n
 
 			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} && & && ${r27_`i'} & ${r28_`i'} \\" _n
-			file write latex " Treat. mean & ${m11_`i'} & ${m10_`i'} &&  & && ${m11_`i'} & ${m10_`i'} \\" _n
-			file write latex " Cont. mean & ${m01_`i'} & ${m00_`i'} && & && ${m01_`i'} & ${m00_`i'} \\" _n
+			file write latex " Treatment group \\" _n			
+			file write latex " \hspace{3mm} Mean & ${e_m11_`i'} & ${e_m10_`i'} &&  & && ${i_m11_`i'} & ${i_m10_`i'} \\" _n
+			file write latex " \hspace{3mm} Std. Dev. & ${e_sd11_`i'} & ${e_sd10_`i'} &&  & && ${i_sd11_`i'} & ${i_sd10_`i'} \\" _n
+			file write latex " Control group \\" _n
+			file write latex " \hspace{3mm} Mean  & ${e_m01_`i'} & ${e_m00_`i'} && & && ${i_m01_`i'} & ${i_m00_`i'} \\" _n
+			file write latex " \hspace{3mm} Std. Dev.  & ${e_sd01_`i'} & ${e_sd00_`i'} && & && ${i_sd01_`i'} & ${i_sd00_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n

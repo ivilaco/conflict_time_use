@@ -100,12 +100,6 @@ This do file runs robustness 1 - PSM and Parallel trends
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
 	}
-
-	file open latex using "${sale}/reg1r_2.txt", write replace text
-	file write latex "\begin{tabular}{l c c c c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{2}{c}{Extensive margin} && \multicolumn{4}{c}{Intensive margin} \\ \cline{2-3} \cline{5-8}" _n
-	file write latex " & \multicolumn{2}{c}{Dummy} && \multicolumn{2}{c}{OLS} & \multicolumn{2}{c}{Tobit} \\" _n
-	file write latex "& (1) & (2) && (3) & (4) & (5) & (6) \\ \hline" _n
 	
 	* v1 - Intensive OLS (Rwolf)
 	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, cluster(MUNICIPIO)) ///
@@ -150,15 +144,7 @@ This do file runs robustness 1 - PSM and Parallel trends
 
 	* v2 - Intensive Tobit (Sidak)
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
-		
-		/* wyoung 
-		global rw4_MW: di %4.3f `= r(table)[1,4]'
-		global rw4_NW1: di %4.3f `= r(table)[2,4]'
-		global rw4_NW2: di %4.3f `= r(table)[3,4]'
-		global rw4_NW3: di %4.3f `= r(table)[4,4]'
-		global rw4_CH: di %4.3f `= r(table)[5,4]'
-		global rw4_CU: di %4.3f `= r(table)[6,4]'
-		*/
+
 		* Sidak
 		global rw4_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw4_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -170,25 +156,6 @@ This do file runs robustness 1 - PSM and Parallel trends
 	* v2 - Intensive Tobit (Sidak) - Year interaction
 	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 	
-		/* wyoung
-
-			* 2016
-			global rw5_MW: di %4.3f `= r(table)[1,4]'
-			global rw5_NW1: di %4.3f `= r(table)[2,4]'
-			global rw5_NW2: di %4.3f `= r(table)[3,4]'
-			global rw5_NW3: di %4.3f `= r(table)[4,4]'
-			global rw5_CH: di %4.3f `= r(table)[5,4]'
-			global rw5_CU: di %4.3f `=  r(table)[6,4]'
-
-			* 2020
-			global rw6_MW: di %4.3f `= r(table)[7,4]'
-			global rw6_NW1: di %4.3f `= r(table)[8,4]'
-			global rw6_NW2: di %4.3f `= r(table)[9,4]'
-			global rw6_NW3: di %4.3f `= r(table)[10,4]'
-			global rw6_CH: di %4.3f `= r(table)[11,4]'
-			global rw6_CU: di %4.3f `= r(table)[12,4]'
-			*/
-		
 		* Sidak
 
 			* 2016
@@ -247,6 +214,14 @@ This do file runs robustness 1 - PSM and Parallel trends
 		global rw9_NW3: di %4.3f `= e(RW)[8,3]'
 		global rw9_CH: di %4.3f `= e(RW)[10,3]'
 		global rw9_CU: di %4.3f `= e(RW)[12,3]'
+		
+		
+	file open latex using "${sale}/reg1r_2.txt", write replace text
+	file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
+	file write latex "& \multicolumn{2}{c}{\textbf{Extensive margin}} && \multicolumn{5}{c}{\textbf{Intensive margin}} \\ " _n
+	file write latex " & \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{Tobit}} \\ \cline{2-3} \cline{5-6} \cline{8-9}" _n
+	file write latex "& All & By year && All & By year && All & By year \\" _n	
+	file write latex "& (1) & (2) && (3) & (4) && (5) & (6) \\ \hline" _n
 
 		foreach i in $out {
 					
@@ -420,44 +395,31 @@ This do file runs robustness 1 - PSM and Parallel trends
 
 		local lab: variable label `i'
 		
-		foreach n in c d {
-			foreach a of numlist 0/1 {
-				sum `i'`n' if TIME==0 & CONFLICT==`a', d 
-				global m`n'`a'_`i': di %10.2f `= r(mean)'
-			}
-		}
 		
 	file write latex "\textbf{`lab'} \\" _n
-	file write latex " Conflict x Time & ${bc_`i'} &&& ${ba_`i'} && ${bb_`i'} & \\" _n
-	file write latex "  & (${sec_`i'}) &&& (${sea_`i'}) && (${seb_`i'}) & \\" _n
-	file write latex "  & [${rw7_`i'}] &&& [${rw1_`i'}] && \{${rw4_`i'_s}\} & \\" _n
-	*file write latex "  & [${rw7_`i'}] &&& [${rw1_`i'}] && \{${rw4_`i'}\} & \\" _n
-	*file write latex "  & && && <${rw4_`i'_s}> & \\" _n
+	file write latex " Conflict x Time & ${bc_`i'} &&& ${ba_`i'} &&& ${bb_`i'} &\\" _n
+	file write latex "  & (${sec_`i'}) &&& (${sea_`i'}) &&& (${seb_`i'}) & \\" _n
+	file write latex "  & [${rw7_`i'}] &&& [${rw1_`i'}] &&& \{${rw4_`i'_s}\} & \\" _n
 
-	file write latex " Conflict x 2016 && ${bj_`i'} &&& ${be_`i'} && ${bg_`i'}  \\" _n
-	file write latex " && (${sej_`i'}) &&& (${see_`i'}) && (${seg_`i'})\\" _n
-	file write latex " && [${rw8_`i'}] &&& [${rw2_`i'}] && \{${rw5_`i'_s}\} \\" _n
-	*file write latex " && [${rw8_`i'}] &&& [${rw2_`i'}] && \{${rw5_`i'}\} \\" _n
-	*file write latex " && && && <${rw5_`i'_s}> \\" _n
+	file write latex " Conflict x 2016 && ${bj_`i'} &&& ${be_`i'} &&& ${bg_`i'} \\" _n
+	file write latex " && (${sej_`i'}) &&& (${see_`i'}) &&& (${seg_`i'})  \\" _n
+	file write latex " && [${rw8_`i'}] &&& [${rw2_`i'}] &&& \{${rw5_`i'_s}\} \\" _n
 
-	file write latex " Conflict x 2020 && ${bk_`i'} &&& ${bf_`i'} && ${bh_`i'} \\" _n
-	file write latex " && (${sek_`i'}) &&& (${sef_`i'}) && (${seh_`i'}) \\" _n
-	file write latex " && [${rw9_`i'}] &&& [${rw3_`i'}] && \{${rw6_`i'_s}\} \\" _n
-	*file write latex " && [${rw9_`i'}] &&& [${rw3_`i'}] && \{${rw6_`i'}\} \\" _n
-	*file write latex " && && && <${rw6_`i'_s}> \\" _n
+	file write latex " Conflict x 2020 && ${bk_`i'} &&& ${bf_`i'} &&& ${bh_`i'}  \\" _n
+	file write latex " && (${sek_`i'}) &&& (${sef_`i'}) &&& (${seh_`i'})  \\" _n
+	file write latex " && [${rw9_`i'}] &&& [${rw3_`i'}] &&& \{${rw6_`i'_s}\} \\" _n
 
-	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} && ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-	file write latex " Pre-t. treat. mean & ${md1_`i'} & ${md1_`i'} && ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} & ${mc1_`i'} \\" _n
-	file write latex " Pre-t. cont. mean & ${md0_`i'} & ${md0_`i'} && ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} & ${mc0_`i'} \\" _n
+	file write latex " R-squared & ${r25_`i'} & ${r26_`i'} && ${r2_`i'} & ${r22_`i'} && ${r23_`i'} & ${r24_`i'}   \\" _n
 
 	file write latex "\hline" _n
-		}
-		
-	file write latex " Observations & ${N5_MW} & ${N6_MW} && ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
-	file write latex "Year FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  & $\checkmark$ & $\checkmark$  \\" _n	
-	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n
-	file write latex "Controls & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$  \\" _n			
+		}	
+	file write latex " Observations & ${N5_MW} & ${N6_MW} && ${N_MW} & ${N2_MW} && ${N3_MW} & ${N4_MW} \\" _n
+	file write latex "Year FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  && $\checkmark$ & $\checkmark$  \\" _n	
+	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  \\" _n
+	file write latex "Controls & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  \\" _n			
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
+
+	
 	
