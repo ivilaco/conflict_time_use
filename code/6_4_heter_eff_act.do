@@ -15,6 +15,50 @@ This do file runs regression with heterogeneous effects - Income level
 	}
 	
 **************************************
+*** Mean and SD per group *** 
+**************************************
+
+	file open latex using "${output}/m_sd_he_act.txt", write replace text
+	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
+	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
+	
+	file write latex "& \multicolumn{5}{c}{\textbf{Extensive margin}} && \multicolumn{5}{c}{\textbf{Intensive margin}} \\" _n
+	file write latex "& \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} && \multicolumn{2}{c}{\textit{Treatment}} && \multicolumn{2}{c}{\textit{Control}} \\ \cline{2-3} \cline{5-6} \cline{8-9} \cline{11-12} " _n
+	file write latex "& Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. && Mean & Std. Dev. \\ " _n
+	file write latex "& (1) & (2) && (3) & (4) && (5) & (6) && (7) & (8) \\ \hline" _n
+
+	* Assets
+	foreach i in $out {
+		
+		foreach a of numlist 0/1 {
+			
+			forvalues n = 0/1 {			
+			
+				sum `i'd if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
+				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+				
+				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
+				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				
+			}
+		}
+		
+		local lab: variable label `i'
+		
+		file write latex " `lab' \\" _n
+		file write latex "\hspace{3mm} Higher possession & ${m1_d1_`i'} & ${sd1_d1_`i'} && ${m1_d0_`i'} & ${sd1_d0_`i'} && ${m1_c1_`i'} & ${sd1_c1_`i'} && ${m1_c0_`i'} & ${sd1_c0_`i'} \\" _n
+		file write latex "\hspace{3mm} Lower possession & ${m0_d1_`i'} & ${sd0_d1_`i'} && ${m0_d0_`i'} & ${sd0_d0_`i'} && ${m0_c1_`i'} & ${sd0_c1_`i'} && ${m0_c0_`i'} & ${sd0_c0_`i'} \\" _n
+		file write latex "\\" _n
+		
+	}
+	
+	file write latex "\hline \hline" _n
+	file write latex "\end{tabular}" _n
+	file close latex
+	
+**************************************
 *** Multiple hypothesis correction *** 
 **************************************
 
@@ -297,10 +341,10 @@ This do file runs regression with heterogeneous effects - Income level
 
 	file open latex using "${output}/reg_he_act.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
-	file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{2}{c}{ \textbf{Extensive}} && \multicolumn{5}{c}{ \textbf{Intensive}} \\" _n
-	file write latex "& \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{Tobit}} \\ \cline{2-3} \cline{5-6} \cline{8-9}" _n
-	file write latex " & Lower possession & Higher possession && Lower possession & Higher possession && Lower possession & Higher possession \\" _n
+	file write latex "\begin{tabular}{l c c c c c } \\ \hline \hline" _n
+	file write latex "& \multicolumn{2}{c}{ \textbf{Extensive}} && \multicolumn{2}{c}{ \textbf{Intensive}} \\" _n
+	file write latex "& \multicolumn{2}{c}{\textit{OLS}} && \multicolumn{2}{c}{\textit{Tobit/OLS}} \\ \cline{2-3} \cline{5-6} " _n
+	file write latex " & Lower possession & Higher possession && Lower possession & Higher possession \\" _n
 	file write latex "& (1) & (2) && (3) & (4) && (5) & (6)  \\ \hline" _n
 		
 	foreach i in $out {
@@ -310,32 +354,32 @@ This do file runs regression with heterogeneous effects - Income level
 		* Sleep | Leisure and self care
 		if "`i'" == "NW1" | "`i'" == "NW2" {
 
-			file write latex " \textbf{`lab'} & & && ${bd_`i'} & ${be_`i'} && &  \\" _n
-			file write latex " & & && (${sed_`i'}) & (${see_`i'}) && &   \\" _n
-			file write latex " & & && [${d_`i'}] & [${e_`i'} && & \\" _n
+			file write latex " \textbf{`lab'} & & && ${bd_`i'} & ${be_`i'}  \\" _n
+			file write latex " & & && (${sed_`i'}) & (${see_`i'})  \\" _n
+			file write latex " & & && [${d_`i'}] & [${e_`i'}  \\" _n
 			file write latex "\\" _n
 
-			file write latex " R^2 & & && ${r24_`i'} & ${r25_`i'} && & \\" _n
+			file write latex " R^2 & & && ${r24_`i'} & ${r25_`i'} \\" _n
 		}
 
 		* Others
 		else {
 			
-			file write latex " \textbf{`lab'} & ${ba_`i'} & ${bb_`i'} && &  && ${bg_`i'} & ${bh_`i'} \\" _n
-			file write latex " & (${sea_`i'}) & (${seb_`i'}) && & && (${seg_`i'}) & (${seh_`i'}) \\" _n
-			file write latex " & [${a_`i'}]& [${b_`i'}] && &  && \{${g_`i'}\} & \{${h_`i'}\} \\" _n
+			file write latex " \textbf{`lab'} & ${ba_`i'} & ${bb_`i'} && ${bg_`i'} & ${bh_`i'} \\" _n
+			file write latex " & (${sea_`i'}) & (${seb_`i'}) && (${seg_`i'}) & (${seh_`i'}) \\" _n
+			file write latex " & [${a_`i'}]& [${b_`i'}] && \{${g_`i'}\} & \{${h_`i'}\} \\" _n
 			file write latex "\\" _n
 
-			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} && & && ${r27_`i'} & ${r28_`i'} \\" _n
+			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} && ${r27_`i'} & ${r28_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n
 	}
 		
-	file write latex " Observations & ${N_MW} & ${N2_MW} && ${N4_MW} & ${N5_MW && ${N7_MW} & ${N8_MW} \\" _n
-	file write latex "Year FE  & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n	
-	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n		
-	file write latex "Controls & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n		
+	file write latex " Observations & ${N_MW} & ${N2_MW} && ${N4_MW} & ${N5_MW \\" _n
+	file write latex "Year FE  & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  \\" _n	
+	file write latex "Municipality FE & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$  \\" _n		
+	file write latex "Controls & $\checkmark$ & $\checkmark$ && $\checkmark$ & $\checkmark$ \\" _n		
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
