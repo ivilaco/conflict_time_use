@@ -306,17 +306,6 @@ This do file runs regression with heterogeneous effects - HH Education
 			global bk_`i' "`k'"
 		}
 
-		* Mean
-		foreach n of numlist 1/4 {
-			foreach a of numlist 0/1 {
-				sum `i'd if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global e_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global e_sd`a'`n'_`i': di %10.2f `= r(sd)'
-
-			}
-		}
-
-
 	}
 	
 		
@@ -430,14 +419,6 @@ This do file runs regression with heterogeneous effects - HH Education
 			global bl_`i' "`l'"
 		}
 	
-		* Mean
-		foreach n of numlist 1/4 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 
 **************************************
@@ -550,14 +531,6 @@ This do file runs regression with heterogeneous effects - HH Education
 			global bm_`i' "`m'"
 		}
 		
-		* Mean
-		foreach n of numlist 1/4 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & EDU==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 	
 **************************************
@@ -569,7 +542,7 @@ This do file runs regression with heterogeneous effects - HH Education
 	file write latex "\begin{tabular}{l c c c c c c c c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{4}{c}{ \textbf{Extensive}} && \multicolumn{9}{c}{ \textbf{Intensive}} \\" _n
 	file write latex "& \multicolumn{4}{c}{\textit{OLS}} && \multicolumn{4}{c}{\textit{OLS}} && \multicolumn{4}{c}{\textit{Tobit}} \\ \cline{2-5} \cline{7-10} \cline{11-14}" _n
-	file write latex " & No education & Preschool/elementary & Middle/High school & Under/postgraduate && No education & Preschool/elementary & Middle/High school & Under/postgraduate && No education & Preschool/elementary & Middle/High school & Under/postgraduate \\" _n
+	file write latex " & No education & Preschool/Elementary & Middle/High school & Under/Postgraduate && No education & Preschool/elementary & Middle/High school & Under/postgraduate && No education & Preschool/elementary & Middle/High school & Under/postgraduate \\" _n
 	file write latex "& (1) & (2) & (3) & (4) && (5) & (6) & (7) & (8) && (9) & (10) & (11) & (12)  \\ \hline" _n
 		
 	foreach i in $out {
@@ -585,12 +558,6 @@ This do file runs regression with heterogeneous effects - HH Education
 			file write latex "\\" _n
 
 			file write latex " R^2 & & & & && ${r24_`i'} & ${r25_`i'} & ${r26_`i'} & ${r211_`i'} && & && \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & & & & && ${i_m11_`i'} & ${i_m12_`i'} & ${i_m13_`i'} & ${i_m14_`i'} && &&& \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & & & & && ${i_sd11_`i'} & ${i_sd12_`i'} & ${i_sd13_`i'} & ${i_sd14_`i'} && &&& \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & & & & && ${i_m01_`i'} & ${i_m02_`i'} & ${i_m03_`i'} & ${i_m04_`i'} &&& && \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & & & & && ${i_sd01_`i'} & ${i_sd02_`i'} & ${i_sd03_`i'} & ${i_sd04_`i'} &&& && \\" _n
 		}
 
 		* Others
@@ -602,12 +569,6 @@ This do file runs regression with heterogeneous effects - HH Education
 			file write latex "\\" _n
 
 			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r210_`i'} && & & & && ${r27_`i'} & ${r28_`i'} & ${r29_`i'} & ${r212_`i'} \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & ${e_m11_`i'} & ${e_m12_`i'} & ${e_m13_`i'} & ${e_m14_`i'} && & &  &  && ${i_m11_`i'} & ${i_m12_`i'} & ${i_m13_`i'} & ${i_m14_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${e_sd11_`i'} & ${e_sd12_`i'} & ${e_sd13_`i'} & ${e_sd14_`i'} && & &  &  && ${i_sd11_`i'} & ${i_sd12_`i'} & ${i_sd13_`i'} & ${i_sd14_`i'} \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & ${e_m01_`i'} & ${e_m02_`i'} & ${e_m03_`i'} & ${e_m04_`i'} && && & && ${i_m01_`i'} & ${i_m02_`i'} & ${i_m03_`i'} & ${i_m04_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${sd01_`i'} & ${e_sd02_`i'} & ${e_sd03_`i'} & ${e_sd04_`i'} && && & && ${i_sd01_`i'} & ${i_sd02_`i'} & ${i_sd03_`i'} & ${i_sd04_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n

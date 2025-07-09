@@ -242,16 +242,6 @@ This do file runs regression with heterogeneous effects - Age groups
 			global bc_`i' "`c'"
 		}
 
-		* Mean
-		foreach n of numlist 0/2 {
-			foreach a of numlist 0/1 {
-				sum `i'd if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
-				global e_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global e_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
-
-
 	}
 	
 		
@@ -339,14 +329,6 @@ This do file runs regression with heterogeneous effects - Age groups
 			global bf_`i' "`f'"
 		}
 	
-		* Mean
-		foreach n of numlist 0/2 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 
 **************************************
@@ -433,14 +415,6 @@ This do file runs regression with heterogeneous effects - Age groups
 			global bj_`i' "`j'"
 		}
 	
-		* Mean
-		foreach n of numlist 0/2 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 	
 **************************************
@@ -468,13 +442,6 @@ This do file runs regression with heterogeneous effects - Age groups
 			file write latex "\\" _n
 
 			file write latex " R^2 & &  & && ${r24_`i'} & ${r25_`i'} & ${r26_`i'} && & & \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & & & && ${i_m10_`i'} & ${i_m11_`i'} & ${i_m12_`i'} && && \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & & & && ${i_sd10_`i'} & ${i_sd11_`i'} & ${i_sd12_`i'} && && \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & & & && ${i_m00_`i'} & ${i_m01_`i'} & ${i_m02_`i'} &&& & \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & & & && ${i_sd00_`i'} & ${i_sd01_`i'} & ${i_sd02_`i'} &&& & \\" _n
-
 		}
 
 		* Others
@@ -486,12 +453,6 @@ This do file runs regression with heterogeneous effects - Age groups
 			file write latex "\\" _n
 
 			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} && &  & && ${r27_`i'} & ${r28_`i'} & ${r29_`i'} \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & ${e_m10_`i'} & ${e_m11_`i'} & ${e_m12_`i'} &&  &  &  && ${i_m10_`i'} & ${i_m11_`i'} & ${i_m12_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${e_sd10_`i'} & ${e_sd11_`i'} & ${e_sd12_`i'} &&  &  &  && ${i_sd10_`i'} & ${i_sd11_`i'} & ${i_sd12_`i'} \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & ${e_m00_`i'} & ${e_m01_`i'} & ${e_m02_`i'} && & & && ${i_m00_`i'} & ${i_m01_`i'} & ${i_m02_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${e_sd00_`i'} & ${e_sd01_`i'} & ${e_sd02_`i'} && & & && ${i_sd00_`i'} & ${i_sd01_`i'} & ${i_sd02_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n

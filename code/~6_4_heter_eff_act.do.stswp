@@ -168,15 +168,6 @@ This do file runs regression with heterogeneous effects - Income level
 			global bb_`i' "`b'"
 		}
 
-		* Mean
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'd if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global e_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global e_sd`a'`n'_`i': di %10.2f `= r(sd)'
-
-			}
-		}
 
 
 	}
@@ -240,14 +231,6 @@ This do file runs regression with heterogeneous effects - Income level
 			global be_`i' "`e'"
 		}
 	
-		* Mean
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 
 **************************************
@@ -308,14 +291,6 @@ This do file runs regression with heterogeneous effects - Income level
 			global bh_`i' "`h'"
 		}
 	
-		* Mean
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global i_m`a'`n'_`i': di %10.2f `= r(mean)'
-				global i_sd`a'`n'_`i': di %10.2f `= r(sd)'
-			}
-		}
 	}
 	
 **************************************
@@ -343,12 +318,6 @@ This do file runs regression with heterogeneous effects - Income level
 			file write latex "\\" _n
 
 			file write latex " R^2 & & && ${r24_`i'} & ${r25_`i'} && & \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & &  && ${i_m10_`i'} & ${i_m11_`i'} && & \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & &  && ${i_sd10_`i'} & ${i_sd11_`i'} && & \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & & && ${i_m00_`i'} & ${i_m01_`i'} &&&  \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & & && ${i_sd00_`i'} & ${i_sd01_`i'} &&&  \\" _n
 		}
 
 		* Others
@@ -360,12 +329,6 @@ This do file runs regression with heterogeneous effects - Income level
 			file write latex "\\" _n
 
 			file write latex " R^2 & ${r2_`i'} & ${r22_`i'} && & && ${r27_`i'} & ${r28_`i'} \\" _n
-			file write latex " Treatment group \\" _n			
-			file write latex " \hspace{3mm} Mean & ${e_m11_`i'} & ${e_m10_`i'} &&  & && ${i_m11_`i'} & ${i_m10_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${e_sd11_`i'} & ${e_sd10_`i'} &&  & && ${i_sd11_`i'} & ${i_sd10_`i'} \\" _n
-			file write latex " Control group \\" _n
-			file write latex " \hspace{3mm} Mean & ${e_m01_`i'} & ${e_m00_`i'} && & && ${i_m01_`i'} & ${i_m00_`i'} \\" _n
-			file write latex " \hspace{3mm} Std. Dev. & ${e_sd01_`i'} & ${sd00_`i'} && & && ${i_sd01_`i'} & ${i_sd00_`i'} \\" _n
 		}
 
 		file write latex "\hline" _n

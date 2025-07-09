@@ -425,21 +425,30 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "& (1) & (2) && (3) & (4) && (5) & (6) && (7) & (8) \\ \hline" _n
 
 	* Age
-	file write latex "\multicolumn{9}{l}{Panel A. Age group} \\ " _n // ACA VOY
+	file write latex "\multicolumn{9}{l}{Panel A. Age group} \\ " _n
 	foreach i in $out {
 		
 		foreach a of numlist 0/1 {
-			sum `i'd if TIME==0 & CONFLICT==`a', d 
-			global m_d`a'_`i': di %10.2f `= r(mean)'
-			global sd_d`a'_`i': di %10.2f `= r(sd)'
 			
-			sum `i'c if TIME==0 & CONFLICT==`a', d 
-			global m_c`a'_`i': di %10.2f `= r(mean)'
-			global sd_c`a'_`i': di %10.2f `= r(sd)'
+			forvalues n = 0/2 {			
+			
+				sum `i'd if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
+				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+				
+				sum `i'c if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
+				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				
+			}
 		}
 		
 		local lab: variable label `i'
-		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+		
+		file write latex "\hspace{3mm} `lab' \\" _n
+		file write latex "\hspace{6mm} \textit{14-19 yrs} & ${m0_d1_`i'} & ${sd0_d1_`i'} && ${m0_d0_`i'} & ${sd0_d0_`i'} && ${m0_c1_`i'} & ${sd0_c1_`i'} && ${m0_c0_`i'} & ${sd0_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{20-23 yrs} & ${m1_d1_`i'} & ${sd1_d1_`i'} && ${m1_d0_`i'} & ${sd1_d0_`i'} && ${m1_c1_`i'} & ${sd1_c1_`i'} && ${m1_c0_`i'} & ${sd1_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{24-28 yrs} & ${m2_d1_`i'} & ${sd2_d1_`i'} && ${m2_d0_`i'} & ${sd2_d0_`i'} && ${m2_c1_`i'} & ${sd2_c1_`i'} && ${m2_c0_`i'} & ${sd2_c0_`i'} \\" _n
 	}
 	file write latex "\\" _n	
 	
@@ -448,36 +457,54 @@ This do file runs descriptive stats, behaviour graphs and maps
 	foreach i in $out {
 		
 		foreach a of numlist 0/1 {
-			sum `i'd if TIME==0 & CONFLICT1==`a', d 
-			global m_d`a'_`i': di %10.2f `= r(mean)'
-			global sd_d`a'_`i': di %10.2f `= r(sd)'
 			
-			sum `i'c if TIME==0 & CONFLICT1==`a', d 
-			global m_c`a'_`i': di %10.2f `= r(mean)'
-			global sd_c`a'_`i': di %10.2f `= r(sd)'
+			forvalues n = 0/1 {			
+			
+				sum `i'd if TIME==0 & CONFLICT==`a' & SEXO==`n', d 
+				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+				
+				sum `i'c if TIME==0 & CONFLICT==`a' & SEXO==`n', d 
+				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				
+			}
 		}
 		
 		local lab: variable label `i'
-		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+		
+		file write latex "\hspace{3mm} `lab' \\" _n
+		file write latex "\hspace{6mm} \textit{Females} & ${m1_d1_`i'} & ${sd1_d1_`i'} && ${m1_d0_`i'} & ${sd1_d0_`i'} && ${m1_c1_`i'} & ${sd1_c1_`i'} && ${m1_c0_`i'} & ${sd1_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{Males} & ${m0_d1_`i'} & ${sd0_d1_`i'} && ${m0_d0_`i'} & ${sd0_d0_`i'} && ${m0_c1_`i'} & ${sd0_c1_`i'} && ${m0_c0_`i'} & ${sd0_c0_`i'} \\" _n
 	}
 	file write latex "\\" _n		
 	
 	* Education
-	file write latex " \multicolumn{9}{l}{Panel C. Education level of the head of household } \\" _n
+	file write latex " \multicolumn{9}{l}{Panel C. Education level of the head of household} \\" _n
 	foreach i in $out {
 		
 		foreach a of numlist 0/1 {
-			sum `i'd if TIME==0 & CONFLICT==`a', d 
-			global m_d`a'_`i': di %10.2f `= r(mean)'
-			global sd_d`a'_`i': di %10.2f `= r(sd)'
 			
-			sum `i'c if TIME==0 & CONFLICT==`a', d 
-			global m_c`a'_`i': di %10.2f `= r(mean)'
-			global sd_c`a'_`i': di %10.2f `= r(sd)'
+			forvalues n = 1/4 {			
+			
+				sum `i'd if TIME==0 & CONFLICT==`a' & EDU==`n', d 
+				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+				
+				sum `i'c if TIME==0 & CONFLICT==`a' & EDU==`n', d 
+				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				
+			}
 		}
 		
 		local lab: variable label `i'
-		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+		
+		file write latex "\hspace{3mm} `lab' \\" _n
+		file write latex "\hspace{6mm} \textit{No education} & ${m1_d1_`i'} & ${sd1_d1_`i'} && ${m1_d0_`i'} & ${sd1_d0_`i'} && ${m1_c1_`i'} & ${sd1_c1_`i'} && ${m1_c0_`i'} & ${sd1_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{Preschool/Elementary} & ${m2_d1_`i'} & ${sd2_d1_`i'} && ${m2_d0_`i'} & ${sd2_d0_`i'} && ${m2_c1_`i'} & ${sd2_c1_`i'} && ${m2_c0_`i'} & ${sd2_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{Middle/High school} & ${m3_d1_`i'} & ${sd3_d1_`i'} && ${m3_d0_`i'} & ${sd3_d0_`i'} && ${m3_c1_`i'} & ${sd3_c1_`i'} && ${m3_c0_`i'} & ${sd3_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{Under/Postgraduate} & ${m4_d1_`i'} & ${sd4_d1_`i'} && ${m4_d0_`i'} & ${sd4_d0_`i'} && ${m4_c1_`i'} & ${sd4_c1_`i'} && ${m4_c0_`i'} & ${sd4_c0_`i'} \\" _n
 	}
 	
 	file write latex "\hline \hline" _n
@@ -489,17 +516,25 @@ This do file runs descriptive stats, behaviour graphs and maps
 	foreach i in $out {
 		
 		foreach a of numlist 0/1 {
-			sum `i'd if TIME==0 & CONFLICT==`a', d 
-			global m_d`a'_`i': di %10.2f `= r(mean)'
-			global sd_d`a'_`i': di %10.2f `= r(sd)'
 			
-			sum `i'c if TIME==0 & CONFLICT==`a', d 
-			global m_c`a'_`i': di %10.2f `= r(mean)'
-			global sd_c`a'_`i': di %10.2f `= r(sd)'
+			forvalues n = 0/1 {			
+			
+				sum `i'd if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
+				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+				
+				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
+				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
+				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				
+			}
 		}
 		
 		local lab: variable label `i'
-		file write latex " \hspace{3mm} `lab' & ${m_d1_`i'} & ${sd_d1_`i'} && ${m_d0_`i'} & ${sd_d0_`i'} && ${m_c1_`i'} & ${sd_c1_`i'} && ${m_c0_`i'} & ${sd_c0_`i'} \\" _n
+		
+		file write latex "\hspace{3mm} `lab' \\" _n
+		file write latex "\hspace{6mm} \textit{Higher possession} & ${m1_d1_`i'} & ${sd1_d1_`i'} && ${m1_d0_`i'} & ${sd1_d0_`i'} && ${m1_c1_`i'} & ${sd1_c1_`i'} && ${m1_c0_`i'} & ${sd1_c0_`i'} \\" _n
+		file write latex "\hspace{6mm} \textit{Lower possession} & ${m0_d1_`i'} & ${sd0_d1_`i'} && ${m0_d0_`i'} & ${sd0_d0_`i'} && ${m0_c1_`i'} & ${sd0_c1_`i'} && ${m0_c0_`i'} & ${sd0_c0_`i'} \\" _n
 	}
 	
 	file write latex "\hline \hline" _n
