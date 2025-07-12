@@ -75,6 +75,9 @@ This do creates the final database for analysis
 			foreach i in v4 v20 {
 			gen `i'_c=`i'*TIME
 		}
+		
+		* Removing observations with zeros on sleep
+		drop if NW2c == 0
 	
 		* Guardo base final
 		save "$enut/ENUT_FARC_`j'.dta", replace

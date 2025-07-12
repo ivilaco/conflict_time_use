@@ -7,8 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects - HH Education
 =========================================================================*/
 
-	*use "${enut}/ENUT_FARC_J.dta", clear // clave
-	use "/Users/ivonnelara/Documents/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -585,10 +584,10 @@ This do file runs regression with heterogeneous effects - HH Education
 
 	file open latex using "${output}/reg_he_edu.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
-	file write latex "\begin{tabular}{l c c c c c c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{4}{c}{ \textbf{Extensive}} && \multicolumn{4}{c}{ \textbf{Intensive}} \\" _n
+	file write latex "\begin{tabular}{l C{1.5cm} C{2cm} C{2cm} C{2.5cm} c C{1.5cm} C{2cm} C{2cm} C{2.5cm}} \\ \hline \hline" _n
+	file write latex "& \multicolumn{4}{c}{ \textbf{Extensive margin}} && \multicolumn{4}{c}{ \textbf{Intensive margin}} \\" _n
 	file write latex "& \multicolumn{4}{c}{\textit{OLS}} && \multicolumn{4}{c}{\textit{Tobit/OLS}} \\ \cline{2-5} \cline{7-10} " _n
-	file write latex " & No education & Preschool/Elementary & Middle/High school & Under/Postgraduate && No education & Preschool/elementary & Middle/High school & Under/postgraduate \\" _n
+	file write latex "& No education & Preschool/ Elementary & Middle/ High school & Under/ Postgraduate && No education & Preschool/ Elementary & Middle/ High school & Under/ Postgraduate \\" _n
 	file write latex "& (1) & (2) & (3) & (4) && (5) & (6) & (7) & (8) \\ \hline" _n
 		
 	foreach i in $out {

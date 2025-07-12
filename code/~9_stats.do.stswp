@@ -130,8 +130,8 @@ This do file runs descriptive stats, behaviour graphs and maps
 
 	foreach i in $out {
 		
-		tab `i'd
-		estpost tabulate `i'd
+		tab `i'c
+		estpost tabulate `i'c
 		mat b = e(b)
 		mat a = e(pct)
 		scalar f0_`i' = b[1,1]

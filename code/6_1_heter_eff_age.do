@@ -7,8 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects - Age groups
 =========================================================================*/
 
-	*use "${enut}/ENUT_FARC_J.dta", clear // clave
-	use "/Users/ivonnelara/Documents/Tesis_raw/IVONNE LARA/ENTRA/ENUT/ENUT_FARC_J.dta", clear
+	use "${enut}/ENUT_FARC_J.dta", clear // clave
 
 	foreach i in v4 v20 {
 		gen `i'_c=`i'*TIME
@@ -469,7 +468,7 @@ This do file runs regression with heterogeneous effects - Age groups
 	file open latex using "${output}/reg_he_age.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c} \\ \hline \hline" _n
-	file write latex "& \multicolumn{3}{c}{ \textbf{Extensive}} && \multicolumn{3}{c}{ \textbf{Intensive}} \\" _n
+	file write latex "& \multicolumn{3}{c}{ \textbf{Extensive margin}} && \multicolumn{3}{c}{ \textbf{Intensive margin}} \\" _n
 	file write latex "& \multicolumn{3}{c}{\textit{OLS}} && \multicolumn{3}{c}{\textit{Tobit/OLS}} \\ \cline{2-4} \cline{6-8}" _n
 	file write latex " & 14-19 yrs & 20-23 yrs & 24-28 yrs && 14-19 yrs & 20-23 yrs & 24-28 yrs \\" _n
 	file write latex "& (1) & (2) & (3) && (4) & (5) & (6) \\ \hline" _n
