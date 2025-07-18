@@ -24,7 +24,7 @@ This do file runs mechanism 2 - Household Composition
 	}
 	
 	* Regresion
-	file open latex using "${output}/mecanismos1.txt", write replace text
+	file open latex using "${sale}/mecanismos1.txt", write replace text
 	file write latex "\begin{tabular}{l c c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{2}{c}{HH size} & \multicolumn{2}{c}{\% males} & \multicolumn{2}{c}{\% young males} & \multicolumn{2}{c}{\% disabled} \\ " _n
 	file write latex "& (1) & (2) & (1) & (2) & (1) & (2) & (1) & (2) \\ \hline" _n

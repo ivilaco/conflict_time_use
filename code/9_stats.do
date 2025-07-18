@@ -339,7 +339,7 @@ This do file runs descriptive stats, behaviour graphs and maps
 *** Mean and SD for main samples ***
 *******************************************
 
-	file open latex using "${output}/m_sd_main.txt", write replace text
+	file open latex using "${sale}/m_sd_main.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
 	
@@ -409,9 +409,4 @@ This do file runs descriptive stats, behaviour graphs and maps
 	file write latex "\hline \hline" _n
 	file write latex "\end{tabular}" _n
 	file close latex
-	
-	 
-*******************************************
-*** Mean and SD for heterogeneous eff ***
-*******************************************
 	

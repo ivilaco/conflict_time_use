@@ -14,12 +14,12 @@ This do creates the final database for analysis
 	foreach j in J ALL {
 
 		* Pego con el tratamiento
-		use "$entra/FARC_final.dta", clear
-		merge 1:m MUNICIPIO TIME using "$enut/ENUT_TOTAL_`j'.dta", gen(_merge7)
+		use "${entra}/FARC_final.dta", clear
+		merge 1:m MUNICIPIO TIME using "${enut}/ENUT_TOTAL_`j'.dta", gen(_merge7)
 		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
 		
 		* Pego covariables
-		merge m:1 MUNICIPIO using "$entra/new_vars.dta", gen(_merge2)
+		merge m:1 MUNICIPIO using "${entra}/new_vars.dta", gen(_merge2)
 
 		*unique MUNICIPIO // 202 mpios 
 		*tab CONFLICT // No conflict: 33,549 (79.3%) Conflict: 8,732 (20.6%)
@@ -29,7 +29,7 @@ This do creates the final database for analysis
 		preserve
 		keep CONFLICT MUNICIPIO CONFLICT1
 		duplicates drop MUNICIPIO, force
-		save "$enut/MUNS_finales_`j'.dta", replace
+		save "${enut}/MUNS_finales_`j'.dta", replace
 		tab CONFLICT // No conflict (mpios): 166 (82.2%) Conflict (mpios): 36 (17.8%)
 		tab CONFLICT1 // No conflict (mpios): 81 (40.1%) Conflict (mpios): 121 (59.9%)
 		restore
@@ -80,14 +80,14 @@ This do creates the final database for analysis
 		drop if NW2c == 0
 	
 		* Guardo base final
-		save "$enut/ENUT_FARC_`j'.dta", replace
+		save "${enut}/ENUT_FARC_`j'.dta", replace
 	}
 	
 *******************************************
 *** Additional variables for analysis ***
 *******************************************
 
-	use "$enut/ENUT_FARC_ALL.dta", clear
+	use "${enut}/ENUT_FARC_ALL.dta", clear
 		
 	* Percentage of hhs with a women as head 
 	bys ANNO MUNICIPIO : egen hhs_j = sum(jefe)
@@ -103,5 +103,5 @@ This do creates the final database for analysis
 	gen p_hhs_jm = (hhs_jm/hhs_j)*100	
 	gen p_hhs_c = (hhs_c/hhs_j)*100	
 		
-	save "$enut/ENUT_FARC_ALL.dta", replace
+	save "${enut}/ENUT_FARC_ALL.dta", replace
 	

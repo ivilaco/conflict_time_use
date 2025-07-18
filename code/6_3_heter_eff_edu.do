@@ -17,7 +17,7 @@ This do file runs regression with heterogeneous effects - HH Education
 *** Mean and SD per group *** 
 **************************************
 
-	file open latex using "${output}/m_sd_he_edu.txt", write replace text
+	file open latex using "${sale}/m_sd_he_edu.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
 	
@@ -582,7 +582,7 @@ This do file runs regression with heterogeneous effects - HH Education
 *** Latex table *** 
 **************************************
 
-	file open latex using "${output}/reg_he_edu.txt", write replace text
+	file open latex using "${sale}/reg_he_edu.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l C{1.5cm} C{2cm} C{2cm} C{2.5cm} c C{1.5cm} C{2cm} C{2cm} C{2.5cm}} \\ \hline \hline" _n
 	file write latex "& \multicolumn{4}{c}{ \textbf{Extensive margin}} && \multicolumn{4}{c}{ \textbf{Intensive margin}} \\" _n

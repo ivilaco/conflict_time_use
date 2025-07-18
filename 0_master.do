@@ -76,8 +76,8 @@ Setting the code environment
 	glo covs "gcaribe retro_pobl_rur pobl_rur dismdo disbogota mercado_cercano distancia_mercado pib_agricola pib_industria pib_servicios pib_total nbicabecera IPM_rur ipm_ledu_p ipm_templeof_p v9 v11 v18 v22 v23 v25 v26 v4 v20"
 	global controls "v4_c v20_c"
 	
-*******************************************
-*** Code ***
+/*******************************************
+*** Code (to be updated) ***
 *******************************************
 
 **************************

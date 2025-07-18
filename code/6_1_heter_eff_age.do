@@ -22,7 +22,7 @@ This do file runs regression with heterogeneous effects - Age groups
 *** Mean and SD per group *** 
 **************************************
 
-	file open latex using "${output}/m_sd_he_age.txt", write replace text
+	file open latex using "${sale}/m_sd_he_age.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c c c c c} \\ \hline \hline" _n
 	
@@ -465,7 +465,7 @@ This do file runs regression with heterogeneous effects - Age groups
 *** Latex table *** 
 **************************************
 
-	file open latex using "${output}/reg_he_age.txt", write replace text
+	file open latex using "${sale}/reg_he_age.txt", write replace text
 	file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 	file write latex "\begin{tabular}{l c c c c c c c} \\ \hline \hline" _n
 	file write latex "& \multicolumn{3}{c}{ \textbf{Extensive margin}} && \multicolumn{3}{c}{ \textbf{Intensive margin}} \\" _n
