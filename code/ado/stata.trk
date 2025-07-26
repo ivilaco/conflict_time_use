@@ -1,4 +1,4 @@
-* 00000011
+* 00000013
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -449,4 +449,56 @@ f m/ms_parse_absvars.ado
 f m/ms_parse_varlist.ado
 f m/ms_parse_vce.ado
 f m/ms_add_comma.ado
+e
+S http://fmwww.bc.edu/repec/bocode/u
+N unique.pkg
+D 26 Jul 2025
+U 12
+d 'UNIQUE': module to report number of unique values in variable(s)
+d 
+d  The command unique without a by reports the number of unique
+d values for the varlist. With a by it does the same, but also
+d creates a new variable (_Unique by default but can be named in
+d the gen option). This new variable contains the number of unique
+d values of the varlist for each level of the by variable. The new
+d variable is coded missing except for the first record in each
+d group defined by the levels of the by variable. The command is
+d useful for exploring data where the records refer to more than
+d one level, for example longitudinal data where each record refers
+d to a visit by a subject.
+d 
+d 
+d Requires: Stata version 10.1
+d 
+d Distribution-Date: 20200618
+d 
+d Author: Tony Brady
+d Support: email tony@@sealedenvelope.com
+d 
+f u/unique.ado
+f u/unique.sthlp
+e
+S http://www.stata-journal.com/software/sj14-2
+N st0085_2.pkg
+D 26 Jul 2025
+U 13
+d SJ14-2 st0085_2. Update: Making regression...
+d Update: Making regression tables from stored
+d   estimates
+d by Ben Jann, University of Bern
+d Support:  jann@@soz.unibe.ch
+d After installation, type help ^estout^,
+d   ^esttab^, ^eststo^, ^estadd^, and ^estpost^
+f _/_eststo.ado
+f _/_eststo.hlp
+f e/esttab.ado
+f e/esttab.hlp
+f e/estadd.ado
+f e/estadd.hlp
+f e/eststo.ado
+f e/eststo.hlp
+f e/estout.ado
+f e/estout.hlp
+f e/estpost.ado
+f e/estpost.hlp
 e

@@ -84,6 +84,19 @@ ENUT database
 		
 	* v. Kids in the house
 	bys idhogar ANNO : egen kids=count(unos) if EDAD<18
+	
+	* vi. Region
+	label define region 1 "Caribe" 2 "Central" 3 "Oriental" 4 "Pacifica" 5 "Bogota" 6 "San Andres"
+	label value REGION region
+	
+	* vii. Porcentage de hogares segun genero de la jefatura por municipio
+	replace P425 = P425 - 1 if P425 >= 6 & ANNO == 2020
+
+	label define jefe 1 "Jefe(a) del hogar" 2 "Esposo(a) o compañero(a)" 3 "Hijo(a), Hijastro(a)" 4 "Nieto(a)" 5 "Padre, madre, suegro(a)" 6 "Hermano(a), hermanastro(a)" 7 "Yerno, nuera" 8 "Otro pariente del jefe(a)" 9 "Empleado(a) del servicio doméstico" 10 "Otro no pariente"
+	label value P425 jefe
+	
+	gen jefe = 0 
+	replace jefe = 1 if P425 == 1 
 
 *******************************************
 *** Dependent variables ***

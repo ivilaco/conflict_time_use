@@ -118,10 +118,10 @@ This do file runs descriptive stats, behaviour graphs and maps
 	restore
 
 *******************************************
-*** Table proportion of zeros ***
+*** Table proportion of zeros *** // Toca cambiar esto a otra tabla xd
 *******************************************
 
-	file open latex0 using "${sale}/zeros.txt", write replace text
+	file open latex0 using "${output}/zeros.txt", write replace text
 	file write latex0 "\begin{tabular}{l c c c c c} \\ \hline \hline" _n
 	file write latex0 "\large" _n
 	file write latex0 "& \multicolumn{2}{c}{Frequency} && \multicolumn{2}{c}{Percentage} \\ \cline{2-3} \cline{5-6}" _n
@@ -130,22 +130,24 @@ This do file runs descriptive stats, behaviour graphs and maps
 
 	foreach i in $out {
 		
-		tab `i'c
-		estpost tabulate `i'c
-		mat b = e(b)
-		mat a = e(pct)
-		scalar f0_`i' = b[1,1]
-		scalar f1_`i' = b[1,2]		
-		scalar p0_`i' = a[1,1]
-		scalar p1_`i' = a[1,2]	
-		glo f0_`i' : di f0_`i'
-		glo f1_`i' : di f1_`i'
-		glo p0_`i' : di %10.2f p0_`i'
-		glo p1_`i' : di %10.2f p1_`i'		
+		* Count
+		count if `i'c > 0
+		global n1_`i' : di %10.0f `= r(N)'
+		
+		count if `i'c == 0
+		global n2_`i' : di %10.0f `= r(N)'
+		
+		* Total observations:
+		count
+		global ntot_`i' : di %10.0f `= r(N)'
+
+		* Proportion:
+		global p1_`i' : di %6.2f `= ${n1_`i'} / ${ntot_`i'}'
+		global p2_`i' : di %6.2f `= ${n2_`i'} / ${ntot_`i'}'
 			
 		local lab: variable label `i'
 		
-	file write latex0 "`lab' & ${f1_`i'} & ${f0_`i'} && ${p1_`i'} & ${p0_`i'} \\" _n
+	file write latex0 "`lab' & ${n1_`i'} & ${n2_`i'} && ${p1_`i'} & ${p2_`i'} \\" _n
 		}
 		
 	file write latex0 "\hline \hline" _n

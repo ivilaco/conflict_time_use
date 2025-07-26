@@ -7,19 +7,31 @@ Code author: Ivonne Lara
 This do creates the final database for analysis
 =========================================================================*/
 
+*glob entra "${data}/coded/" // QUITAR
+
 *******************************************
 *** Final details ***
 *******************************************
 
 	foreach j in J ALL {
-
+		
+		/* Importo ENUT y pego con municipios
+		use "$enut/ENUT_TOTAL_`j'.dta", clear
+		merge m:1 DIRECTORIO using "$enut/MUNS.dta", gen(_merge10)
+		keep if _merge10==3
+		drop _merge*
+		save "$enut/ENUT_TOTAL_`j'.dta", replace
+		*/
+		
 		* Pego con el tratamiento
 		use "${entra}/FARC_final.dta", clear
 		merge 1:m MUNICIPIO TIME using "${enut}/ENUT_TOTAL_`j'.dta", gen(_merge7)
-		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
+		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281 
+		drop _merge*
 		
 		* Pego covariables
 		merge m:1 MUNICIPIO using "${entra}/new_vars.dta", gen(_merge2)
+		drop _merge*
 
 		*unique MUNICIPIO // 202 mpios 
 		*tab CONFLICT // No conflict: 33,549 (79.3%) Conflict: 8,732 (20.6%)
@@ -43,7 +55,7 @@ This do creates the final database for analysis
 		gen conflict_time12020 = CONFLICT1*TIME2020
 		
 		* Variables de interes
-		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros $dummys ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud P1174 P1172 jefe P425
+		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros $dummys ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud P1174 P1172 P425 jefe
 		
 		* Modifico var municipio
 		tostring MUNICIPIO, replace
@@ -95,7 +107,7 @@ This do creates the final database for analysis
 		
 	* Porcentage of hhs where spouse is present
 	bys ANNO MUNICIPIO : egen hhs_c = sum(jefe) if conyuge_hogar == 1
-		
+	
 	* Mechanism 2 - Household Re-Composition
 	gen p_hhth = (hhth/hht)*100
 	gen p_hhthj = (hhthj/hht)*100
