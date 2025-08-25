@@ -8,7 +8,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects - Gender
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear // clave
+	use "${data}/coded/enut/ENUT_FARC_J.dta", clear // clave
 	
 * =====================================================================
 * Heterogeneous effects - Gender
