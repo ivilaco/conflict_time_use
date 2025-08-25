@@ -7,16 +7,7 @@ Code author: Ivonne Lara
 This do file runs regression with heterogeneous effects - Age groups
 =========================================================================*/
 
-	use "${enut}/ENUT_FARC_J.dta", clear // clave
-
-	foreach i in v4 v20 {
-		gen `i'_c=`i'*TIME
-	}
-
-	gen dummyedad=.
-	replace dummyedad=0 if EDAD<19
-	replace dummyedad=1 if EDAD>=19 & EDAD<=23
-	replace dummyedad=2 if EDAD>23
+	use "${data}/coded/enut/ENUT_FARC_J.dta", clear // clave
 	
 **************************************
 *** Mean and SD per group *** 
@@ -36,15 +27,21 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 		foreach a of numlist 0/1 {
 			
-			forvalues n = 0/2 {			
-			
-				sum `i'd if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
-				global m`n'_d`a'_`i': di %10.2f `= r(mean)'
-				global sd`n'_d`a'_`i': di %10.2f `= r(sd)'
+			forvalues n = 0/2 {		
 				
-				sum `i'c if TIME==0 & CONFLICT==`a' & dummyedad==`n', d 
-				global m`n'_c`a'_`i': di %10.2f `= r(mean)'
-				global sd`n'_c`a'_`i': di %10.2f `= r(sd)'
+				mean `i'd [pw=F_EXP] if TIME==0 & CONFLICT==`a' & dummyedad==`n'
+				scalar m1 = e(b)[1,1]
+				scalar sd1 = e(sd)[1,1]
+			
+				global m`n'_d`a'_`i': di %10.2f m1
+				global sd`n'_d`a'_`i': di %10.2f sd1
+				
+				mean `i'c [pw=F_EXP] if TIME==0 & CONFLICT==`a' & dummyedad==`n'
+				scalar m2 = e(b)[1,1]
+				scalar sd2 = e(sd)[1,1]
+				
+				global m`n'_c`a'_`i': di %10.2f m2
+				global sd`n'_c`a'_`i': di %10.2f sd2
 				
 			}
 		}
@@ -70,62 +67,62 @@ This do file runs regression with heterogeneous effects - Age groups
 ***** Extensive
 
 	* Age group 1
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global a_MW: di %4.3f `= e(RW)[1,3]'
-		global a_NW1: di %4.3f `= e(RW)[2,3]'
-		global a_NW2: di %4.3f `= e(RW)[3,3]'
-		global a_NW3: di %4.3f `= e(RW)[4,3]'
-		global a_CH: di %4.3f `= e(RW)[5,3]'
-		global a_CU: di %4.3f `= e(RW)[6,3]'
+		global a_NW3: di %4.3f `= e(RW)[2,3]'
+		global a_CH: di %4.3f `= e(RW)[3,3]'
+		global a_CU: di %4.3f `= e(RW)[4,3]'
+		display $a_MW
+		display $a_NW3
+		display $a_CH
+		display $a_CU
 		
 	* Age group 2
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global b_MW: di %4.3f `= e(RW)[1,3]'
-		global b_NW1: di %4.3f `= e(RW)[2,3]'
-		global b_NW2: di %4.3f `= e(RW)[3,3]'
-		global b_NW3: di %4.3f `= e(RW)[4,3]'
-		global b_CH: di %4.3f `= e(RW)[5,3]'
-		global b_CU: di %4.3f `= e(RW)[6,3]'
+		global b_NW3: di %4.3f `= e(RW)[2,3]'
+		global b_CH: di %4.3f `= e(RW)[3,3]'
+		global b_CU: di %4.3f `= e(RW)[4,3]'
+		display $b_MW
+		display $b_NW3
+		display $b_CH
+		display $b_CU
 		
 	* Age group 3
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)), ///
-	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)), ///
+	indepvars(conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 			
 		global c_MW: di %4.3f `= e(RW)[1,3]'
-		global c_NW1: di %4.3f `= e(RW)[2,3]'
-		global c_NW2: di %4.3f `= e(RW)[3,3]'
-		global c_NW3: di %4.3f `= e(RW)[4,3]'
-		global c_CH: di %4.3f `= e(RW)[5,3]'
-		global c_CU: di %4.3f `= e(RW)[6,3]'
-
+		global c_NW3: di %4.3f `= e(RW)[2,3]'
+		global c_CH: di %4.3f `= e(RW)[3,3]'
+		global c_CU: di %4.3f `= e(RW)[4,3]'
+		display $c_MW
+		display $c_NW3
+		display $c_CH
+		display $c_CU
+		
 ***** Intensive - OLS	
 	
 	* Age group 1
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==0, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global d_MW: di %4.3f `= e(RW)[1,3]'
@@ -134,14 +131,20 @@ This do file runs regression with heterogeneous effects - Age groups
 		global d_NW3: di %4.3f `= e(RW)[4,3]'
 		global d_CH: di %4.3f `= e(RW)[5,3]'
 		global d_CU: di %4.3f `= e(RW)[6,3]'
-			
+		display $d_MW
+		display $d_NW1
+		display $d_NW2
+		display $d_NW3
+		display $d_CH
+		display $d_CU
+		
 	* Age group 2
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==1, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global e_MW: di %4.3f `= e(RW)[1,3]'
@@ -150,14 +153,20 @@ This do file runs regression with heterogeneous effects - Age groups
 		global e_NW3: di %4.3f `= e(RW)[4,3]'
 		global e_CH: di %4.3f `= e(RW)[5,3]'
 		global e_CU: di %4.3f `= e(RW)[6,3]'	
+		display $e_MW
+		display $e_NW1
+		display $e_NW2
+		display $e_NW3
+		display $e_CH
+		display $e_CU
 		
 	* Age group 3
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if dummyedad==2, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if dummyedad==2, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 			
 		global f_MW: di %4.3f `= e(RW)[1,3]'
@@ -166,42 +175,54 @@ This do file runs regression with heterogeneous effects - Age groups
 		global f_NW3: di %4.3f `= e(RW)[4,3]'
 		global f_CH: di %4.3f `= e(RW)[5,3]'
 		global f_CU: di %4.3f `= e(RW)[6,3]'
+		display $f_MW
+		display $f_NW1
+		display $f_NW2
+		display $f_NW3
+		display $f_CH
+		display $f_CU
 		
 ***** Intesive - Tobit
 	
 	* Age group 1
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $no_tobit, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* Sidak
-		global g_MW: di %4.3f `= r(table)[1,6]'
-		global g_NW1: di %4.3f `= r(table)[2,6]'
-		global g_NW2: di %4.3f `= r(table)[3,6]'
-		global g_NW3: di %4.3f `= r(table)[4,6]'
-		global g_CH: di %4.3f `= r(table)[5,6]'
-		global g_CU: di %4.3f `= r(table)[6,6]'
+		global g_NW3: di %4.3f `= r(table)[1,6]'
+		global g_MW: di %4.3f `= r(table)[2,6]'
+		global g_CH: di %4.3f `= r(table)[3,6]'
+		global g_CU: di %4.3f `= r(table)[4,6]'
+		display $g_NW3
+		display $g_MW
+		display $g_CH
+		display $g_CU	
 		
 	* Age group 2
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $no_tobit, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* Sidak
-		global h_MW: di %4.3f `= r(table)[1,6]'
-		global h_NW1: di %4.3f `= r(table)[2,6]'
-		global h_NW2: di %4.3f `= r(table)[3,6]'
-		global h_NW3: di %4.3f `= r(table)[4,6]'
-		global h_CH: di %4.3f `= r(table)[5,6]'
-		global h_CU: di %4.3f `= r(table)[6,6]'
+		global h_NW3: di %4.3f `= r(table)[1,6]'
+		global h_MW: di %4.3f `= r(table)[2,6]'
+		global h_CH: di %4.3f `= r(table)[3,6]'
+		global h_CU: di %4.3f `= r(table)[4,6]'
+		display $h_NW3
+		display $h_MW
+		display $h_CH
+		display $h_CU	
 		
 	* Age group 3
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $no_tobit, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		* Sidak
-		global j_MW: di %4.3f `= r(table)[1,6]'
-		global j_NW1: di %4.3f `= r(table)[2,6]'
-		global j_NW2: di %4.3f `= r(table)[3,6]'
-		global j_NW3: di %4.3f `= r(table)[4,6]'
-		global j_CH: di %4.3f `= r(table)[5,6]'
-		global j_CU: di %4.3f `= r(table)[6,6]'	
-
+		global j_NW3: di %4.3f `= r(table)[1,6]'
+		global j_MW: di %4.3f `= r(table)[2,6]'
+		global j_CH: di %4.3f `= r(table)[3,6]'
+		global j_CU: di %4.3f `= r(table)[4,6]'
+		display $j_NW3
+		display $j_MW
+		display $j_CH
+		display $j_CU	
+		
 **************************************
 *** Regressions - Extensive *** 
 **************************************
@@ -210,7 +231,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 1
 	
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
 		local ta=_b[conflict_time]/_se[conflict_time]
@@ -236,7 +257,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 2
 	
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, vce(cluster MUNICIPIO)
 		local b: di %4.3f `= _b[conflict_time]'
 		global seb_`i': di %4.3f `= _se[conflict_time]'
 		local tb=_b[conflict_time]/_se[conflict_time]
@@ -262,7 +283,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 3
 	
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
 		local tc=_b[conflict_time]/_se[conflict_time]
@@ -297,7 +318,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 1
 
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, vce(cluster MUNICIPIO)
 		local d: di %4.3f `= _b[conflict_time]'
 		global sed_`i': di %4.3f `= _se[conflict_time]'
 		local td=_b[conflict_time]/_se[conflict_time]
@@ -323,7 +344,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 2
 	
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, vce(cluster MUNICIPIO)
 		local e: di %4.3f `= _b[conflict_time]'
 		global see_`i': di %4.3f `= _se[conflict_time]'
 		local te=_b[conflict_time]/_se[conflict_time]
@@ -349,7 +370,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 3
 	
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, vce(cluster MUNICIPIO)
 		local f: di %4.3f `= _b[conflict_time]'
 		global sef_`i': di %4.3f `= _se[conflict_time]'
 		local tf=_b[conflict_time]/_se[conflict_time]
@@ -383,7 +404,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 1
 	
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local g: di %4.3f `= _b[conflict_time]'
 		global seg_`i': di %4.3f `= _se[conflict_time]'
 		local tg=_b[conflict_time]/_se[conflict_time]
@@ -409,7 +430,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 2
 	
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local h: di %4.3f `= _b[conflict_time]'
 		global seh_`i': di %4.3f `= _se[conflict_time]'
 		local th=_b[conflict_time]/_se[conflict_time]
@@ -435,7 +456,7 @@ This do file runs regression with heterogeneous effects - Age groups
 		
 ***** Age group 3
 	
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if dummyedad==2, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local j: di %4.3f `= _b[conflict_time]'
 		global sej_`i': di %4.3f `= _se[conflict_time]'
 		local tj=_b[conflict_time]/_se[conflict_time]

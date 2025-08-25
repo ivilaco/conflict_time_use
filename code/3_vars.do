@@ -8,7 +8,7 @@ This do file creates the variables needed for the analisis from the unified
 ENUT database
 =========================================================================*/
 
-	use "${enut}/ENUT_TOTAL.dta", clear
+	use "${data}/coded/enut/ENUT_TOTAL.dta", clear
 	gen unos=1
 	
 *******************************************
@@ -30,11 +30,11 @@ ENUT database
 *******************************************
 
 	* i. Identificador único de persona 
-	unique 	DIRECTORIO SECUENCIA_P ORDEN
+	*unique 	DIRECTORIO SECUENCIA_P ORDEN
 	egen 	personid = group(DIRECTORIO SECUENCIA_P ORDEN)
 			
 	* ii. Identificador único de Hogar
-	unique	DIRECTORIO SECUENCIA_P	
+	*unique	DIRECTORIO SECUENCIA_P	
 	egen 	idhogar = group(DIRECTORIO SECUENCIA_P)
 	
 	* iii. Orden de Variables
@@ -46,7 +46,7 @@ ENUT database
 *******************************************
 
 	* i. Sexo
-	tab P6020, nolabel
+	tab P6020, m
 	recode P6020 (1 = 0) (2 = 1)
 	label define sexo 1 "Female" 0 "Male"
 	label value P6020 sexo
@@ -89,14 +89,9 @@ ENUT database
 	label define region 1 "Caribe" 2 "Central" 3 "Oriental" 4 "Pacifica" 5 "Bogota" 6 "San Andres"
 	label value REGION region
 	
-	* vii. Porcentage de hogares segun genero de la jefatura por municipio
-	replace P425 = P425 - 1 if P425 >= 6 & ANNO == 2020
-
-	label define jefe 1 "Jefe(a) del hogar" 2 "Esposo(a) o compañero(a)" 3 "Hijo(a), Hijastro(a)" 4 "Nieto(a)" 5 "Padre, madre, suegro(a)" 6 "Hermano(a), hermanastro(a)" 7 "Yerno, nuera" 8 "Otro pariente del jefe(a)" 9 "Empleado(a) del servicio doméstico" 10 "Otro no pariente"
-	label value P425 jefe
-	
-	gen jefe = 0 
-	replace jefe = 1 if P425 == 1 
+	* vii. Porcentage of hhs according to gender and head of household by municipality
+	replace P425 = P425 - 1 if P425 >=6 & ANNO == 2020
+	gen jefe = (P425 == 1)
 
 *******************************************
 *** Dependent variables ***
@@ -177,24 +172,15 @@ ENUT database
 *******************************************
 
 	* Removing percentile 99 and keeping all sample
-	preserve
-	
-	foreach i in MWc NW1c NW2c NW3c {
+	foreach i in $ceros {
 		sum `i', d
 		gen t_`i' = `= r(p99)'
 		drop if `i' > t_`i'
 	}
-	
-	save "${enut}/ENUT_TOTAL_ALL.dta", replace
-	restore
+	save "${data}/coded/enut/ENUT_TOTAL_ALL.dta", replace
 
 	* Removing percentile 99 y keeping only young population
 	keep if EDAD>13 & EDAD<29 
-	foreach i in MWc NW1c NW2c NW3c {
-		sum `i', d
-		gen t_`i' = `= r(p99)'
-		drop if `i' > t_`i'
-	}
-	
-	save "${enut}/ENUT_TOTAL_J.dta", replace
+
+	save "${data}/coded/enut/ENUT_TOTAL_J.dta", replace
 	

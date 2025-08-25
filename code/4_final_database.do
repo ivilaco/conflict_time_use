@@ -7,33 +7,22 @@ Code author: Ivonne Lara
 This do creates the final database for analysis
 =========================================================================*/
 
-*glob entra "${data}/coded/" // QUITAR
-
 *******************************************
 *** Final details ***
 *******************************************
 
-	foreach j in J ALL {
-		
-		/* Importo ENUT y pego con municipios
-		use "$enut/ENUT_TOTAL_`j'.dta", clear
-		merge m:1 DIRECTORIO using "$enut/MUNS.dta", gen(_merge10)
-		keep if _merge10==3
-		drop _merge*
-		save "$enut/ENUT_TOTAL_`j'.dta", replace
-		*/
-		
+	foreach j in ALL J {
+
 		* Pego con el tratamiento
-		use "${entra}/FARC_final.dta", clear
-		merge 1:m MUNICIPIO TIME using "${enut}/ENUT_TOTAL_`j'.dta", gen(_merge7)
-		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281 
-		drop _merge*
+		use "${data}/coded/FARC_final.dta", clear
+		merge 1:m MUNICIPIO TIME using "${data}/coded/enut/ENUT_TOTAL_`j'.dta", gen(_merge7)
+		keep if _merge7==3 // Se van las capitales JFV. Obs: 42,281
 		
 		* Pego covariables
-		merge m:1 MUNICIPIO using "${entra}/new_vars.dta", gen(_merge2)
-		drop _merge*
+		merge m:1 MUNICIPIO using "${data}/coded/new_vars.dta", gen(_merge2)
+		keep if _merge2 == 3
 
-		*unique MUNICIPIO // 202 mpios 
+		*unique MUNICIPIO // 201 mpios 
 		*tab CONFLICT // No conflict: 33,549 (79.3%) Conflict: 8,732 (20.6%)
 		*tab CONFLICT1 // No conflict: 17,064 (40.3%) Conflict: 25,217 (59.6%)
 
@@ -41,7 +30,7 @@ This do creates the final database for analysis
 		preserve
 		keep CONFLICT MUNICIPIO CONFLICT1
 		duplicates drop MUNICIPIO, force
-		save "${enut}/MUNS_finales_`j'.dta", replace
+		save "${data}/coded/enut/MUNS_finales_`j'.dta", replace
 		tab CONFLICT // No conflict (mpios): 166 (82.2%) Conflict (mpios): 36 (17.8%)
 		tab CONFLICT1 // No conflict (mpios): 81 (40.1%) Conflict (mpios): 121 (59.9%)
 		restore
@@ -50,12 +39,13 @@ This do creates the final database for analysis
 		gen conflict_time = CONFLICT*TIME
 		gen conflict_time2016 = CONFLICT*TIME2016
 		gen conflict_time2020 = CONFLICT*TIME2020
+		
 		gen conflict_time1 = CONFLICT1*TIME
 		gen conflict_time12016 = CONFLICT1*TIME2016
 		gen conflict_time12020 = CONFLICT1*TIME2020
 		
 		* Variables de interes
-		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros $dummys ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud P1174 P1172 P425 jefe
+		keep conflict_time* CONFLICT* TIME* ANNO* MUNICIPIO $out $ceros ingdummy INGRESO EDAD EDU SEXO DIRECTORIO SECUENCIA_P ORDEN personid idhogar SEXO REGION unos $covs DIS $mecs SALUD salud P1174 P1172 jefe P425 $dummys F_EXP
 		
 		* Modifico var municipio
 		tostring MUNICIPIO, replace
@@ -88,18 +78,24 @@ This do creates the final database for analysis
 			gen `i'_c=`i'*TIME
 		}
 		
+		* Heter. Effects vars
+		gen dummyedad=.
+		replace dummyedad=0 if EDAD<19
+		replace dummyedad=1 if EDAD>=19 & EDAD<=23
+		replace dummyedad=2 if EDAD>23
+		
 		* Removing observations with zeros on sleep
 		drop if NW2c == 0
 	
 		* Guardo base final
-		save "${enut}/ENUT_FARC_`j'.dta", replace
+		save "${data}/coded/enut/ENUT_FARC_`j'.dta", replace
 	}
 	
 *******************************************
 *** Additional variables for analysis ***
 *******************************************
 
-	use "${enut}/ENUT_FARC_ALL.dta", clear
+	use "${data}/coded/enut/ENUT_FARC_ALL.dta", clear
 		
 	* Percentage of hhs with a women as head 
 	bys ANNO MUNICIPIO : egen hhs_j = sum(jefe)
@@ -107,13 +103,13 @@ This do creates the final database for analysis
 		
 	* Porcentage of hhs where spouse is present
 	bys ANNO MUNICIPIO : egen hhs_c = sum(jefe) if conyuge_hogar == 1
-	
-	* Mechanism 2 - Household Re-Composition
-	gen p_hhth = (hhth/hht)*100
-	gen p_hhthj = (hhthj/hht)*100
-	gen p_hdist = (hdist/hht)*100
-	gen p_hhs_jm = (hhs_jm/hhs_j)*100	
-	gen p_hhs_c = (hhs_c/hhs_j)*100	
 		
-	save "${enut}/ENUT_FARC_ALL.dta", replace
+	* Mechanism 2 - Household Re-Composition
+	gen p_hhth = (hhth/hht)*100 // Percentage of males in hhd 
+	gen p_hhthj = (hhthj/hht)*100 // Percentage of young males in hhd
+	gen p_hdist = (hdist/hht)*100 // Percentage of displaced people in household
+	gen p_hhs_jm = (hhs_jm/hhs_j)*100 // Percentage of households with women as head
+	gen p_hhs_c = (hhs_c/hhs_j)*100	// Percentage of households were spouse is present
+		
+	save "${data}/coded/enut/ENUT_FARC_ALL.dta", replace
 	
