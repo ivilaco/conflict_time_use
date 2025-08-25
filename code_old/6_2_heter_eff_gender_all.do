@@ -1,25 +1,22 @@
+@ -1,840 +0,0 @@
 /*=========================================================================
 Young people and household caring in the postwar
 Code author: Ivonne Lara
 --------------------------------------------------------------------------
-7_4_heter_eff_act.do
+6_2_heter_eff_gender_all.do
 
-This do file runs regression with heterogeneous effects - Income level
+This do file runs regression with heterogeneous effects - Gender
 =========================================================================*/
 
 	use "${enut}/ENUT_FARC_J.dta", clear // clave
 	
 * =====================================================================
-* Heterogeneous effects - Income level
+* Heterogeneous effects - Gender
 
 	* v1 - Intensive OLS
 	* v2 - Intensive Tobit
 	* v3 - Extensive Dummys
 * =====================================================================
-
-	foreach i in v4 v20 {
-		gen `i'_c=`i'*TIME
-	}
 
 *******************************************
 *** v1 - Intensive OLS  *** 
@@ -29,21 +26,21 @@ This do file runs regression with heterogeneous effects - Income level
 *** Multiple hypothesis correction *** 
 **************************************
 	
-file open latex using "${sale}/reg6c_v1.txt", write replace text
+file open latex using "${sale}/reg3c_v1_all.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
-file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
+file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
+file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-***** Income high
+***** Women
 	
 	* All years
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global rw1_MW: di %4.3f `= e(RW)[1,3]'
@@ -54,12 +51,12 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
 	* Year interaction
-	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
 
 		* 2016
@@ -78,15 +75,15 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-***** Income low
+***** Men
 	
 	* All years
-	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3c conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUc conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global rw4_MW: di %4.3f `= e(RW)[1,3]'
@@ -97,12 +94,12 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
 	* Year interaction
-	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3c TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUc TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
 	
 		* 2016
@@ -127,10 +124,10 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 	
 		* All years
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
 		local ta=_b[conflict_time]/_se[conflict_time]
@@ -155,7 +152,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		
 		* Year interaction
-		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
 		local z: di %4.3f `= _b[conflict_time2020]'
@@ -185,10 +182,10 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		}
 		
-***** Income low
+***** Men
 	
 		* All years
-		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
 		local tc=_b[conflict_time]/_se[conflict_time]
@@ -213,7 +210,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		
 		* Year interaction
-		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		reg `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
 		local w: di %4.3f `= _b[conflict_time2020]'
@@ -245,15 +242,8 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		
 	local lab: variable label `i'c
 	
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
-			}
-		}
-	
 file write latex "\textbf{`lab'} \\" _n
-file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} & \\" _n
 file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 file write latex "  & [${rw1_`i'}]&& [${rw4_`i'}] & \\" _n
 
@@ -266,12 +256,10 @@ file write latex " && (${sez_`i'})&& (${sew_`i'}) \\" _n
 file write latex " && [${rw3_`i'}]&& [${rw6_`i'}] \\" _n
 
 file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
 file write latex "\hline" _n
 	}
-file write latex "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+file write latex " Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
 file write latex "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
 file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
 file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
@@ -287,16 +275,16 @@ file close latex
 *** Multiple hypothesis correction *** 
 **************************************
 
-file open latex using "${sale}/reg6c_v2.txt", write replace text
+file open latex using "${sale}/reg3c_v2_all.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
-file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
+file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
+file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-***** Income high
+***** Women
 	
 	* All years
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung 
 		global rw1_MW: di %4.3f `= r(table)[1,4]'
@@ -314,8 +302,8 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw1_CH_s: di %4.3f `= r(table)[5,6]'
 		global rw1_CU_s: di %4.3f `= r(table)[6,6]'
 
-	* Year interaction 
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	* Year interaction
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung
 
@@ -335,6 +323,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			global rw3_CH: di %4.3f `= r(table)[11,4]'
 			global rw3_CU: di %4.3f `= r(table)[12,4]'
 			*/
+		
 		* Sidak
 
 			* 2016
@@ -353,10 +342,10 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			global rw3_CH_s: di %4.3f `= r(table)[11,6]'
 			global rw3_CU_s: di %4.3f `= r(table)[12,6]'
 
-***** Income low
+***** Men
 	
 	* All years
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung 
 		global rw4_MW: di %4.3f `= r(table)[1,4]'
@@ -366,6 +355,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw4_CH: di %4.3f `= r(table)[5,4]'
 		global rw4_CU: di %4.3f `= r(table)[6,4]'
 		*/
+		
 		* Sidak
 		global rw4_MW_s: di %4.3f `= r(table)[1,6]'
 		global rw4_NW1_s: di %4.3f `= r(table)[2,6]'
@@ -375,7 +365,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		global rw4_CU_s: di %4.3f `= r(table)[6,6]'
 
 	* Year interaction
-	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
+	qui wyoung $ceros, cmd(tobit OUTCOMEVAR conflict_time2016 conflict_time2020 CONFLICT TIME2016 TIME2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)) familyp(conflict_time2016 conflict_time2020) cluster(MUNICIPIO) bootstraps(100) seed(12345)
 		
 		/* wyoung
 
@@ -395,6 +385,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 			global rw6_CH: di %4.3f `= r(table)[11,4]'
 			global rw6_CU: di %4.3f `= r(table)[12,4]'
 			*/
+		
 		* Sidak
 
 			* 2016
@@ -419,10 +410,10 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 	
 		* All years
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
 		local ta=_b[conflict_time]/_se[conflict_time]
@@ -447,7 +438,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		
 		* Year interaction
-		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
 		local z: di %4.3f `= _b[conflict_time2020]'
@@ -477,10 +468,10 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		}
 		
-***** Income low
+***** Men
 	
 		* All years
-		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
 		local tc=_b[conflict_time]/_se[conflict_time]
@@ -505,7 +496,7 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		}
 		
 		* Year interaction
-		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO) ll(0) ul(24)
+		tobit `i'c CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO) ll(0) ul(24)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
 		local w: di %4.3f `= _b[conflict_time2020]'
@@ -537,39 +528,25 @@ file write latex "& (1) & (2) & (3) & (4)  \\ \hline" _n
 		
 	local lab: variable label `i'c
 	
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'c if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
-			}
-		}
-	
 file write latex "\textbf{`lab'} \\" _n
-file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} & \\" _n
 file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 file write latex "  & \{${rw1_`i'_s}\} && \{${rw4_`i'_s}\} & \\" _n
-*file write latex "  & <${rw1_`i'_s}> && <${rw4_`i'_s}> & \\" _n
 
 file write latex " Conflict x 2016 && ${by_`i'} && ${bx_`i'} \\" _n
 file write latex " && (${sey_`i'}) && (${sex_`i'}) \\" _n
 file write latex " && \{${rw2_`i'_s}\} && \{${rw5_`i'_s}\} \\" _n
-*file write latex " && <${rw2_`i'_s}> && <${rw5_`i'_s}> \\" _n
 
 file write latex " Conflict x 2020 && ${bz_`i'} && ${bw_`i'} \\" _n
 file write latex " && (${sez_`i'})&& (${sew_`i'}) \\" _n
 file write latex " && \{${rw3_`i'_s}\} && \{${rw6_`i'_s}\} \\" _n
-*file write latex " && <${rw3_`i'_s}> && <${rw6_`i'_s}> \\" _n
-
-*file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
 file write latex "\hline" _n
 	}
-file write latex "Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
+file write latex " Observations & ${N_MW} & ${N2_MW} & ${N3_MW} & ${N4_MW} \\" _n
 file write latex "Year FE  & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n	
 file write latex "Municipality FE & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
-file write latex "Control & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
+file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\checkmark$ \\" _n		
 file write latex "\hline \hline" _n
 file write latex "\end{tabular}" _n
 file close latex
@@ -582,21 +559,21 @@ file close latex
 *** Multiple hypothesis correction *** 
 **************************************
 
-file open latex using "${sale}/reg6c_v3.txt", write replace text
+file open latex using "${sale}/reg3c_v3_all.txt", write replace text
 file write latex "\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}" _n
 file write latex "\begin{tabular}{l c c c c} \\ \hline \hline" _n
-file write latex "& \multicolumn{2}{c}{Lower possession} & \multicolumn{2}{c}{Higher possession} \\" _n
+file write latex "& \multicolumn{2}{c}{Females} & \multicolumn{2}{c}{Males}\\" _n
 file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
-***** Income high
+***** Women
 	
 	* All years
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global rw1_MW: di %4.3f `= e(RW)[1,3]'
@@ -607,12 +584,12 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw1_CU: di %4.3f `= e(RW)[6,3]'
 
 	* Year interaction
-	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)) ///
-	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==1, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)) ///
+	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==1, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
 
 		* 2016
@@ -631,15 +608,15 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw3_CH: di %4.3f `= e(RW)[10,3]'
 		global rw3_CU: di %4.3f `= e(RW)[12,3]'
 
-***** Income low
+***** Men
 	
 	* All years
-	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3d conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUd conflict_time CONFLICT TIME i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time, conflict_time, conflict_time, conflict_time, conflict_time, conflict_time) reps(1000) seed(12345)
 		
 		global rw4_MW: di %4.3f `= e(RW)[1,3]'
@@ -650,12 +627,12 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		global rw4_CU: di %4.3f `= e(RW)[6,3]'
 		
 	* Year interaction
-	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)) ///
-	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls if ingdummy==0, cluster(MUNICIPIO)), ///
+	qui rwolf2 (reg MWd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW1d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW2d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg NW3d TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CHd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)) ///
+	(reg CUd TIME2016 TIME2020 conflict_time2016 conflict_time2020 CONFLICT i.ANNO i.MUNICIPIO  $controls [pw=F_EXP] if SEXO==0, cluster(MUNICIPIO)), ///
 	indepvars(conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020, conflict_time2016 conflict_time2020) reps(1000) seed(12345)
 	
 		* 2016
@@ -680,10 +657,10 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 
 	foreach i in $out {
 		
-***** Income high
+***** Women
 	
 		* All years
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO if ingdummy==1, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO)
 		local a: di %4.3f `= _b[conflict_time]'
 		global sea_`i': di %4.3f `= _se[conflict_time]'
 		local ta=_b[conflict_time]/_se[conflict_time]
@@ -707,8 +684,8 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global ba_`i' "`a'"
 		}
 		
-		* v3 - Interacción por año
-		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==1, vce(cluster MUNICIPIO)
+		* Year interaction
+		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==1, vce(cluster MUNICIPIO)
 		local y: di %4.3f `= _b[conflict_time2016]'
 		global sey_`i': di %4.3f `= _se[conflict_time2016]'	
 		local z: di %4.3f `= _b[conflict_time2020]'
@@ -738,10 +715,10 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		}
 		}
 		
-***** Income low
+***** Men
 	
 		* All years
-		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		reg `i'd CONFLICT TIME conflict_time i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO)
 		local c: di %4.3f `= _b[conflict_time]'
 		global sec_`i': di %4.3f `= _se[conflict_time]'
 		local tc=_b[conflict_time]/_se[conflict_time]
@@ -765,8 +742,8 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 			global bc_`i' "`c'"
 		}
 		
-		* v3 - Interacción por año
-		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls if ingdummy==0, vce(cluster MUNICIPIO)
+		* Year interaction
+		reg `i'd CONFLICT TIME2016 TIME2020 conflict_time2016 conflict_time2020 i.ANNO i.MUNICIPIO $controls [pw=F_EXP] if SEXO==0, vce(cluster MUNICIPIO)
 		local x: di %4.3f `= _b[conflict_time2016]'
 		global sex_`i': di %4.3f `= _se[conflict_time2016]'	
 		local w: di %4.3f `= _b[conflict_time2020]'
@@ -798,15 +775,8 @@ file write latex "& (1) & (2) & (3) & (4) \\ \hline" _n
 		
 	local lab: variable label `i'd
 	
-		foreach n of numlist 0/1 {
-			foreach a of numlist 0/1 {
-				sum `i'd if TIME==0 & CONFLICT==`a' & ingdummy==`n', d 
-				global m`a'`n'_`i': di %10.2f `= r(mean)'
-			}
-		}
-	
 file write latex "\textbf{`lab'} \\" _n
-file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} &  \\" _n
+file write latex " Conflict x Time & ${ba_`i'} && ${bc_`i'} & \\" _n
 file write latex "  & (${sea_`i'})&& (${sec_`i'}) & \\" _n
 file write latex "  & [${rw1_`i'}]&& [${rw4_`i'}] & \\" _n
 
@@ -819,8 +789,6 @@ file write latex " && (${sez_`i'})&& (${sew_`i'}) \\" _n
 file write latex " && [${rw3_`i'}]&& [${rw6_`i'}] \\" _n
 
 file write latex " R-squared & ${r2_`i'} & ${r22_`i'} & ${r23_`i'} & ${r24_`i'} \\" _n
-file write latex " Pre-t treat. mean & ${m11_`i'} & ${m11_`i'} & ${m10_`i'} & ${m10_`i'} \\" _n
-file write latex " Pre-t cont. mean & ${m01_`i'} & ${m01_`i'} & ${m00_`i'} & ${m00_`i'} \\" _n
 
 file write latex "\hline" _n
 	}
@@ -831,3 +799,5 @@ file write latex "Controls & $\checkmark$ & $\checkmark$ & $\checkmark$ & $\chec
 file write latex "\hline \hline" _n
 file write latex "\end{tabular}" _n
 file close latex
+
+	
