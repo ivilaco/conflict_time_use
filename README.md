@@ -30,8 +30,15 @@ All code tagged with “(DANE)” must be executed under the supervision of the 
 ## Data
 The data is organized into a `\02_data` folder in [Dropbox](https://www.dropbox.com/scl/fo/jb7r6jz8zqgmdrgvb4ehm/h?rlkey=kbf16ami0e3jdzaq91gfnecnj&dl=0). The raw data, that serves as main imput for the project, can be located in the `\raw` subfolder, as its name indicates. Manipulated data in the code will be saved in the `\coded` subfolder.
 
-The main data sources are:
-1. 
+The main data source is:
+1. **Encuesta Nacional de Uso del Tiempo (ENUT)** – Colombian national household survey on time use, conducted by DANE. Waves: 2012–2013, 2016–2017, and 2020–2021. Access is _restricted_ and must be requested and used under DANE supervision in their secure data rooms.
+
+Secondary data sources are stored in the `\02_data` Dropbox folder. To obtain the original datasets, please refer directly to the providers listed below:
+3. **CERAC Conflict Database** – Municipal-level data on conflict-related events, based on Justicia y Paz from Noche y Niebla (CINEP and Comisión Intercongregacional de Justicia y Paz). Access is _restricted_ and available only through CERAC with proper authorization.
+4. **CEDE Municipality Panel Database** – Panel dataset (1993–2020) developed by Universidad de los Andes, with information on agriculture, governance, conflict, education, health, and other municipal characteristics. Publicly available from CEDE’s website (registration may be required).
+5. **2018 Colombian Population and Housing Census** – Conducted by DANE, providing household- and individual-level sociodemographic data. Publicly available through DANE’s website.
+6. **Global Nighttime Lights Dataset (Li et al., 2020)** – Recalibrated, globally harmonized satellite-based nightlights data (1992–2021). Open-access dataset.
+7. **Colombia Municipal Shapefile** – Geographic boundaries from the Humanitarian Data Exchange (HDX, OCHA, 2022). Open-access dataset.
 
 ## Figures and Tables
 Figures, maps and tables will be found inside the `\03_outputs` folder when produced by the code.
