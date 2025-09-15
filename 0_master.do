@@ -29,9 +29,9 @@ Setting the code environment
 	glo github "/Users/ivonnelara/Downloads/conflict_time_use"
 	glo main "/Users/ivonnelara/Dropbox/WORK/Working Papers/conflict_time_use"
 
-	glo code "${github}/code"
-	glo data "${main}/data"
-	glo output "${main}/output"
+	glo code "${github}/01_code"
+	glo data "${main}/02_data"
+	glo output "${main}/03_outputs"
 	*/
 
 	cd "${main}"
